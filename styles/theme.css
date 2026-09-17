@@ -1,0 +1,118 @@
+/*
+ * Design tokens da identidade Grupo Natus — fonte única (AD-7).
+ * Cores derivadas dos logos oficiais em img/LOGO-.../LOGO/JPG:
+ *   nude/rosé do wordmark NATUS = #cca890
+ *   azul-marinho do acento do 'N' = #243c54
+ *   cinza quente do "GRUPO"       = #9c9090
+ * Toda estilização deve consumir estes tokens (proibido cor crua em componentes).
+ */
+
+@theme {
+  /* ---- Paleta: Nude/rosé (marca primária) ---- */
+  --color-nude-50: #f9f2ec;
+  --color-nude-100: #f1e4d8;
+  --color-nude-200: #e6d0be;
+  --color-nude-300: #d9bca3;
+  --color-nude-400: #cca890; /* base — wordmark NATUS */
+  --color-nude-500: #bd9277;
+  --color-nude-600: #a67a5e;
+  --color-nude-700: #86614a;
+  --color-nude-800: #654a39;
+  --color-nude-900: #453227;
+
+  /* ---- Paleta: Azul-marinho (tinta/ink) ---- */
+  --color-navy-50: #eef2f6;
+  --color-navy-100: #d6e0e9;
+  --color-navy-200: #adc0d1;
+  --color-navy-300: #7c93ab;
+  --color-navy-400: #4e6e8e;
+  --color-navy-500: #345474;
+  --color-navy-600: #243c54; /* base — acento do 'N' */
+  --color-navy-700: #1d3145;
+  --color-navy-800: #152431;
+  --color-navy-900: #0d161e;
+
+  /* ---- Paleta: Cinza quente (neutros) ---- */
+  --color-stone-50: #f6f5f4;
+  --color-stone-100: #e9e6e5;
+  --color-stone-200: #d3cecd;
+  --color-stone-300: #b5adac;
+  --color-stone-400: #9c9090; /* base — "GRUPO" */
+  --color-stone-500: #7f7473;
+  --color-stone-600: #635a59;
+  --color-stone-700: #48413f;
+  --color-stone-800: #2e2928;
+  --color-stone-900: #1a1615;
+
+  /* ---- Cores semânticas da marca ---- */
+  --color-brand: var(--color-nude-400);
+  --color-brand-strong: var(--color-nude-600);
+  --color-ink: var(--color-navy-600);
+  --color-ink-soft: var(--color-navy-400);
+  --color-surface: #ffffff;
+  --color-surface-muted: var(--color-stone-50);
+  --color-muted: var(--color-stone-400);
+  --color-border: var(--color-stone-200);
+
+  /* ---- Status de empreendimento (DevelopmentStatus) ---- */
+  --color-status-lancamento: var(--color-navy-500);
+  --color-status-em-construcao: #b8823a; /* âmbar quente, harmônico com o nude */
+  --color-status-pronto: #4f7a52; /* verde sóbrio */
+
+  /* ---- Tipografia ---- */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-heading:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  /* ---- Spacing (base da escala Tailwind) ---- */
+  --spacing: 0.25rem;
+
+  /* ---- Radius ---- */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ---- Shadows ---- */
+  --shadow-xs: 0 1px 2px 0 rgb(36 60 84 / 0.06);
+  --shadow-sm: 0 1px 3px 0 rgb(36 60 84 / 0.1), 0 1px 2px -1px rgb(36 60 84 / 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgb(36 60 84 / 0.1), 0 2px 4px -2px rgb(36 60 84 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(36 60 84 / 0.1), 0 4px 6px -4px rgb(36 60 84 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(36 60 84 / 0.12);
+
+  /* ---- Breakpoints (Mobile / Tablet / Desktop / Large) ---- */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+
+  /* ---- Container / grid ---- */
+  --container-max: 80rem;
+
+  /* ---- Motion (reforça hierarquia, degrada bem; ver NFR4) ---- */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+}

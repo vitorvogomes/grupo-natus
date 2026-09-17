@@ -1,0 +1,37 @@
+Referencias: 
+- https://www.novolar.com.br/
+
+Site oficial Natus: https://www.natusgrupo.com.br/
+
+https://www.skills.sh/vercel-labs/skills/find-skills
+https://www.skills.sh/anthropics/skills/theme-factory
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-m
+
+
+- HOME/ CATALOGO DOS 11 EMPREENDIMENTOS ATIVOS
+
+- PAGINA PARA CADA UM DOS 11 EMPREENDIMENTOS ATIVOS (
+    PAGINA ESTRUTURADA PARA CADA EMPREENDIMENTO
+)
+
+- SERVICOS DE ENGENHARIA
+- NEGOCIE SEU TERRENO
+- QUEM SOMOS
+- FALE CONOSCO (FORMULARIO PARA EMAIL)
+
+Temos o projeto para o Grupo Natus para estruturar a estrategia para poder criar uma versao otimizada do site da empresa. Manter as cores originais e logo do Grupo Natus. Temos a referencia do site do novolar, que seria uma referencia para estrutura de site, funcionalidades, intereatividades, entao seria interessante fazer um scrap do design system da novo lar e adaptar para o contexto do grupo natus. Tenho as imagens de referencia que estao salvas localmente. 
+
+Para questao de estrutura de desenvolvimento, ja criei o supabase para gente rodar local e ter dados se necessario. E para o frontend, vamos utilizar next js. Sem over engenerring em questao de robustez de arquitetura. Preservar as env vars e poliicas de RLS no banco. Caso for editar alguma env var editar as cegas. Validacao 100% local primeiro, sem preocupar deploys por agora. Caso precisar de alguma api vamo fazer via next js mesmo, auth via suapabse auth. Mas focar inicialmente no frontend e design com as referencias e depois de fechar o escopo do front vamos para o backend do que for necessario. Talvez seja necessario um painel admin para poder gerenciar algumas coisas do conteudo do site, como progresso ou alguma outra tarefa simples. 
+
+utilizar as skills criadas para chegar em um system design junto com as referencias. Seria interessante fecharmos um theme-showcase.pdf para entender como esta o design dos componentes tambem. Buscar um design profissional e sem cara de padrao feito por IA.
+
+de solicitacoes da empresa para funcionalidades no site:
+- Interessante ter um progresso de evolucao sobre cada empreendimento, que vai ser atualizada a medida que a obra vai avancando
+- Contatos simples enviando dados dos formularios por emails e redirecionamento via whatsapp com botao flutuante
+- Interessante a utilizacao da localizacao dos empreendimentos, via google maps
+- como estamos trabalhando com empreendimentos, seria interessante um sinte dinamico interavito, com animacoes, podemos criar uns videos, gifs do espaco, entao planejar para que o site tenha capacidade para isso
+- Pensar na estrategia do SEO tambem, nao seria uma prioridade, mas podemos pensar em algo estruturado
+
+
+* Veja se o metodo bmad esta instado para que a gente crie o plano de desenvolvimento seguindo o metodo
+https://github.com/bmad-code-org/bmad-method

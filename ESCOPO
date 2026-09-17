@@ -1,0 +1,1236 @@
+Prompt estruturado
+
+Eu usaria o seguinte como prompt mestre para iniciar o projeto, preferencialmente em uma sessão nova do agente:
+
+Prompt Mestre — Grupo Natus Website
+GRUPO NATUS — WEBSITE REDESIGN & DEVELOPMENT
+1. CONTEXTO DO PROJETO
+
+Estamos iniciando o desenvolvimento de uma nova versão do website institucional do Grupo Natus, empresa do setor imobiliário e de engenharia.
+
+O objetivo inicial não é simplesmente reproduzir o site atual, mas desenvolver uma experiência digital mais profissional, moderna, sofisticada e orientada a conversão, preservando a identidade visual existente da empresa.
+
+O projeto deve partir de:
+
+Identidade visual atual do Grupo Natus.
+Logo oficial existente.
+Cores institucionais atuais.
+Conteúdo e informações reais dos empreendimentos.
+Referência estrutural e de experiência do site NovoLar.
+Referências visuais locais fornecidas no projeto.
+Skills especializadas disponíveis no ambiente.
+Uma arquitetura simples e adequada ao tamanho real do projeto.
+Referências
+
+Grupo Natus:
+https://www.natusgrupo.com.br/
+
+Referência de estrutura/experiência:
+https://www.novolar.com.br/
+
+Skills:
+https://www.skills.sh/vercel-labs/skills/find-skills
+https://www.skills.sh/anthropics/skills/theme-factory
+https://www.skills.sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max
+
+Metodologia de desenvolvimento:
+https://github.com/bmad-code-org/bmad-method
+
+2. PRIMEIRO PRINCÍPIO
+
+Antes de escrever código, entender o produto, a identidade visual, as referências e o escopo.
+
+Não começar implementando páginas diretamente.
+
+Primeiro devemos construir:
+
+entendimento do produto;
+análise das referências;
+arquitetura de informação;
+estratégia visual;
+design system;
+estrutura das páginas;
+estratégia de componentes;
+estratégia de conteúdo;
+estratégia de animações;
+estratégia de responsividade;
+estratégia de SEO;
+arquitetura técnica mínima necessária.
+
+Somente depois disso iniciar a implementação.
+
+3. OBJETIVO DO WEBSITE
+
+O novo website deve posicionar o Grupo Natus como uma empresa imobiliária profissional, confiável e contemporânea.
+
+O site deve transmitir:
+
+confiança;
+qualidade;
+sofisticação;
+transparência;
+experiência;
+solidez;
+qualidade dos empreendimentos;
+capacidade de execução;
+proximidade com o cliente.
+
+A experiência deve ser predominantemente visual.
+
+Empreendimentos imobiliários precisam ser apresentados de forma que o usuário consiga:
+
+descobrir empreendimentos;
+entender localização;
+visualizar imagens;
+compreender características;
+acompanhar evolução da obra;
+demonstrar interesse;
+entrar em contato;
+iniciar conversa pelo WhatsApp.
+4. PRINCÍPIO DE DESIGN
+
+O resultado NÃO deve parecer:
+
+template genérico;
+landing page de SaaS;
+dashboard;
+site produzido automaticamente por IA;
+conjunto de componentes shadcn sem identidade;
+cópia literal do NovoLar.
+
+O NovoLar deve ser tratado como referência de estrutura, navegação, interação e experiência, não como algo para copiar visualmente.
+
+Devemos extrair princípios da referência:
+
+hierarquia;
+organização de conteúdo;
+navegação;
+apresentação dos empreendimentos;
+cards;
+filtros;
+galerias;
+mapas;
+chamadas para ação;
+transições;
+comportamento responsivo;
+storytelling visual.
+
+Depois adaptar esses princípios para a identidade do Grupo Natus.
+
+5. IDENTIDADE VISUAL
+
+Preservar:
+
+logo oficial do Grupo Natus;
+cores institucionais;
+elementos de identidade já existentes;
+percepção de marca.
+
+Não substituir arbitrariamente as cores da empresa por uma paleta "bonita".
+
+Primeiro devemos identificar e documentar:
+
+Brand colors
+Typography
+Logo usage
+Spacing
+Border radius
+Shadows
+Iconography
+Image treatment
+Buttons
+Forms
+Cards
+Navigation
+Section patterns
+Motion
+
+Caso existam inconsistências na identidade atual, podemos propor pequenas melhorias, mas sempre mantendo reconhecimento da marca.
+
+6. REFERÊNCIAS LOCAIS
+
+Existem imagens e referências visuais salvas localmente no projeto.
+
+Antes de tomar decisões visuais:
+
+localizar todos os assets relevantes;
+analisar as imagens;
+identificar padrões;
+identificar referências de composição;
+verificar se existem logos, screenshots, paletas ou materiais institucionais;
+utilizar essas referências como input para o design system.
+
+Não ignorar assets locais e substituí-los automaticamente por placeholders.
+
+7. SKILLS
+
+Antes de iniciar o design, verificar quais skills estão instaladas.
+
+Utilizar prioritariamente:
+
+Find Skills
+
+Usar para descobrir skills adicionais relevantes ao projeto.
+
+UI/UX Pro Max
+
+Usar para:
+
+design system;
+UX;
+responsive design;
+typography;
+component patterns;
+interaction design;
+accessibility;
+animations;
+Next.js implementation guidance.
+Theme Factory
+
+Usar como referência para estruturação e avaliação de temas, tipografia e consistência visual.
+
+Não utilizar uma theme pronta cegamente.
+
+A identidade do Grupo Natus deve prevalecer.
+
+8. BMAD METHOD
+
+Antes de iniciar o desenvolvimento:
+
+Verificar se BMAD está instalado.
+
+Verificar:
+
+ls -la _bmad
+
+e:
+
+npx bmad-method --version
+
+Se necessário, verificar:
+
+npx bmad-method install
+
+Não reinstalar ou modificar uma instalação existente sem verificar primeiro.
+
+Se BMAD não estiver instalado, propor a instalação antes de iniciar o fluxo.
+
+Utilizar o BMAD para estruturar o projeto seguindo, de forma adaptada ao tamanho do produto:
+
+Project Brief
+    ↓
+Product Requirements
+    ↓
+UX / Design Strategy
+    ↓
+Architecture
+    ↓
+Implementation Plan
+    ↓
+Development
+    ↓
+Validation
+
+Não aplicar burocracia desnecessária.
+
+Este não é um produto SaaS complexo.
+
+O objetivo é utilizar BMAD para aumentar clareza e qualidade, não para criar documentação inútil.
+
+9. ESCOPO DE PÁGINAS
+
+Existe uma inconsistência no briefing original:
+
+Foi informado "10 páginas", mas o detalhamento resulta em 16 rotas.
+
+Considerar inicialmente:
+
+1. Home / Catálogo
+
+A Home deve funcionar como:
+
+apresentação institucional;
+catálogo dos empreendimentos;
+entrada para descoberta;
+principal página de conversão.
+
+Deve apresentar os 11 empreendimentos ativos.
+
+Possíveis elementos:
+
+Hero;
+apresentação do Grupo Natus;
+empreendimentos em destaque;
+catálogo;
+filtros;
+localização;
+status da obra;
+CTA;
+serviços;
+institucional;
+contato;
+WhatsApp.
+2–12. Empreendimentos
+
+Criar uma página estruturada para cada um dos 11 empreendimentos.
+
+Não duplicar código.
+
+Criar um modelo de dados comum.
+
+Exemplo conceitual:
+
+type Development = {
+  slug: string
+  name: string
+  status: DevelopmentStatus
+  location: Location
+  description: string
+  images: Image[]
+  features: Feature[]
+  constructionProgress?: number
+  progressUpdatedAt?: string
+  map?: MapData
+  contact?: ContactData
+  metadata?: SEOData
+}
+
+A página deve ser alimentada por dados estruturados.
+
+13. Serviços de Engenharia
+
+Apresentar:
+
+atuação;
+metodologia;
+tipos de projetos;
+capacidade técnica;
+obras realizadas;
+diferenciais;
+CTA para contato.
+14. Negocie seu Terreno
+
+Página voltada para proprietários e corretores.
+
+Objetivo:
+
+explicar a proposta;
+apresentar como funciona;
+coletar informações do terreno;
+gerar lead.
+
+Formulário com campos adequados.
+
+15. Quem Somos
+
+Apresentar:
+
+Grupo Natus;
+história;
+empresas;
+atuação;
+filosofia;
+valores;
+metodologia;
+posicionamento;
+números relevantes.
+
+Evitar texto institucional genérico.
+
+16. Fale Conosco
+
+Página de contato com:
+
+formulário;
+email;
+telefone;
+WhatsApp;
+endereço;
+mapa;
+horário de atendimento.
+10. CATÁLOGO DE EMPREENDIMENTOS
+
+O catálogo deve permitir uma experiência dinâmica.
+
+Cada empreendimento deve apresentar pelo menos:
+
+nome;
+localização;
+cidade/estado;
+status;
+imagem principal;
+características;
+CTA;
+link para página detalhada.
+
+Possíveis estados:
+
+Lançamento
+Em construção
+Pronto para morar
+
+Não assumir que esses estados são definitivos sem validar os dados atuais.
+
+11. PROGRESSO DAS OBRAS
+
+Uma funcionalidade importante é apresentar a evolução de cada empreendimento.
+
+Exemplo:
+
+Fundação       ████████████████████ 100%
+Estrutura      ███████████████░░░░░ 75%
+Acabamento     ████████░░░░░░░░░░░░ 40%
+
+Porém, não implementar simplesmente barras arbitrárias.
+
+Primeiro definir:
+
+quais etapas existem;
+quem atualiza;
+periodicidade;
+histórico;
+data da última atualização;
+percentual geral;
+evidências visuais;
+eventualmente fotos da evolução.
+
+O modelo deve permitir crescimento futuro.
+
+Exemplo:
+
+type ConstructionProgress = {
+  overallPercentage: number
+  updatedAt: string
+
+  stages: {
+    name: string
+    percentage: number
+    order: number
+  }[]
+}
+
+No primeiro momento pode existir como dado estático/mock.
+
+Posteriormente pode migrar para Supabase.
+
+12. EXPERIÊNCIA VISUAL / MOTION
+
+O site deve ser preparado para utilizar:
+
+vídeos;
+GIFs;
+imagens;
+galerias;
+panoramas;
+animações;
+microinterações;
+transições;
+scroll animations;
+efeitos de entrada;
+elementos de storytelling.
+
+Mas evitar:
+
+excesso de animações;
+efeitos chamativos sem função;
+parallax indiscriminado;
+animações que prejudiquem performance;
+experiência ruim em mobile.
+
+Motion deve reforçar:
+
+Hierarchy
+Storytelling
+Spatial perception
+Navigation
+Premium perception
+
+Não usar animação simplesmente porque a biblioteca permite.
+
+13. MAPAS
+
+Cada empreendimento deve possuir capacidade de apresentar sua localização.
+
+Priorizar integração com Google Maps.
+
+A arquitetura deve permitir:
+
+address
+latitude
+longitude
+googleMapsUrl
+
+Evitar acoplar a aplicação inteira à API do Google Maps prematuramente.
+
+No primeiro momento avaliar:
+
+embed;
+link;
+mapa interativo;
+custo;
+necessidade de API key.
+
+Escolher a solução mais simples que entregue uma boa experiência.
+
+14. WHATSAPP
+
+Adicionar botão flutuante de WhatsApp.
+
+O comportamento deve ser:
+
+responsivo;
+discreto;
+acessível;
+claramente identificável.
+
+O link deve permitir eventualmente associar contexto.
+
+Exemplo:
+
+Olá, gostaria de saber mais sobre o empreendimento X.
+
+Não hardcodar esse comportamento em dezenas de componentes.
+
+Criar uma abstração única.
+
+15. FORMULÁRIOS
+
+Formulários inicialmente:
+
+Contato
+
+Campos mínimos:
+
+nome;
+email;
+telefone;
+assunto;
+mensagem.
+Interesse em empreendimento
+
+Possibilidade de:
+
+nome;
+telefone;
+email;
+empreendimento;
+mensagem.
+Negocie seu terreno
+
+Campos a definir durante o PRD.
+
+Os formulários devem inicialmente priorizar:
+
+UX
+Validation
+Accessibility
+Clear feedback
+Spam protection strategy
+
+O envio por email deve ser implementado apenas depois de definir o fluxo.
+
+16. SUPABASE
+
+Já existe um projeto Supabase.
+
+Utilizar Supabase quando houver necessidade real de persistência.
+
+Possíveis dados futuros:
+
+Developments
+DevelopmentProgress
+DevelopmentImages
+Leads
+ContactMessages
+EngineeringProjects
+SiteContent
+
+Não criar todas essas tabelas antecipadamente.
+
+Regra:
+
+Se o dado puder permanecer como conteúdo estático e não houver necessidade de administração dinâmica, não colocar no banco.
+
+17. RLS E SEGURANÇA
+
+Existem políticas RLS existentes.
+
+REGRA CRÍTICA:
+
+Não remover, substituir ou desabilitar RLS.
+
+Não modificar políticas existentes sem necessidade explícita.
+
+Preservar:
+
+env vars;
+secrets;
+RLS;
+configurações existentes;
+estrutura existente do Supabase.
+
+Caso seja necessário editar uma variável de ambiente:
+
+identificar a necessidade;
+alterar somente o necessário;
+nunca expor valores secretos;
+nunca imprimir secrets nos logs;
+nunca substituir uma env var sem entender seu uso.
+18. AUTENTICAÇÃO
+
+Caso seja necessário autenticação:
+
+Supabase Auth
+
+Não criar sistema próprio de autenticação.
+
+Possível uso futuro:
+
+/admin
+
+para gerenciamento de:
+
+empreendimentos;
+progresso;
+imagens;
+conteúdos;
+leads.
+
+Mas NÃO implementar painel administrativo antes de existir uma necessidade concreta.
+
+19. NEXT.JS
+
+Frontend:
+
+Next.js
+
+Prioridades:
+
+App Router;
+Server Components quando fizer sentido;
+Client Components apenas quando necessários;
+TypeScript;
+componentes reutilizáveis;
+SEO;
+imagens otimizadas;
+performance;
+responsividade.
+
+Não criar uma arquitetura enterprise para um site institucional.
+
+Evitar:
+
+microservices;
+múltiplos backends;
+abstrações prematuras;
+repositories/services absurdamente genéricos;
+state management global sem necessidade;
+over-engineering.
+20. API
+
+Se uma API for necessária inicialmente:
+
+preferir:
+
+Next.js Route Handlers
+
+Não criar NestJS/FastAPI separadamente sem uma necessidade concreta.
+
+A prioridade é:
+
+Frontend → Next.js → Supabase
+
+Somente adicionar outra camada quando houver justificativa técnica real.
+
+21. ARQUITETURA PROPOSTA
+
+Arquitetura inicial:
+
+                    ┌──────────────────┐
+                    │     Next.js      │
+                    │                  │
+                    │ Pages / Routes   │
+                    │ Components       │
+                    │ Design System    │
+                    │ Content          │
+                    └────────┬─────────┘
+                             │
+                ┌────────────┴────────────┐
+                │                         │
+         Static Content              Next API
+                │                         │
+                │                         │
+                └────────────┬────────────┘
+                             │
+                         Supabase
+                             │
+                    ┌────────┴─────────┐
+                    │                  │
+                 Postgres           Auth
+                    │
+                   RLS
+
+Essa arquitetura é suficiente até que exista evidência de que não é.
+
+22. DESIGN SYSTEM
+
+Antes de construir todas as páginas, criar um design system mínimo.
+
+Definir:
+
+Foundations
+Colors
+Typography
+Spacing
+Radius
+Shadows
+Containers
+Breakpoints
+Grid
+Motion
+Components
+Header
+Navigation
+Footer
+Button
+Link
+Badge
+Card
+DevelopmentCard
+DevelopmentStatus
+ProgressBar
+ProgressTimeline
+Gallery
+Image
+Video
+Map
+Form
+Input
+Select
+Textarea
+Modal
+Accordion
+CTA
+WhatsAppButton
+23. THEME SHOWCASE
+
+Antes da implementação completa, gerar um:
+
+theme-showcase.pdf
+
+O PDF deve demonstrar visualmente:
+
+Logo;
+cores;
+tipografia;
+headings;
+body text;
+buttons;
+links;
+badges;
+cards;
+development cards;
+progress indicators;
+forms;
+inputs;
+gallery;
+image treatment;
+map component;
+CTA;
+header;
+footer;
+exemplos de seções;
+estados hover;
+estados active;
+estados disabled;
+mobile examples;
+motion principles.
+
+O objetivo do PDF é permitir validação visual do sistema antes de construir todas as páginas.
+
+Não considerar o design system fechado antes dessa etapa ser revisada.
+
+24. RESPONSIVIDADE
+
+Projetar primeiro considerando:
+
+Mobile
+Tablet
+Desktop
+Large Desktop
+
+O design não deve ser simplesmente:
+
+Desktop → diminuir tudo → Mobile
+
+Mobile deve ter composição própria.
+
+Validar:
+
+navegação;
+imagens;
+galerias;
+cards;
+mapas;
+formulários;
+CTAs;
+WhatsApp;
+progress bars;
+vídeos;
+performance.
+25. SEO
+
+SEO não é prioridade número 1, mas deve existir uma base correta.
+
+Implementar desde o início:
+
+metadata;
+title;
+description;
+canonical;
+Open Graph;
+sitemap;
+robots;
+semantic HTML;
+headings corretos;
+alt text;
+URLs amigáveis;
+structured data quando fizer sentido.
+
+Para empreendimentos:
+
+/empreendimentos/[slug]
+
+Cada empreendimento deve ter metadata própria.
+
+Evitar SEO artificial ou keyword stuffing.
+
+26. PERFORMANCE
+
+Priorizar:
+
+next/image;
+lazy loading;
+responsive images;
+compressão;
+vídeos otimizados;
+carregamento progressivo;
+evitar JavaScript desnecessário;
+Server Components quando apropriado.
+
+Animação não pode destruir Core Web Vitals.
+
+27. CONTEÚDO
+
+Não inventar informações de empreendimentos.
+
+Quando uma informação estiver ausente:
+
+TODO: CONTENT REQUIRED
+
+ou criar um mock explicitamente identificado.
+
+Não apresentar dados inventados como reais.
+
+28. ESTRUTURA DE DADOS
+
+Separar claramente:
+
+Content
+Presentation
+Business Logic
+Infrastructure
+
+Exemplo:
+
+src/
+  app/
+  components/
+  features/
+    developments/
+    contact/
+    engineering/
+    land-submission/
+  content/
+  lib/
+  styles/
+  types/
+
+A estrutura final deve ser decidida pelo agente após analisar o projeto existente.
+
+Não seguir esta estrutura cegamente se outra organização for claramente mais adequada.
+
+29. REGRAS DE DESENVOLVIMENTO
+Regra 1 — Não codar antes de entender
+
+Antes de implementar:
+
+analisar projeto;
+analisar dependências;
+analisar Supabase;
+analisar assets;
+analisar referências;
+analisar skills;
+analisar BMAD.
+Regra 2 — Não destruir o que já existe
+
+Antes de modificar:
+
+env;
+Supabase;
+RLS;
+configurações;
+dependências;
+
+entender primeiro.
+
+Regra 3 — Desenvolvimento local primeiro
+
+Toda validação inicial será local.
+
+Não se preocupar com:
+
+deploy;
+CI/CD;
+produção;
+domínio;
+infraestrutura de hosting.
+
+Esses assuntos ficam para uma fase posterior.
+
+Regra 4 — Preferir simplicidade
+
+Sempre perguntar:
+
+Existe uma solução mais simples?
+
+Se sim, preferir a solução simples.
+
+Regra 5 — Componentizar por comportamento
+
+Não criar componentes apenas para transformar cada <div> em um arquivo.
+
+Criar componentes quando houver:
+
+reutilização;
+comportamento;
+domínio;
+consistência visual;
+complexidade própria.
+30. WORKFLOW DE DESENVOLVIMENTO
+
+Seguir esta ordem:
+
+PHASE 0 — Discovery
+analisar repositório;
+analisar assets;
+verificar BMAD;
+verificar skills;
+analisar Supabase;
+analisar site atual;
+analisar NovoLar;
+levantar inconsistências.
+
+Output:
+
+PROJECT-DISCOVERY.md
+PHASE 1 — Product Brief
+
+Definir:
+
+objetivo;
+público;
+proposta;
+jornada;
+conversão;
+principais funcionalidades;
+escopo;
+fora do escopo.
+
+Output:
+
+product-brief.md
+PHASE 2 — UX / Information Architecture
+
+Definir:
+
+Site Map
+Navigation
+User Flows
+Page Structure
+Content Hierarchy
+Conversion Points
+
+Output:
+
+information-architecture.md
+user-flows.md
+PHASE 3 — Design Direction
+
+Utilizar UI/UX Pro Max + referências locais + identidade Natus.
+
+Definir:
+
+Design Language
+Typography
+Colors
+Grid
+Spacing
+Cards
+Buttons
+Motion
+Image Treatment
+Responsive Behavior
+
+Output:
+
+design-system.md
+PHASE 4 — Theme Showcase
+
+Criar:
+
+theme-showcase.pdf
+
+Revisar visualmente.
+
+Somente após aprovação continuar.
+
+PHASE 5 — Technical Architecture
+
+Definir:
+
+Next.js structure
+Components
+Data model
+Supabase usage
+Auth strategy
+API strategy
+Content strategy
+SEO
+Media strategy
+
+Output:
+
+architecture.md
+PHASE 6 — Foundation
+
+Implementar:
+
+Next.js foundation;
+fonts;
+theme;
+design tokens;
+layout;
+header;
+footer;
+buttons;
+base components.
+PHASE 7 — Home
+
+Implementar primeiro:
+
+/
+
+Validar completamente:
+
+desktop;
+mobile;
+interactions;
+motion;
+performance.
+PHASE 8 — Development Template
+
+Implementar uma única página de empreendimento completamente.
+
+Exemplo:
+
+/empreendimentos/[slug]
+
+Essa página será o template para os outros 10 empreendimentos.
+
+Validar o modelo antes de replicar.
+
+PHASE 9 — Remaining Developments
+
+Adicionar os outros empreendimentos através dos dados.
+
+Não duplicar páginas manualmente.
+
+PHASE 10 — Institutional Pages
+
+Implementar:
+
+/engenharia
+/negocie-seu-terreno
+/quem-somos
+/contato
+PHASE 11 — Dynamic Features
+
+Adicionar:
+
+progresso das obras;
+mapas;
+formulários;
+WhatsApp;
+galerias;
+vídeos;
+conteúdo dinâmico.
+PHASE 12 — Admin
+
+Somente se houver necessidade real.
+
+Avaliar:
+
+/admin
+
+com Supabase Auth.
+
+Priorizar inicialmente:
+
+progresso;
+empreendimentos;
+imagens;
+conteúdo simples.
+PHASE 13 — Validation
+
+Executar:
+
+TypeScript
+Lint
+Build
+Responsive testing
+Accessibility checks
+SEO checks
+Performance checks
+
+Testar pelo menos:
+
+Mobile
+Tablet
+Desktop
+31. CRITÉRIO DE QUALIDADE VISUAL
+
+Antes de considerar uma página pronta, perguntar:
+
+Branding
+
+A página parece claramente Grupo Natus?
+
+Design
+
+Parece um produto profissional ou um template genérico?
+
+UX
+
+O usuário entende rapidamente o que pode fazer?
+
+Hierarchy
+
+Existe uma hierarquia visual clara?
+
+Conversion
+
+Existe uma próxima ação evidente?
+
+Motion
+
+As animações melhoram a experiência?
+
+Responsive
+
+Funciona realmente em mobile?
+
+Performance
+
+A experiência continua rápida?
+
+Content
+
+As informações são reais ou claramente identificadas como mock?
+
+32. O QUE NÃO FAZER
+
+Não:
+
+copiar o NovoLar;
+inventar dados;
+criar microservices;
+criar backend separado sem necessidade;
+criar CMS antes da hora;
+criar admin antes da hora;
+criar abstrações excessivas;
+instalar dezenas de dependências;
+alterar RLS sem motivo;
+alterar env vars sem necessidade;
+implementar todas as páginas antes de validar o design;
+usar animações gratuitamente;
+transformar o site em uma demonstração de biblioteca de UI.
+33. PRIMEIRA TAREFA DO AGENTE
+
+NÃO começar escrevendo código.
+
+Executar primeiro uma fase de discovery.
+
+Entregáveis da primeira etapa:
+verificar BMAD;
+verificar skills;
+analisar estrutura atual do projeto;
+analisar assets locais;
+analisar Supabase sem alterar nada;
+analisar site atual do Grupo Natus;
+analisar referência NovoLar;
+identificar padrões relevantes;
+identificar riscos;
+identificar inconsistências do briefing;
+propor sitemap;
+propor architecture direction;
+propor design direction;
+propor plano BMAD;
+definir próximos passos.
+Regra final
+
+Após o discovery, pare antes de implementar e apresente os achados e decisões que precisam ser validadas.
+
+Não avance automaticamente para uma implementação grande.
+
+O objetivo da primeira sessão é transformar o briefing em um plano técnico e visual suficientemente claro para começar o desenvolvimento sem retrabalho desnecessário.
+
+Uma melhoria que eu faria no processo
+
+Eu não começaria pelo Supabase. O seu próprio briefing aponta para isso: primeiro frontend + design + conteúdo, depois backend.
+
+A ordem que eu usaria é:
+
+Discovery
+   ↓
+BMAD Brief
+   ↓
+UX / Sitemap
+   ↓
+Design System
+   ↓
+theme-showcase.pdf
+   ↓
+Home
+   ↓
+Template de Empreendimento
+   ↓
+11 empreendimentos
+   ↓
+Páginas institucionais
+   ↓
+Formulários / WhatsApp / Maps
+   ↓
+Supabase
+   ↓
+Admin (se realmente necessário)
+   ↓
+SEO / Performance / QA
+
+Isso evita o clássico crime arquitetural de modelar 17 tabelas no banco antes de saber se alguém realmente precisa delas.
+
+E eu manteria o empreendimento como entidade central do produto, não como 11 páginas independentes. Isso vai facilitar brutalmente o progresso das obras, imagens, mapas, SEO e eventual painel administrativo.
+
+O BMad atual inclusive suporta instalação incremental e módulos, então não precisa transformar o projeto num laboratório de agentes.
+
+Para a próxima etapa, você prefere que eu transforme esse prompt em um PROJECT_BRIEF.md + PRD.md já no formato do BMAD, ou em um prompt direto para Claude Code/Cursor executar o Discovery?

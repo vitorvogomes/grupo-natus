@@ -1,0 +1,48 @@
+# 🔔 Lacunas de conteúdo — o que preciso da empresa
+
+> Documento único (Story 2.2). O site já roda com os dados confirmados + placeholders `TODO: CONTENT REQUIRED` claramente rotulados. **Nada aqui bloqueia o desenvolvimento** — sigo construindo com mock; ao receber o material real, substituo sem retrabalho.
+> **Regra:** nada é inventado. Enquanto não houver fonte confiável, o campo aparece como TODO/mock rotulado.
+
+## 0. Validação geral (rápida, mas importante)
+- [ ] **Confirmar nomes e status** dos 11 empreendimentos (abaixo) — vieram do site atual, podem estar desatualizados.
+- [ ] Confirmar **contatos institucionais**: WhatsApp (31) 98466-3280 · Tel (31) 98337-4122 · administrativo@natusgrupo.com.br · Av. Getúlio Vargas, 1621 — Savassi, BH · Seg–Sex 09–19h.
+
+## 1. Por empreendimento (11)
+
+Para **cada** um dos empreendimentos abaixo preciso de:
+- **Resumo** (1–2 linhas) e **descrição** completa.
+- **Imagens** (renders, plantas humanizadas, externas, hero) — e a **indicação de quais arquivos de `img/` pertencem a cada empreendimento** (hoje não há esse mapeamento).
+- **Características/features** (ex.: nº de quartos, área, vagas, lazer, tipologia).
+- **Localização precisa**: endereço, e idealmente lat/lng ou link do Google Maps.
+- **Progresso da obra** (só para "Em construção"): % geral, etapas e data (ver §2).
+
+| # | Empreendimento | Cidade/UF | Status (confirmar) | Destaque confirmado |
+|---|---|---|---|---|
+| 1 | Viver Mais | Itaboraí/RJ | Pronto | — |
+| 2 | Residencial Denver | Belo Horizonte/MG | Pronto | — |
+| 3 | Torres da Lagoa | Lagoa Santa/MG | Pronto | — |
+| 4 | Follow Savassi | Belo Horizonte/MG | Em construção | — |
+| 5 | Golden Ville Residence | São Gonçalo/RJ | Em construção | — |
+| 6 | Solar Manilha | Itaboraí/RJ | Lançamento | 368 un. MCMV |
+| 7 | One Studios | Niterói/RJ | Lançamento | 180 studios |
+| 8 | Vista do Lago | Nova Lima/MG | Lançamento | 508 lotes |
+| 9 | Sunset Ville Residence | Belo Horizonte/MG | Lançamento | 72 un. MCMV |
+| 10 | Royal Ville Residence | Vespasiano/MG | Lançamento | 96 casas MCMV |
+| 11 | Gutierrez | Belo Horizonte/MG | Lançamento | 20 un. alto luxo |
+
+## 2. Progresso das obras (Epic 4)
+- [ ] Para cada empreendimento "Em construção" (Follow Savassi, Golden Ville): **% geral**, **etapas** (nome + % + ordem) e **data da última atualização**.
+- [ ] **Quem** atualiza e com **qual periodicidade** (define se vira conteúdo estático ou administração dinâmica no futuro).
+
+## 3. Páginas institucionais (Epic 6)
+- [ ] **Quem Somos**: história, empresas do grupo, atuação, valores, números (ex.: nº de obras/entregas, tempo de mercado).
+- [ ] **Serviços de Engenharia**: atuação, metodologia, tipos de projeto, capacidade técnica, obras realizadas, diferenciais.
+
+## 4. Conversão (Epic 5)
+- [ ] **Negocie seu Terreno**: confirmar os **campos exatos** do formulário (além de nome/contato/localização/área/tipo/observações).
+- [ ] **Envio de e-mail**: definir **provedor** (ex.: Resend) e para **qual caixa** os leads/contatos vão. O valor do secret será fornecido por você e eu edito `.env` sem exibi-lo.
+
+## 5. Mídia
+- [ ] Confirmar direitos de uso das imagens em `img/` e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
+- [ ] **Comprimir/redimensionar os fontes** antes de produção: os renders originais têm ~3999×5000 e 6–14 MB cada. O `next/image` otimiza na entrega, mas o ideal é versionar fontes web-friendly (NFR1). (Follow Savassi já usa os originais como prévia.)
+- [ ] Vídeos/panorâmicas, se houver.

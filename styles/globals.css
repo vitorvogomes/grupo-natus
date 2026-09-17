@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+/* Base mínima; tipografia e superfícies detalhadas evoluem com o design system. */
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Motion global (NFR4): respeita quem prefere menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
