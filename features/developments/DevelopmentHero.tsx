@@ -1,3 +1,4 @@
+import { BedDouble, MapPin, Play } from "lucide-react";
 import { Image } from "@/components/ui/Image";
 import { pickHeroImage } from "./pickHeroImage";
 import type { Development } from "@/types/development";
@@ -31,12 +32,12 @@ export function DevelopmentHero({ development }: DevelopmentHeroProps) {
         </h1>
         <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-navy-50">
           <span className="inline-flex items-center gap-2">
-            <span aria-hidden="true">📍</span>
+            <MapPin aria-hidden="true" className="size-4" />
             {development.location.city}/{development.location.state}
           </span>
           {development.tagline ? (
             <span className="inline-flex items-center gap-2">
-              <span aria-hidden="true">🛏️</span>
+              <BedDouble aria-hidden="true" className="size-4" />
               {development.tagline}
             </span>
           ) : null}
@@ -47,7 +48,7 @@ export function DevelopmentHero({ development }: DevelopmentHeroProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 font-medium text-white hover:text-brand"
             >
-              <span aria-hidden="true">▶</span>
+              <Play aria-hidden="true" className="size-4" />
               Assista ao vídeo
             </a>
           ) : null}

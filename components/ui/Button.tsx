@@ -18,6 +18,9 @@ export const buttonVariants = cva(
         secondary:
           "border border-ink bg-transparent text-ink hover:bg-ink hover:text-white",
         ghost: "bg-transparent text-ink hover:bg-surface-muted",
+        // Para superfícies escuras (ex.: hero navy) — visível sobre fundo escuro.
+        outlineInverse:
+          "border border-white/40 bg-transparent text-white hover:bg-white/10",
       },
       size: {
         sm: "text-sm px-3 py-1.5",

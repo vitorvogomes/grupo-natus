@@ -24,7 +24,7 @@ export function Hero() {
               <Button size="lg">Ver empreendimentos</Button>
             </Link>
             <Link href="/contato">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="outlineInverse">
                 Falar com o time
               </Button>
             </Link>

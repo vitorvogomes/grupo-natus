@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle } from "lucide-react";
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { BackToTop } from "./BackToTop";
 import { buttonVariants } from "./ui/Button";
@@ -44,29 +44,42 @@ export function Footer() {
 
         <address className="flex flex-col gap-3 text-sm not-italic">
           <h2 className="text-sm font-semibold text-white">Contato</h2>
-          <a href={`mailto:${CONTACT.email}`} className={linkClass}>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            className={cn(linkClass, "inline-flex items-center gap-2")}
+          >
+            <Mail aria-hidden="true" className="size-4 shrink-0" />
             {CONTACT.email}
           </a>
-          <a href={`tel:${CONTACT.phone}`} className={linkClass}>
+          <a
+            href={`tel:${CONTACT.phone}`}
+            className={cn(linkClass, "inline-flex items-center gap-2")}
+          >
+            <Phone aria-hidden="true" className="size-4 shrink-0" />
             {CONTACT.phoneDisplay}
           </a>
           <a
             href={buildWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className={linkClass}
+            className={cn(linkClass, "inline-flex items-center gap-2")}
           >
+            <MessageCircle aria-hidden="true" className="size-4 shrink-0" />
             WhatsApp {CONTACT.whatsappDisplay}
           </a>
           <a
             href={CONTACT.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={linkClass}
+            className={cn(linkClass, "inline-flex items-start gap-2")}
           >
+            <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
             {CONTACT.address}
           </a>
-          <span className="text-navy-200">{CONTACT.hours}</span>
+          <span className="inline-flex items-center gap-2 text-navy-200">
+            <Clock aria-hidden="true" className="size-4 shrink-0" />
+            {CONTACT.hours}
+          </span>
         </address>
 
         <div>
