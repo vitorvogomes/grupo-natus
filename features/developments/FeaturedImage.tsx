@@ -60,7 +60,9 @@ export function FeaturedImage({ image, onOpen }: FeaturedImageProps) {
           src={image.src}
           alt={image.alt}
           fill
-          sizes="(max-width: 1024px) 100vw, 66vw"
+          // Pede variante maior que a caixa: dá folga p/ o hover-zoom (1.9x)
+          // continuar nítido ao ampliar.
+          sizes="(max-width: 1024px) 100vw, 1216px"
           className="object-cover"
         />
       </motion.div>

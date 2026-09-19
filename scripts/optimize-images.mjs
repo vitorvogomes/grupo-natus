@@ -19,9 +19,11 @@ import sharp from "sharp";
 const ROOT = process.cwd();
 const OUT_ROOT = join(ROOT, "public", "empreendimentos");
 
-// Larguras-alvo por papel: hero/fachada maior; galeria um pouco menor.
-const WIDTH = { hero: 2400, gallery: 1920 };
-const QUALITY = 80;
+// Limite do LADO MAIOR por papel (mantém nitidez em retratos 4K e no hero
+// full-bleed; o hover-zoom amplia o featured, então preservamos resolução).
+// fit "inside" nunca amplia além do original.
+const MAX_SIDE = { hero: 3000, gallery: 2560 };
+const QUALITY = 86;
 
 /** @type {Record<string, { srcDir: string; images: {src:string; out:string; role?: "hero"|"gallery"}[] }>} */
 const JOBS = {
@@ -60,13 +62,18 @@ async function run() {
     for (const img of job.images) {
       const srcPath = join(ROOT, job.srcDir, img.src);
       const outPath = join(outDir, `${img.out}.webp`);
-      const width = WIDTH[img.role === "hero" ? "hero" : "gallery"];
+      const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
       const before = (await stat(srcPath)).size;
 
       await sharp(srcPath)
         .rotate() // respeita orientação EXIF
-        .resize({ width, withoutEnlargement: true })
-        .webp({ quality: QUALITY })
+        .resize({
+          width: maxSide,
+          height: maxSide,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp({ quality: QUALITY, effort: 6 })
         .toFile(outPath);
 
       const after = (await stat(outPath)).size;
