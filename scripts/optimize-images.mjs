@@ -129,11 +129,55 @@ const JOBS = {
   },
 };
 
+// Assets avulsos (não ligados a um empreendimento). Rode com o slug "singles".
+const SINGLES = [
+  {
+    name: "placeholder (em construção)",
+    src: "img/em-construcao.png",
+    out: "public/empreendimentos/em-construcao.webp",
+    maxSide: 1600,
+  },
+  {
+    name: "home hero",
+    src: "img/Follow Savassi - Belo Horizonte MG/0065-OASIS_FACHADA NOTURNA CAM 02_4K.jpg",
+    out: "public/home/hero.webp",
+    maxSide: 3000,
+  },
+];
+
 const KB = (bytes) => `${Math.round(bytes / 1024)} KB`;
+
+async function optimizeSingles() {
+  console.log(`\n▸ singles (${SINGLES.length})`);
+  for (const item of SINGLES) {
+    const outPath = join(ROOT, item.out);
+    await mkdir(join(outPath, ".."), { recursive: true });
+    const before = (await stat(join(ROOT, item.src))).size;
+    await sharp(join(ROOT, item.src))
+      .rotate()
+      .resize({
+        width: item.maxSide,
+        height: item.maxSide,
+        fit: "inside",
+        withoutEnlargement: true,
+      })
+      .webp({ quality: QUALITY, effort: 6 })
+      .toFile(outPath);
+    const after = (await stat(outPath)).size;
+    console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
+  }
+}
 
 async function run() {
   const requested = process.argv.slice(2);
-  const slugs = requested.length ? requested : Object.keys(JOBS);
+
+  if (!requested.length || requested.includes("singles")) {
+    await optimizeSingles();
+  }
+
+  const slugs = requested.length
+    ? requested.filter((s) => s !== "singles")
+    : Object.keys(JOBS);
 
   for (const slug of slugs) {
     const job = JOBS[slug];
