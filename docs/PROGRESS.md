@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-09-18 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** Modernização de Frontend (ver seção abaixo) · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-09-19 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** Modernização de Frontend — **implementação concluída** (ver seção abaixo); pendente `interface-review` manual · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -65,7 +65,7 @@
 
 > Fora do backlog original (Epics 1–8). Eleva o design a um patamar premium: shadcn/ui + Radix,
 > tipografia Fraunces/Inter, ícones lucide, motion. Gate baixado p/ 85% (ver `docs/adr/0001-coverage-85.md`).
-> Branch `feature/frontend-modernization`.
+> Commits na `main` (mesmo fluxo do restante do projeto).
 
 - ✅ Fase 0 — tooling (npm, `cn`, deps, skills, MCP)
 - ✅ Gate 90→85 + ADR
@@ -77,9 +77,15 @@
 - ✅ B1 — Reorder (empreendimento antes da galeria)
 - ✅ B2 — Zoom/lightbox galeria (Radix Tabs + Radix Dialog lightbox com setas/teclado)
 - ✅ B3 — Google Maps do HQ
-- ⬜ A6/B4 — theme-showcase + polir cards/hero/catálogo (**não cobre header/footer**)
 - ✅ **B5 — Navegação (Header/Footer)**: CTA persistente, mega-menu (NavigationMenu), MobileNav→Sheet, Footer rico + sub-footer
-- ⬜ Verificação final (build/lint/typecheck/cobertura ≥85%) + `interface-review`
+- ✅ QW — hero CTA on-dark (`outlineInverse`) + 📍→lucide (MapPin/BedDouble/Play) + ícones de contato
+- ✅ Rebuild da seção do empreendimento (Overview/Details): remove duplicação status+localização; características em grid de cards; placeholder discreto p/ descrição TODO
+- ✅ Progresso → **Radix Progress** (somente leitura): geral em card destaque + etapas em grid; fill em gradiente de marca (sliders descartados; referência usa barras)
+- ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
+- ✅ Galeria — **imagem em destaque + lupa (magnifier) no hover** + grade das demais + lightbox (gated por `prefers-reduced-motion`/pointer)
+- ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
+- ✅ Verificação: 224 testes · cobertura 98%+/91% · typecheck/lint/build (24 páginas) ok
+- 🔔 `interface-review` — execução formal é **manual** (`/interface-review`; skill com `disable-model-invocation`); auto-revisão do diff aplicada nesta rodada
 
 ---
 

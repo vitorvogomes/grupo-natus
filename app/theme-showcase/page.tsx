@@ -1,12 +1,56 @@
 import type { Metadata } from "next";
+import {
+  BedDouble,
+  Check,
+  ChevronDown,
+  Clock,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Play,
+  ZoomIn,
+} from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Image } from "@/components/ui/Image";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Textarea } from "@/components/ui/Textarea";
 import { TextLink } from "@/components/ui/TextLink";
+import { ProgressTimeline } from "@/features/developments/ProgressTimeline";
 import { ShowcaseInteractive } from "@/components/showcase/ShowcaseInteractive";
 import { Logo } from "@/components/Logo";
-import { DEVELOPMENT_STATUSES } from "@/types/development";
+import {
+  DEVELOPMENT_STATUSES,
+  type ConstructionProgress,
+} from "@/types/development";
+
+const ICONS = [
+  { Icon: MapPin, name: "MapPin" },
+  { Icon: BedDouble, name: "BedDouble" },
+  { Icon: Check, name: "Check" },
+  { Icon: Phone, name: "Phone" },
+  { Icon: Mail, name: "Mail" },
+  { Icon: MessageCircle, name: "MessageCircle" },
+  { Icon: ZoomIn, name: "ZoomIn" },
+  { Icon: ChevronDown, name: "ChevronDown" },
+  { Icon: Clock, name: "Clock" },
+  { Icon: Play, name: "Play" },
+] as const;
+
+const SHOWCASE_PROGRESS: ConstructionProgress = {
+  overallPercentage: 62,
+  updatedAt: "2026-08-01T00:00:00.000Z",
+  isPreview: true,
+  stages: [
+    { name: "Fundação", percentage: 100, order: 1 },
+    { name: "Estrutura", percentage: 70, order: 2 },
+    { name: "Instalações", percentage: 35, order: 3 },
+    { name: "Acabamento", percentage: 10, order: 4 },
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Theme Showcase",
@@ -131,15 +175,57 @@ export default function ThemeShowcasePage() {
       </Section>
 
       <Section id="tipografia" title="Tipografia">
-        <div className="flex flex-col gap-2">
-          {TYPE_SIZES.map((size) => (
-            <p
-              key={size}
-              className="text-ink"
-              style={{ fontSize: `var(--${size})` }}
+        <div className="flex flex-col gap-8">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="rounded-lg border border-border p-6">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Títulos — Fraunces (serifa)
+              </p>
+              <p className="mt-2 font-heading text-4xl font-semibold text-ink">
+                Grupo Natus
+              </p>
+              <p className="font-heading text-lg text-ink-soft">
+                Incorporação & engenharia
+              </p>
+            </div>
+            <div className="rounded-lg border border-border p-6">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                Corpo — Inter (sans)
+              </p>
+              <p className="mt-2 text-base text-ink">
+                Texto de leitura, rótulos e interface. Legível em qualquer
+                tamanho, com bom contraste sobre as superfícies claras da marca.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            {TYPE_SIZES.map((size) => (
+              <p
+                key={size}
+                className="text-ink"
+                style={{ fontSize: `var(--${size})` }}
+              >
+                Grupo Natus — {size}
+              </p>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section id="icones" title="Ícones (lucide)">
+        <p className="mb-4 max-w-2xl text-sm text-ink-soft">
+          Biblioteca única de ícones (lucide-react), importada por nome
+          (tree-shaking). Sem emojis/glifos em nenhuma superfície.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {ICONS.map(({ Icon, name }) => (
+            <div
+              key={name}
+              className="flex w-24 flex-col items-center gap-2 rounded-lg border border-border p-3 text-center"
             >
-              Grupo Natus — {size}
-            </p>
+              <Icon aria-hidden="true" className="size-6 text-brand-strong" />
+              <span className="text-xs text-muted-foreground">{name}</span>
+            </div>
           ))}
         </div>
       </Section>
@@ -162,6 +248,18 @@ export default function ThemeShowcasePage() {
               </Button>
             </div>
           ))}
+          {/* Variante para superfícies escuras (hero navy). */}
+          <div className="flex flex-wrap items-center gap-4 rounded-lg bg-navy-600 p-4">
+            <Button variant="outlineInverse" size="sm">
+              outlineInverse sm
+            </Button>
+            <Button variant="outlineInverse" size="md">
+              outlineInverse md
+            </Button>
+            <Button variant="outlineInverse" size="lg">
+              outlineInverse lg
+            </Button>
+          </div>
         </div>
       </Section>
 
@@ -213,40 +311,49 @@ export default function ThemeShowcasePage() {
         </div>
       </Section>
 
-      <Section id="progresso" title="Progresso da obra (prévia — Epic 4)">
-        <div className="max-w-md">
-          <div className="mb-1 flex justify-between text-sm text-ink">
-            <span>Fundação</span>
-            <span>65%</span>
-          </div>
-          <div className="h-3 w-full overflow-hidden rounded-full bg-surface-muted">
-            <div className="h-full w-[65%] rounded-full bg-status-em-construcao" />
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            Componente real (ProgressBar/Timeline) chega na Epic 4.
+      <Section id="progresso" title="Progresso da obra">
+        <div className="max-w-2xl">
+          <ProgressTimeline progress={SHOWCASE_PROGRESS} />
+          <p className="mt-4 text-xs text-muted-foreground">
+            Componente real (Radix Progress, somente leitura). Percentuais aqui
+            são ilustrativos — dados reais por empreendimento.
           </p>
         </div>
       </Section>
 
-      <Section id="formularios" title="Formulários (prévia — Epic 5)">
+      <Section id="formularios" title="Formulários">
         <div className="grid max-w-md gap-4">
-          <label className="flex flex-col gap-1 text-sm text-ink">
-            Nome
-            <input
-              className="rounded-md border border-border px-3 py-2"
-              placeholder="Seu nome"
-            />
-          </label>
-          <label className="flex flex-col gap-1 text-sm text-ink">
-            Mensagem
-            <textarea
-              className="rounded-md border border-border px-3 py-2"
-              rows={3}
-              placeholder="Sua mensagem"
-            />
-          </label>
+          <Input
+            id="showcase-nome"
+            label="Nome"
+            placeholder="Seu nome"
+            required
+          />
+          <Select
+            id="showcase-assunto"
+            label="Assunto"
+            placeholder="Selecione"
+            options={[
+              { value: "compra", label: "Quero comprar" },
+              { value: "terreno", label: "Negociar meu terreno" },
+            ]}
+          />
+          <Textarea
+            id="showcase-mensagem"
+            label="Mensagem"
+            rows={3}
+            placeholder="Sua mensagem"
+          />
+          <Input
+            id="showcase-email-erro"
+            label="Email"
+            defaultValue="invalido"
+            error="Email inválido."
+          />
           <p className="text-xs text-muted-foreground">
-            Primitivos acessíveis reais (Input/Select/Textarea) chegam na Epic 5.
+            Primitivos acessíveis reais (Input/Select/Textarea) — validação via
+            react-hook-form + zod no LeadForm. Filtros do catálogo usam Radix
+            Select.
           </p>
         </div>
       </Section>
