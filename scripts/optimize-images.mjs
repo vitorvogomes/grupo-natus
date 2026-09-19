@@ -147,6 +147,22 @@ const SINGLES = [
 
 // Imagens institucionais (Quem Somos + Engenharia). Rode com o slug "institucional".
 const INSTITUTIONAL = [
+  // Marca — lockups "assinatura" (Grupo Natus + ALIATTO | OASI). Line-art
+  // plano com alfa → webp lossless (nítido e leve).
+  {
+    name: "brand: assinatura principal (colorida)",
+    src: "img/LOGOS/LOGO/JPG/GRUPO_NATUS_PRINCIPAL_ASSINATURA.png",
+    out: "public/brand/grupo-natus-assinatura.webp",
+    maxSide: 1400,
+    lossless: true,
+  },
+  {
+    name: "brand: assinatura negativa (branca, p/ fundo escuro)",
+    src: "img/LOGOS/LOGO/JPG/GRUPO_NATUS_NEGATIVA_ASSINATURA.png",
+    out: "public/brand/grupo-natus-assinatura-negativa.webp",
+    maxSide: 1400,
+    lossless: true,
+  },
   // Quem Somos
   {
     name: "quem-somos: parede da recepção (Grupo Natus / ALIATTO | OASI)",
@@ -236,7 +252,7 @@ async function optimizeFlat(label, list) {
         fit: "inside",
         withoutEnlargement: true,
       })
-      .webp({ quality: QUALITY, effort: 6 })
+      .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
       .toFile(outPath);
     const after = (await stat(outPath)).size;
     console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);

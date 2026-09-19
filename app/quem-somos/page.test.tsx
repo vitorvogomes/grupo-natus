@@ -33,6 +33,16 @@ describe("Página /quem-somos (FR13)", () => {
     expect(screen.getAllByText(/ISO 9001:2015/i).length).toBeGreaterThan(0);
   });
 
+  it("usa o lockup de marca (holding + empresas) e a métrica de área construída", () => {
+    render(<QuemSomosPage />);
+    expect(
+      screen.getByRole("img", {
+        name: "Grupo Natus — ALIATTO Incorporadora e OASI Engenharia",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Área construída/i)).toBeInTheDocument();
+  });
+
   it("marca conteúdo pendente como TODO (não inventa números/história)", () => {
     render(<QuemSomosPage />);
     expect(

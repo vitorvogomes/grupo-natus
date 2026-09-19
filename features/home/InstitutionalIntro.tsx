@@ -5,9 +5,9 @@ import Link from "next/link";
  * Números são DADOS — não inventar: exibidos como TODO até a empresa fornecer.
  */
 const STATS = [
-  { label: "Anos de mercado" },
-  { label: "Empreendimentos entregues" },
-  { label: "Unidades" },
+  { label: "Anos de experiência" },
+  { label: "Área construída (m²)" },
+  { label: "Unidades entregues" },
 ] as const;
 
 export function InstitutionalIntro() {

@@ -77,7 +77,9 @@ const VALUES = [
   },
 ] as const;
 
-const STATS = ["Anos de mercado", "Empreendimentos entregues", "Unidades"];
+// Parâmetros inspirados na ref (experiência / área construída / unidades).
+// Valores: DADOS — nunca inventar (TODO até a empresa fornecer).
+const STATS = ["Anos de experiência", "Área construída (m²)", "Unidades entregues"];
 
 function TodoText({ children }: { children: string }) {
   return <span className="text-muted-foreground">{children}</span>;
@@ -139,7 +141,18 @@ export default function QuemSomosPage() {
               incorporação à execução da obra.
             </p>
           </Reveal>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <Reveal delay={0.06}>
+            <div className="mt-8 flex justify-center rounded-lg border border-border bg-surface-muted px-6 py-10">
+              <Image
+                src="/brand/grupo-natus-assinatura.webp"
+                alt="Grupo Natus — ALIATTO Incorporadora e OASI Engenharia"
+                width={1342}
+                height={579}
+                className="h-auto w-full max-w-[460px]"
+              />
+            </div>
+          </Reveal>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
             {COMPANIES.map((company, i) => {
               const Icon = company.icon;
               return (
@@ -247,7 +260,14 @@ export default function QuemSomosPage() {
         {/* CTA. */}
         <Reveal>
           <section className="mt-16 rounded-lg bg-navy-600 p-8 text-navy-50">
-            <h2 className="text-2xl font-semibold text-white">
+            <Image
+              src="/brand/grupo-natus-assinatura-negativa.webp"
+              alt="Grupo Natus"
+              width={1342}
+              height={579}
+              className="h-auto w-full max-w-[220px]"
+            />
+            <h2 className="mt-6 text-2xl font-semibold text-white">
               Vamos conversar sobre seu próximo imóvel?
             </h2>
             <Link href="/contato" className="mt-4 inline-block">
