@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
 import type { ReactNode } from "react";
-import { cx } from "@/lib/cx";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type ModalProps = {
   open: boolean;
@@ -13,46 +14,45 @@ type ModalProps = {
 };
 
 export function Modal({ open, onClose, title, children, className }: ModalProps) {
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
   return (
-    <div
-      data-testid="modal-overlay"
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/50 p-4"
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
     >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-        className={cx(
-          "w-full max-w-lg rounded-lg bg-surface p-6 shadow-xl",
-          className,
-        )}
-      >
-        <div className="mb-4 flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold text-ink">{title}</h2>
-          <button
-            type="button"
-            aria-label="Fechar"
-            onClick={onClose}
-            className="inline-flex size-8 items-center justify-center rounded-md text-ink-soft hover:bg-surface-muted"
-          >
-            <span aria-hidden="true">✕</span>
-          </button>
-        </div>
-        {children}
-      </div>
-    </div>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay
+          data-testid="modal-overlay"
+          className={cn(
+            "fixed inset-0 z-50 bg-navy-900/50",
+            "data-[state=open]:animate-in data-[state=open]:fade-in-0",
+            "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+          )}
+        />
+        <DialogPrimitive.Content
+          className={cn(
+            "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2",
+            "rounded-lg bg-surface p-6 shadow-xl",
+            "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
+            "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+            className,
+          )}
+        >
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <DialogPrimitive.Title className="text-xl font-semibold text-ink">
+              {title}
+            </DialogPrimitive.Title>
+            <DialogPrimitive.Close
+              aria-label="Fechar"
+              className="inline-flex size-8 items-center justify-center rounded-md text-ink-soft transition-colors hover:bg-surface-muted"
+            >
+              <X aria-hidden="true" className="size-5" />
+            </DialogPrimitive.Close>
+          </div>
+          {children}
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }

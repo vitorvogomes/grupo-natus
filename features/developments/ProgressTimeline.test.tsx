@@ -4,21 +4,21 @@ import { ProgressTimeline } from "./ProgressTimeline";
 import type { ConstructionProgress } from "@/types/development";
 
 const progress: ConstructionProgress = {
-  overallPercentage: 62,
+  overallPercentage: 55,
   updatedAt: "2026-08-01T00:00:00.000Z",
   stages: [
-    { name: "Acabamento", percentage: 20, order: 3 },
-    { name: "Fundação", percentage: 100, order: 1 },
-    { name: "Estrutura", percentage: 70, order: 2 },
+    { name: "Estrutura", percentage: 80, order: 4 },
+    { name: "Fundações", percentage: 100, order: 3 },
+    { name: "Terraplanagem", percentage: 100, order: 1 },
   ],
 };
 
 describe("ProgressTimeline (FR5)", () => {
-  it("mostra o progresso geral", () => {
+  it("mostra o Total Construído (percentual geral)", () => {
     render(<ProgressTimeline progress={progress} />);
     expect(
-      screen.getByRole("progressbar", { name: /progresso geral/i }),
-    ).toHaveAttribute("aria-valuenow", "62");
+      screen.getByRole("progressbar", { name: /total construído/i }),
+    ).toHaveAttribute("aria-valuenow", "55");
   });
 
   it("mostra a data da última atualização", () => {
@@ -31,16 +31,30 @@ describe("ProgressTimeline (FR5)", () => {
     expect(screen.getByText(/ilustrativos/i)).toBeInTheDocument();
   });
 
-  it("lista as etapas ordenadas por order", () => {
+  it("projeta as 7 etapas canônicas da Natus, na ordem oficial", () => {
     render(<ProgressTimeline progress={progress} />);
-    const stageBars = screen
+    const labels = screen
       .getAllByRole("progressbar")
       .map((el) => el.getAttribute("aria-label"));
-    expect(stageBars).toEqual([
-      "Progresso geral",
-      "Fundação",
+    expect(labels).toEqual([
+      "Total Construído",
+      "Terraplanagem",
+      "Infraestrutura",
+      "Fundações",
       "Estrutura",
-      "Acabamento",
+      "Instalações",
+      "Revestimento",
+      "Acabamentos",
     ]);
+  });
+
+  it("usa o % informado e preenche 0% nas etapas sem dado", () => {
+    render(<ProgressTimeline progress={progress} />);
+    expect(
+      screen.getByRole("progressbar", { name: "Estrutura" }),
+    ).toHaveAttribute("aria-valuenow", "80");
+    expect(
+      screen.getByRole("progressbar", { name: "Infraestrutura" }),
+    ).toHaveAttribute("aria-valuenow", "0");
   });
 });

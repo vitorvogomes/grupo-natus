@@ -3,8 +3,8 @@ import { developments } from "./data";
 import { DEVELOPMENT_STATUSES } from "@/types/development";
 
 describe("Seed dos empreendimentos", () => {
-  it("cadastra os 11 empreendimentos ativos", () => {
-    expect(developments).toHaveLength(11);
+  it("cadastra os 12 empreendimentos ativos", () => {
+    expect(developments).toHaveLength(12);
   });
 
   it("cada empreendimento tem nome, slug kebab-case, cidade/UF e status válido", () => {
@@ -29,7 +29,7 @@ describe("Seed dos empreendimentos", () => {
   it("Follow Savassi tem imagens reais atribuídas (Gate B)", () => {
     const fs = developments.find((d) => d.slug === "follow-savassi")!;
     expect(fs.images.length).toBeGreaterThanOrEqual(6);
-    expect(fs.images[0]?.kind).toBe("hero");
+    expect(fs.images[0]?.kind).toBe("externa");
   });
 
   it("inclui os empreendimentos-chave conhecidos", () => {

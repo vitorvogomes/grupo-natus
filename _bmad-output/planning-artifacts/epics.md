@@ -12,7 +12,7 @@ inputDocuments:
 
 This document provides the complete epic and story breakdown for Website Grupo Natus, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories. Generated via BMAD (bmad-create-epics-and-stories). Output language: Portuguese.
 
-> **Notas de discovery:** PRD e Product Brief localizados em `docs/` (incluídos manualmente como inputs). **Não existe `architecture.md`** ainda (Fase 5 / decisão de arquitetura pendente) — requisitos técnicos abaixo derivam do PRD §5 e das restrições do ESCOPO. **Não existe contrato de UX formal**; o `theme-showcase` (Gate A) é o marco de design a validar antes de construir todas as páginas.
+> **Notas de discovery:** PRD e Product Brief localizados em `docs/` (incluídos manualmente como inputs). **Não existe `architecture.md`** ainda (Fase 5 / decisão de arquitetura pendente) — requisitos técnicos abaixo derivam do PRD §5 e das restrições do README. **Não existe contrato de UX formal**; o `theme-showcase` (Gate A) é o marco de design a validar antes de construir todas as páginas.
 
 ## Requirements Inventory
 
@@ -48,18 +48,18 @@ NFR9 (Qualidade/TDD): TDD sagrado (red→green→refactor); cobertura mínima de
 
 ### Additional Requirements
 
-<!-- Derivados do PRD §5 e ESCOPO (architecture.md ainda não existe) -->
+<!-- Derivados do PRD §5 e README (architecture.md ainda não existe) -->
 - **Starter/greenfield:** projeto sem código; **Epic 1 / Story 1 = scaffold Next.js (App Router) + TypeScript estrito** com ESLint, Vitest (coverage threshold 90%), scripts `dev`/`build`/`lint`/`typecheck`/`test:coverage`. (Impacta diretamente Epic 1 Story 1.)
 - Camada de conteúdo estática em `src/content`; migração a Supabase apenas quando houver necessidade real de administração dinâmica.
 - APIs via Next.js Route Handlers; auth (se necessária) via Supabase Auth; sem backend separado.
-- Preservar RLS/env/secrets do Supabase existente (restrição crítica do ESCOPO).
+- Preservar RLS/env/secrets do Supabase existente (restrição crítica do README).
 - Google Maps: iniciar por embed/link; avaliar API key/custo antes de acoplar.
 - Provedor de email para envio de formulários: **a definir** (bloqueia FR11 até decisão).
 - **Lacuna:** `architecture.md` (Fase 5) ainda não produzido — decisões finais de estrutura de pastas, estratégia de mídia e dados devem ser confirmadas antes/junto do Epic 1.
 
 ### UX Design Requirements
 
-<!-- Não há contrato de UX formal (bmad-ux) ainda. Itens derivados do design system do ESCOPO §22 e do gate theme-showcase. -->
+<!-- Não há contrato de UX formal (bmad-ux) ainda. Itens derivados do design system do README §22 e do gate theme-showcase. -->
 - **UX-DR pendente de formalização** — o design system e o `theme-showcase` (Gate A) são o marco. Candidatos a UX-DR já mapeados:
 - UX-DR1: Design tokens da marca Natus (cores institucionais extraídas dos logos, tipografia, spacing, radius, shadows, breakpoints, grid, motion) como fonte única.
 - UX-DR2: Componentes reutilizáveis: Header, Footer, Navigation (+ nav mobile), Button, Link, Badge, Card, DevelopmentCard, DevelopmentStatus, ProgressBar, ProgressTimeline, Gallery, Image, Video, Map, Form, Input, Select, Textarea, Modal, Accordion, CTA, WhatsAppButton.

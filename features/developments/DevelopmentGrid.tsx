@@ -8,7 +8,7 @@ type DevelopmentGridProps = {
 export function DevelopmentGrid({ developments }: DevelopmentGridProps) {
   if (developments.length === 0) {
     return (
-      <p className="py-12 text-center text-muted">
+      <p className="py-12 text-center text-muted-foreground">
         Nenhum empreendimento encontrado com os filtros selecionados.
       </p>
     );

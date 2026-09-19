@@ -1,4 +1,5 @@
-import type { Development } from "@/types/development";
+import type { Development, DevelopmentStatus } from "@/types/development";
+import { DEVELOPMENT_STATUSES, STATUS_META } from "@/types/development";
 import { developments } from "./data";
 
 /** Garante unicidade de slug (identificador do empreendimento — AD-2). */
@@ -29,4 +30,25 @@ export function getAllDevelopments(): readonly Development[] {
 
 export function getDevelopmentBySlug(slug: string): Development | undefined {
   return findBySlug(developments, slug);
+}
+
+export type StatusNavGroup = {
+  status: DevelopmentStatus;
+  label: string;
+  items: { name: string; slug: string }[];
+};
+
+/**
+ * Empreendimentos agrupados por status (mega-menu do header). Só grupos com
+ * itens; ordem canônica de `DEVELOPMENT_STATUSES`.
+ */
+export function getDevelopmentsGroupedByStatus(): StatusNavGroup[] {
+  const all = getAllDevelopments();
+  return DEVELOPMENT_STATUSES.map((status) => ({
+    status,
+    label: STATUS_META[status].label,
+    items: all
+      .filter((dev) => dev.status === status)
+      .map((dev) => ({ name: dev.name, slug: dev.slug })),
+  })).filter((group) => group.items.length > 0);
 }

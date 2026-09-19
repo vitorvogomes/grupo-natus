@@ -18,11 +18,6 @@ const base: Development = {
 };
 
 describe("DevelopmentDetails (FR4)", () => {
-  it("mostra o badge de status", () => {
-    render(<DevelopmentDetails development={base} />);
-    expect(screen.getByText("Em construção")).toBeInTheDocument();
-  });
-
   it("mostra descrição e características", () => {
     render(<DevelopmentDetails development={base} />);
     expect(
@@ -36,5 +31,17 @@ describe("DevelopmentDetails (FR4)", () => {
   it("trata ausência de características sem quebrar", () => {
     render(<DevelopmentDetails development={{ ...base, features: [] }} />);
     expect(screen.getByText(/características em breve/i)).toBeInTheDocument();
+  });
+
+  it("mostra placeholder discreto quando a descrição é um TODO", () => {
+    render(
+      <DevelopmentDetails
+        development={{ ...base, description: "TODO: CONTENT REQUIRED — desc" }}
+      />,
+    );
+    expect(
+      screen.getByText(/descrição detalhada em breve/i),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/TODO/)).not.toBeInTheDocument();
   });
 });

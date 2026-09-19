@@ -1,5 +1,5 @@
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 
 type WhatsAppButtonProps = {
   /** Mensagem contextual (ex.: nome do empreendimento). */
@@ -31,7 +31,7 @@ export function WhatsAppButton({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className={cx(
+      className={cn(
         "fixed bottom-5 right-5 z-40 inline-flex size-14 items-center justify-center rounded-full",
         "bg-status-pronto text-white shadow-lg transition-transform hover:scale-105",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",

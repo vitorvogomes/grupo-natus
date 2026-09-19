@@ -10,6 +10,16 @@ describe("InstitutionalIntro", () => {
     ).toHaveAttribute("href", "/quem-somos");
   });
 
+  it("apresenta o posicionamento real (holding, ALIATTO + OASI)", () => {
+    render(<InstitutionalIntro />);
+    expect(
+      screen.getByRole("heading", { name: /holding/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/ALIATTO Incorporadora e OASI\s+Engenharia/i),
+    ).toBeInTheDocument();
+  });
+
   it("mostra números institucionais como placeholders TODO (não inventados)", () => {
     render(<InstitutionalIntro />);
     expect(screen.getAllByText(/TODO: CONTENT REQUIRED/).length).toBeGreaterThan(

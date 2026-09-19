@@ -5,8 +5,8 @@ export type DevSection = {
 
 /** Âncoras de seção da página de empreendimento (estrutura ref.: novolar). */
 export const DEV_SECTIONS: readonly DevSection[] = [
-  { id: "imagens", label: "Imagens" },
   { id: "empreendimento", label: "Empreendimento" },
+  { id: "imagens", label: "Imagens" },
   { id: "localizacao", label: "Localização" },
   { id: "estagio-de-obra", label: "Estágio de Obra" },
   { id: "falar-com-consultor", label: "Falar com Consultor" },

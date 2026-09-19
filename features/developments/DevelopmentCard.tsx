@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
 import { Image } from "@/components/ui/Image";
-import { pickHeroImage } from "./pickHeroImage";
+import { cn } from "@/lib/utils";
+import { PLACEHOLDER_IMAGE, pickHeroImage } from "./pickHeroImage";
 import type { Development } from "@/types/development";
 
 type DevelopmentCardProps = {
@@ -15,20 +17,22 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
   const href = `/empreendimentos/${development.slug}`;
 
   return (
-    <Card as="article" className="flex flex-col overflow-hidden">
-      <div className="relative aspect-[4/3] bg-surface-muted">
-        {hero ? (
-          <Image
-            src={hero.src}
-            alt={hero.alt}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted">
+    <Card
+      as="article"
+      className="group flex flex-col overflow-hidden transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
+        <Image
+          src={hero ? hero.src : PLACEHOLDER_IMAGE}
+          alt={hero ? hero.alt : `${development.name} — imagem em breve`}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+        />
+        {hero ? null : (
+          <span className="absolute bottom-3 left-3 rounded-full bg-navy-900/70 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
             Imagem em breve
-          </div>
+          </span>
         )}
         <div className="absolute left-3 top-3">
           <Badge status={development.status} />
@@ -37,7 +41,8 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-lg font-semibold text-ink">{development.name}</h3>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+          <MapPin aria-hidden="true" className="size-3.5 shrink-0" />
           {development.location.city}/{development.location.state}
         </p>
 
@@ -55,8 +60,11 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
         ) : null}
 
         <div className="mt-auto pt-5">
-          <Link href={href}>
-            <Button className="w-full">Ver empreendimento</Button>
+          <Link
+            href={href}
+            className={cn(buttonVariants({ variant: "primary" }), "w-full")}
+          >
+            Ver empreendimento
           </Link>
         </div>
       </div>

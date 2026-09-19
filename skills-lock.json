@@ -1,6 +1,21 @@
 {
   "version": 1,
   "skills": {
+    "animate": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "computedHash": "7598d33e7f60dd5c24531eaaa897621cc3bdb48e8050324211627973bc59c4ce"
+    },
+    "better-interface": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "computedHash": "406267c5782510d658a914899db2fc5eb3f5f7d51620cc4c86d7e26b217fdf24"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "computedHash": "51f2537e04d15911b41d78e2de24c36a0e26d41beae15e82a954fe5496a5eda9"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
@@ -12,6 +27,11 @@
       "sourceType": "github",
       "skillPath": "frontend/framer-motion-animator/SKILL.md",
       "computedHash": "d0137ba04049bf8926bc80f6a5e2b82d94b5633b6445a85dbfb26ab4f1b104c6"
+    },
+    "interface-review": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "computedHash": "692fc5f2cfc2ad08951ea68ee6f5db9c99b759fa46b18e53101cd50d51a94f3a"
     },
     "nextjs-app-router-patterns": {
       "source": "wshobson/agents",
@@ -48,6 +68,11 @@
       "sourceType": "github",
       "skillPath": "plugins/vitest-testing/skills/vitest-testing/SKILL.md",
       "computedHash": "2a937cd4b3ca9e062af25bfc5fb61a918d2b51db921c49c553345a48c35e30bb"
+    },
+    "web-design-engineer": {
+      "source": "ConardLi/garden-skills",
+      "sourceType": "github",
+      "computedHash": "82e5bd4aec3752c4dd8d22939c46d24f2fa4b03e24088420dabcd4ada0ef6884"
     }
   }
 }

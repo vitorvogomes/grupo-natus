@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 import {
   STATUS_META,
   type DevelopmentStatus,
@@ -19,13 +19,13 @@ export function Badge({ children, status, className }: BadgeProps) {
   if (status) {
     const meta = STATUS_META[status];
     return (
-      <span className={cx(BASE, meta.badgeClassName, className)}>
+      <span className={cn(BASE, meta.badgeClassName, className)}>
         {meta.label}
       </span>
     );
   }
   return (
-    <span className={cx(BASE, "bg-surface-muted text-ink", className)}>
+    <span className={cn(BASE, "bg-surface-muted text-ink", className)}>
       {children}
     </span>
   );

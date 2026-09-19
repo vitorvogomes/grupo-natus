@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { LeadForm, type LeadField } from "@/features/contact/LeadForm";
 import { CONTACT } from "@/lib/site";
+import { buildMapEmbedUrl } from "@/lib/maps";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
+
+// Sede do Grupo Natus (Savassi/BH) — embed por endereço + link do perfil (cid).
+const HQ_MAP_EMBED = buildMapEmbedUrl({
+  city: "Belo Horizonte",
+  state: "MG",
+  address: "Av. Getúlio Vargas, 1621 - Savassi",
+});
 
 export const metadata: Metadata = {
   title: "Fale Conosco",
@@ -40,22 +50,52 @@ export default function ContatoPage() {
 
         <aside className="flex flex-col gap-4 text-ink-soft">
           <h2 className="text-xl font-semibold text-ink">Canais de atendimento</h2>
-          <a href={`mailto:${CONTACT.email}`} className="hover:text-brand-strong">
+          <a
+            href={`mailto:${CONTACT.email}`}
+            className="inline-flex items-center gap-2 hover:text-brand-strong"
+          >
+            <Mail aria-hidden="true" className="size-4 shrink-0" />
             {CONTACT.email}
           </a>
-          <a href={`tel:${CONTACT.phone}`} className="hover:text-brand-strong">
+          <a
+            href={`tel:${CONTACT.phone}`}
+            className="inline-flex items-center gap-2 hover:text-brand-strong"
+          >
+            <Phone aria-hidden="true" className="size-4 shrink-0" />
             {CONTACT.phoneDisplay}
           </a>
           <a
-            href={`https://wa.me/${CONTACT.whatsapp}`}
+            href={buildWhatsAppUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-brand-strong"
+            className="inline-flex items-center gap-2 hover:text-brand-strong"
           >
+            <MessageCircle aria-hidden="true" className="size-4 shrink-0" />
             WhatsApp {CONTACT.whatsappDisplay}
           </a>
-          <p>{CONTACT.address}</p>
-          <p className="text-muted">{CONTACT.hours}</p>
+          <a
+            href={CONTACT.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-start gap-2 hover:text-brand-strong"
+          >
+            <MapPin aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+            {CONTACT.address}
+          </a>
+          <p className="inline-flex items-center gap-2 text-muted-foreground">
+            <Clock aria-hidden="true" className="size-4 shrink-0" />
+            {CONTACT.hours}
+          </p>
+
+          {HQ_MAP_EMBED ? (
+            <iframe
+              src={HQ_MAP_EMBED}
+              title="Mapa da sede do Grupo Natus"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="mt-2 aspect-video w-full rounded-lg border border-border"
+            />
+          ) : null}
         </aside>
       </div>
     </main>

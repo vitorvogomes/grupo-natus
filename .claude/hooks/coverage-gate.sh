@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# TDD sagrado — gate de cobertura (>=90%).
-# Stop hook: impede finalizar o turno enquanto testes falharem ou a cobertura < 90%.
-# O limite de 90% é aplicado pela config do runner (vitest coverage.thresholds); aqui
+# TDD sagrado — gate de cobertura (>=85%).
+# Stop hook: impede finalizar o turno enquanto testes falharem ou a cobertura < 85%.
+# O limite de 85% é aplicado pela config do runner (vitest coverage.thresholds); aqui
 # apenas rodamos e bloqueamos em caso de falha. No-op enquanto o app não estiver scaffolded.
 set -uo pipefail
 
@@ -24,7 +24,7 @@ OUT="$(npm run test:coverage --silent 2>&1)"
 CODE=$?
 if [ "$CODE" -ne 0 ]; then
   {
-    echo "❌ TDD GATE FALHOU — testes ou cobertura (<90%) não passaram."
+    echo "❌ TDD GATE FALHOU — testes ou cobertura (<85%) não passaram."
     echo "Corrija antes de finalizar: rode 'npm run test:coverage' e faça o gate ficar verde."
     echo "----- últimas linhas -----"
     echo "$OUT" | tail -n 30

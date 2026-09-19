@@ -33,7 +33,7 @@ export function DevelopmentAmenities({
       {items.length > 0 ? (
         <Accordion items={items} />
       ) : (
-        <p className="text-muted">
+        <p className="text-muted-foreground">
           Diferenciais e comodidades em breve. (TODO: CONTENT REQUIRED)
         </p>
       )}

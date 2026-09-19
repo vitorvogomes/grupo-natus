@@ -28,7 +28,8 @@ export function ShowcaseInteractive() {
         <Button onClick={() => setOpen(true)}>Abrir modal</Button>
         <Modal open={open} onClose={() => setOpen(false)} title="Exemplo de modal">
           <p className="text-ink-soft">
-            Conteúdo de exemplo. Fecha no ✕, no Escape ou clicando fora.
+            Conteúdo de exemplo. Fecha no botão fechar, no Escape ou clicando
+            fora.
           </p>
         </Modal>
       </div>

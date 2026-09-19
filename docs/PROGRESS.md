@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-09-16 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional, fora do plano atual) · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-09-19 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** Modernização de Frontend — **implementação concluída** (ver seção abaixo); pendente `interface-review` manual · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -45,8 +45,8 @@
 - ✅ 5.5 Envio por email + anti-spam (Route Handler + honeypot + rate-limit) — FR11 — 🔔 provedor/secret (Resend, a confirmar)
 
 ## Epic 6 — Páginas Institucionais  ✅ 2/2
-- ✅ 6.1 Quem Somos (`/quem-somos`; valores confirmados, resto 🔔 TODO) — FR13
-- ✅ 6.2 Serviços de Engenharia (`/engenharia`; 🔔 conteúdo TODO) — FR12
+- ✅ 6.1 Quem Somos (`/quem-somos`) — **conteúdo real** (holding · médio econômico e alto luxo · ALIATTO+OASI · ISO 9001 · hero recepção); história/números seguem 🔔 TODO — FR13
+- ✅ 6.2 Serviços de Engenharia (`/engenharia`) — **portfólio real** (obras por administração: Alphaville / Avenida condomínio / galpão); descrições/capacidade técnica seguem 🔔 TODO — FR12
 
 ## Epic 7 — Descoberta Orgânica & Qualidade  ✅ 4/4
 - ✅ 7.1 SEO site-wide (`sitemap.ts`, `robots.ts`, OG/metadataBase, JSON-LD Organization+Residence) — FR14
@@ -58,6 +58,41 @@
 - ⬜ 8.1 Inicializar Supabase local — NFR5
 - ⬜ 8.2 Migrar entidades necessárias com RLS
 - ⬜ 8.3 Painel `/admin` com Supabase Auth — FR15
+
+---
+
+## Iniciativa — Modernização de Frontend & Design (desde 2026-09-18)
+
+> Fora do backlog original (Epics 1–8). Eleva o design a um patamar premium: shadcn/ui + Radix,
+> tipografia Fraunces/Inter, ícones lucide, motion. Gate baixado p/ 85% (ver `docs/adr/0001-coverage-85.md`).
+> Commits na `main` (mesmo fluxo do restante do projeto).
+
+- ✅ Fase 0 — tooling (npm, `cn`, deps, skills, MCP)
+- ✅ Gate 90→85 + ADR
+- ✅ A1 — Tipografia (Fraunces display + Inter)
+- ✅ A2 — Tokens shadcn ↔ marca (colisão `muted` resolvida)
+- ✅ A3 — Ícones lucide (zero emojis/glifos)
+- ✅ A4 — Primitivos → shadcn/Radix (Button cva; Dialog/Accordion Radix)
+- ✅ A5 — Motion (framer-motion): Reveal on scroll + hover de cards + **B5-a** (Header scroll-aware + link ativo)
+- ✅ B1 — Reorder (empreendimento antes da galeria)
+- ✅ B2 — Zoom/lightbox galeria (Radix Tabs + Radix Dialog lightbox com setas/teclado)
+- ✅ B3 — Google Maps do HQ
+- ✅ **B5 — Navegação (Header/Footer)**: CTA persistente, mega-menu (NavigationMenu), MobileNav→Sheet, Footer rico + sub-footer
+- ✅ QW — hero CTA on-dark (`outlineInverse`) + 📍→lucide (MapPin/BedDouble/Play) + ícones de contato
+- ✅ Rebuild da seção do empreendimento (Overview/Details): remove duplicação status+localização; características em grid de cards; placeholder discreto p/ descrição TODO
+- ✅ Progresso → **Radix Progress** (somente leitura): geral em card destaque + etapas em grid; fill em gradiente de marca (sliders descartados; referência usa barras)
+- ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
+- ✅ Galeria — **imagem em destaque + hover-zoom (zoom-and-pan seguindo o cursor, estilo 21st.dev)** + grade das demais + lightbox (gated por `prefers-reduced-motion`/pointer)
+- ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
+- ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
+- ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
+- ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB. 🔔 Faltam 5 lançamentos sem foto (assets da empresa); Denver com assets fracos
+- ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
+- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras — inspirado no site atual). `DevelopmentImageKind` recategorizado; imagens re-tagueadas + fotos de **obra** (Viver Mais) e interiores extras (Follow Savassi)
+- ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
+- ✅ **Conteúdo institucional (Fase C2)** — Quem Somos + Engenharia reconstruídas com copy verbatim do site atual + material da empresa; 11 imagens institucionais otimizadas (`public/quem-somos/*`, `public/engenharia/*`, keyword `institucional` no pipeline); Home `InstitutionalIntro` grounded. Lacunas restantes rotuladas TODO (ver `docs/CONTENT-GAPS.md §3`)
+- ✅ Verificação: 232 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
+- 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
 
 ---
 

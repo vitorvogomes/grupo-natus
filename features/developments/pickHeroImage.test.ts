@@ -3,15 +3,15 @@ import { pickHeroImage } from "./pickHeroImage";
 import type { DevelopmentImage } from "@/types/development";
 
 describe("pickHeroImage", () => {
-  it("prefere a imagem com kind 'hero'", () => {
+  it("prefere a primeira imagem 'externa' (fachada)", () => {
     const imgs: DevelopmentImage[] = [
-      { src: "/g.jpg", alt: "g", kind: "gallery" },
-      { src: "/h.jpg", alt: "h", kind: "hero" },
+      { src: "/i.jpg", alt: "i", kind: "apartamento" },
+      { src: "/e.jpg", alt: "e", kind: "externa" },
     ];
-    expect(pickHeroImage(imgs)?.src).toBe("/h.jpg");
+    expect(pickHeroImage(imgs)?.src).toBe("/e.jpg");
   });
 
-  it("cai para a primeira imagem quando não há hero", () => {
+  it("cai para a primeira imagem quando não há externa", () => {
     const imgs: DevelopmentImage[] = [{ src: "/a.jpg", alt: "a" }];
     expect(pickHeroImage(imgs)?.src).toBe("/a.jpg");
   });

@@ -25,5 +25,6 @@ describe("Configuração do site", () => {
     expect(CONTACT.email).toBe("administrativo@natusgrupo.com.br");
     expect(CONTACT.address).toMatch(/Savassi/);
     expect(CONTACT.hours).toMatch(/Seg/);
+    expect(CONTACT.mapsUrl).toMatch(/^https:\/\/www\.google\.com\/maps/);
   });
 });

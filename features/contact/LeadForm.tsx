@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, type SyntheticEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
+import { useForm, type Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select, type SelectOption } from "@/components/ui/Select";
-import { isEmail, isPhone, isRequired } from "@/lib/validators";
+import { isEmail, isPhone } from "@/lib/validators";
 import { submitLead } from "./submitLead";
 
 export type LeadFieldType = "text" | "email" | "tel" | "textarea" | "select";
@@ -29,12 +32,31 @@ type LeadFormProps = {
   context?: Record<string, string>;
 };
 
-function validateField(field: LeadField, value: string): string | undefined {
-  if (field.required && !isRequired(value)) return "Campo obrigatório.";
-  if (!value) return undefined;
-  if (field.type === "email" && !isEmail(value)) return "Email inválido.";
-  if (field.type === "tel" && !isPhone(value)) return "Telefone inválido.";
-  return undefined;
+type LeadValues = Record<string, string>;
+
+/** Schema zod derivado dos campos: obrigatório + email/telefone quando preenchidos. */
+function buildSchema(fields: readonly LeadField[]) {
+  const shape: Record<string, z.ZodType<string>> = {};
+  for (const field of fields) {
+    const checks: Array<{ test: (v: string) => boolean; message: string }> = [];
+    if (field.required) {
+      checks.push({ test: (v) => v.trim().length > 0, message: "Campo obrigatório." });
+    }
+    if (field.type === "email") {
+      checks.push({ test: (v) => v.trim() === "" || isEmail(v), message: "Email inválido." });
+    }
+    if (field.type === "tel") {
+      checks.push({
+        test: (v) => v.trim() === "" || isPhone(v),
+        message: "Telefone inválido.",
+      });
+    }
+    shape[field.name] = checks.reduce<z.ZodType<string>>(
+      (schema, check) => schema.refine(check.test, check.message),
+      z.string(),
+    );
+  }
+  return z.object(shape);
 }
 
 export function LeadForm({
@@ -43,35 +65,30 @@ export function LeadForm({
   submitLabel = "Enviar",
   context = {},
 }: LeadFormProps) {
-  const [values, setValues] = useState<Record<string, string>>(() =>
-    Object.fromEntries(fields.map((f) => [f.name, f.defaultValue ?? ""])),
+  const schema = useMemo(() => buildSchema(fields), [fields]);
+  const defaultValues = useMemo<LeadValues>(
+    () => Object.fromEntries(fields.map((f) => [f.name, f.defaultValue ?? ""])),
+    [fields],
   );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    // Schema é dinâmico (campos variam por página); o cast alinha o input
+    // genérico do resolver ao nosso mapa string→string.
+  } = useForm<LeadValues>({
+    resolver: zodResolver(schema) as Resolver<LeadValues>,
+    defaultValues,
+  });
+
   const [honeypot, setHoneypot] = useState("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
     "idle",
   );
   const [formError, setFormError] = useState<string>("");
 
-  function setValue(name: string, value: string) {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  }
-
-  async function onSubmit(e: SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault();
-    // Anti-spam: honeypot preenchido → finge sucesso, não envia.
-    if (honeypot) {
-      setStatus("success");
-      return;
-    }
-    const nextErrors: Record<string, string> = {};
-    for (const field of fields) {
-      const err = validateField(field, values[field.name] ?? "");
-      if (err) nextErrors[field.name] = err;
-    }
-    setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
-
+  async function onValid(values: LeadValues) {
     setStatus("sending");
     setFormError("");
     const result = await submitLead({ type: leadType, ...context, ...values });
@@ -81,6 +98,16 @@ export function LeadForm({
       setStatus("error");
       setFormError(result.error ?? "Falha ao enviar.");
     }
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    // Anti-spam: honeypot preenchido → finge sucesso antes de validar/enviar.
+    if (honeypot) {
+      event.preventDefault();
+      setStatus("success");
+      return;
+    }
+    void handleSubmit(onValid)(event);
   }
 
   if (status === "success") {
@@ -108,22 +135,19 @@ export function LeadForm({
 
       {fields.map((field) => {
         const id = `${leadType}-${field.name}`;
-        const common = {
-          id,
-          name: field.name,
-          label: field.label,
-          required: field.required,
-          error: errors[field.name],
-          value: values[field.name] ?? "",
-        };
+        const error = errors[field.name]?.message as string | undefined;
+        const registration = register(field.name);
         if (field.type === "textarea") {
           return (
             <Textarea
               key={field.name}
-              {...common}
+              id={id}
+              label={field.label}
+              required={field.required}
+              error={error}
               rows={4}
               placeholder={field.placeholder}
-              onChange={(e) => setValue(field.name, e.target.value)}
+              {...registration}
             />
           );
         }
@@ -131,27 +155,33 @@ export function LeadForm({
           return (
             <Select
               key={field.name}
-              {...common}
+              id={id}
+              label={field.label}
+              required={field.required}
+              error={error}
               options={field.options ?? []}
               placeholder={field.placeholder}
-              onChange={(e) => setValue(field.name, e.target.value)}
+              {...registration}
             />
           );
         }
         return (
           <Input
             key={field.name}
-            {...common}
+            id={id}
+            label={field.label}
+            required={field.required}
+            error={error}
             type={field.type ?? "text"}
             readOnly={field.readOnly}
             placeholder={field.placeholder}
-            onChange={(e) => setValue(field.name, e.target.value)}
+            {...registration}
           />
         );
       })}
 
       {status === "error" ? (
-        <p role="alert" className="text-sm text-status-em-construcao">
+        <p role="alert" className="text-sm text-destructive">
           {formError}
         </p>
       ) : null}

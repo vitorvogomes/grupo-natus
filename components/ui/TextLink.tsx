@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 
 type TextLinkProps = {
   href: string;
@@ -16,7 +16,7 @@ export function TextLink({
   className,
   external = false,
 }: TextLinkProps) {
-  const classes = cx(
+  const classes = cn(
     "text-brand-strong underline-offset-4 transition-colors hover:text-ink hover:underline",
     className,
   );

@@ -5,9 +5,9 @@ import Link from "next/link";
  * Números são DADOS — não inventar: exibidos como TODO até a empresa fornecer.
  */
 const STATS = [
-  { label: "Anos de mercado" },
-  { label: "Empreendimentos entregues" },
-  { label: "Unidades" },
+  { label: "Anos de experiência" },
+  { label: "Área construída (m²)" },
+  { label: "Unidades entregues" },
 ] as const;
 
 export function InstitutionalIntro() {
@@ -16,15 +16,14 @@ export function InstitutionalIntro() {
       <div className="grid gap-10 md:grid-cols-2 md:items-center">
         <div>
           <h2 className="text-3xl font-semibold text-ink">
-            Solidez, execução e proximidade
+            Uma holding de incorporação e engenharia
           </h2>
           <p className="mt-4 text-ink-soft">
-            {/* Texto editorial a validar com a empresa. */}
-            O Grupo Natus atua em incorporação imobiliária e engenharia em Minas
-            Gerais e no Rio de Janeiro.{" "}
-            <span className="text-muted">
-              (TODO: CONTENT REQUIRED — texto institucional definitivo)
-            </span>
+            {/* Copy do site atual (posicionamento). */}
+            O Grupo Natus é uma holding criada para desenvolver empreendimentos
+            imobiliários residenciais para o segmento médio econômico e alto
+            luxo — à frente das empresas ALIATTO Incorporadora e OASI
+            Engenharia.
           </p>
           <Link
             href="/quem-somos"
@@ -40,7 +39,7 @@ export function InstitutionalIntro() {
               key={stat.label}
               className="rounded-lg border border-border p-4 text-center"
             >
-              <dt className="text-xs text-muted">{stat.label}</dt>
+              <dt className="text-xs text-muted-foreground">{stat.label}</dt>
               <dd className="mt-1 text-sm font-semibold text-ink">
                 TODO: CONTENT REQUIRED
               </dd>
