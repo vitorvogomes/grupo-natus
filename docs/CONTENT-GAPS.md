@@ -44,7 +44,8 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 
 ## 5. Mídia
 - [ ] Confirmar direitos de uso das imagens em `img/` e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
-- [ ] **Comprimir/redimensionar os fontes** antes de produção: os renders originais têm ~3999×5000 e 6–14 MB cada. O `next/image` otimiza na entrega, mas o ideal é versionar fontes web-friendly (NFR1). (Follow Savassi já usa os originais como prévia.)
+- [x] **Pipeline de otimização** criado: `scripts/optimize-images.mjs` (sharp — resize + WEBP ~80%), `npm run optimize:images [slug]`. Lê os originais em `img/` e grava em `public/empreendimentos/<slug>/`. **Follow Savassi (piloto)** processado: 72 MB → **4 MB** (−90–97%/imagem), servindo `.webp`. TIF de 69 MB fica de fora.
+- [ ] Replicar o pipeline nos demais com fotos prontas (Torres da Lagoa, Viver Mais, Residencial Denver, Gutierrez, Golden Ville) — mapear cada arquivo→saída no `JOBS` do script. Confirmar identidade da pasta **"Residenziale Colonnello Figueiredo"** (é o Vista do Lago?).
 - [ ] Vídeos/panorâmicas, se houver.
 
 ## 6. Navegação — Header/Footer (B5)
