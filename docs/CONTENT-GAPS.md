@@ -40,8 +40,15 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 - [ ] **Quem** atualiza e com **qual periodicidade** (define se vira conteúdo estático ou administração dinâmica no futuro).
 
 ## 3. Páginas institucionais (Epic 6)
-- [ ] **Quem Somos**: história, empresas do grupo, atuação, valores, números (ex.: nº de obras/entregas, tempo de mercado).
-- [ ] **Serviços de Engenharia**: atuação, metodologia, tipos de projeto, capacidade técnica, obras realizadas, diferenciais.
+
+**Construídas com conteúdo real do site atual + material da empresa** (`img/Quem Somos`, `img/Servico -*`). O que ficou grounded e o que segue TODO:
+
+- [x] **Quem Somos** (`/quem-somos`): posicionamento (holding · segmento médio econômico e alto luxo · transparência/ética/lealdade — copy verbatim do site), empresas do grupo (**ALIATTO Incorporadora** + **OASI Engenharia**), valores, **selo ISO 9001:2015** (imagem `public/quem-somos/iso-9001.webp`), hero (parede da recepção).
+- [x] **Serviços de Engenharia** (`/engenharia`): OASI Engenharia · **obras por administração** (3 categorias reais do site: **Casa de alto padrão (Alphaville)**, **Condomínio (Avenida)**, **Galpão comercial**) com fotos reais otimizadas em `public/engenharia/`.
+- [x] **Home**: `InstitutionalIntro` com o posicionamento real (holding + ALIATTO/OASI).
+- [ ] **TODO Quem Somos**: descrição individual de cada empresa (site só as nomeia); **história/trajetória** (site não tem — registros públicos citam Aliatto Emp. Imob. Ltda, CNPJ 24.353.357/0001-11, fundada 2016, **não confirmar como oficial sem o cliente**); **números** (anos de mercado, nº de empreendimentos/unidades) — permanecem `TODO: CONTENT REQUIRED`.
+- [ ] **TODO Engenharia**: copy descritiva de cada obra (site só tem o título "Obra por administração"); **capacidade técnica** (equipe/certificações/números).
+- [ ] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): confirmar escopo/validade do certificado com o cliente antes de destacar como vigente.
 
 ## 4. Conversão (Epic 5)
 - [ ] **Negocie seu Terreno**: confirmar os **campos exatos** do formulário (além de nome/contato/localização/área/tipo/observações).
@@ -56,8 +63,8 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 - [ ] Vídeos/panorâmicas, se houver.
 
 ## 6. Navegação — Header/Footer (B5)
-- [ ] **Redes sociais** do Grupo Natus (Instagram / Facebook / LinkedIn / YouTube): handles e URLs.
-- [ ] **CNPJ** e **CRECI** (registro imobiliário) para o rodapé legal / sub-footer.
+- [ ] **Redes sociais** do Grupo Natus (Instagram / Facebook / LinkedIn / YouTube): handles e URLs — **NÃO constam** no site atual.
+- [ ] **CNPJ** e **CRECI** (registro imobiliário) para o rodapé legal / sub-footer — **não constam** no site; registro público cita CNPJ 24.353.357/0001-11 (Aliatto Emp. Imob. Ltda), **a confirmar com o cliente** antes de publicar.
 - [ ] **Selos/certificações** (se houver) e **links de políticas** (privacidade / termos de uso).
 - [ ] Confirmar o texto do **CTA persistente** do header (ex.: "Falar com consultor"?) e o destino (WhatsApp já configurado).
 > Enquanto não confirmado, cada item entra rotulado como `TODO: CONTENT REQUIRED` (nada inventado).

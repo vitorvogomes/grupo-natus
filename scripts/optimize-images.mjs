@@ -145,11 +145,86 @@ const SINGLES = [
   },
 ];
 
+// Imagens institucionais (Quem Somos + Engenharia). Rode com o slug "institucional".
+const INSTITUTIONAL = [
+  // Quem Somos
+  {
+    name: "quem-somos: parede da recepção (Grupo Natus / ALIATTO | OASI)",
+    src: "img/Quem Somos/Quem somos.webp",
+    out: "public/quem-somos/hero.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "quem-somos: selo ISO 9001:2015",
+    src: "img/Quem Somos/certificado.png",
+    out: "public/quem-somos/iso-9001.webp",
+    maxSide: 1000,
+  },
+  // Engenharia — Residência de alto padrão (Alphaville)
+  {
+    name: "engenharia: residencial (deck/gourmet)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-2.webp",
+    out: "public/engenharia/residencial-1.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: residencial (piscina/mata)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-5.jpeg",
+    out: "public/engenharia/residencial-2.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: residencial (fachada entardecer)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-3.jpeg",
+    out: "public/engenharia/residencial-3.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: residencial (fachada/garagem)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-6.jpeg",
+    out: "public/engenharia/residencial-4.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: residencial (varanda gourmet)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-1.jpeg",
+    out: "public/engenharia/residencial-5.webp",
+    maxSide: 2560,
+  },
+  // Engenharia — Loteamento / condomínio (Avenida)
+  {
+    name: "engenharia: loteamento (masterplan)",
+    src: "img/Servico - Avenida Condominio/projeto-copiar.webp",
+    out: "public/engenharia/loteamento-1.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: loteamento (infraestrutura viária)",
+    src: "img/Servico - Avenida Condominio/pic-rua-castella.webp",
+    out: "public/engenharia/loteamento-2.webp",
+    maxSide: 2560,
+  },
+  // Engenharia — Galpão comercial
+  {
+    name: "engenharia: comercial (galpão frente)",
+    src: "img/Servico - Galpão Comercial/1.jpg",
+    out: "public/engenharia/comercial-1.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: comercial (galpão lateral)",
+    src: "img/Servico - Galpão Comercial/2.jpg",
+    out: "public/engenharia/comercial-2.webp",
+    maxSide: 2560,
+  },
+];
+
 const KB = (bytes) => `${Math.round(bytes / 1024)} KB`;
 
-async function optimizeSingles() {
-  console.log(`\n▸ singles (${SINGLES.length})`);
-  for (const item of SINGLES) {
+/** Processa uma lista de assets avulsos (src/out/maxSide explícitos). */
+async function optimizeFlat(label, list) {
+  console.log(`\n▸ ${label} (${list.length})`);
+  for (const item of list) {
     const outPath = join(ROOT, item.out);
     await mkdir(join(outPath, ".."), { recursive: true });
     const before = (await stat(join(ROOT, item.src))).size;
@@ -170,13 +245,17 @@ async function optimizeSingles() {
 
 async function run() {
   const requested = process.argv.slice(2);
+  const KEYWORDS = new Set(["singles", "institucional"]);
 
   if (!requested.length || requested.includes("singles")) {
-    await optimizeSingles();
+    await optimizeFlat("singles", SINGLES);
+  }
+  if (!requested.length || requested.includes("institucional")) {
+    await optimizeFlat("institucional", INSTITUTIONAL);
   }
 
   const slugs = requested.length
-    ? requested.filter((s) => s !== "singles")
+    ? requested.filter((s) => !KEYWORDS.has(s))
     : Object.keys(JOBS);
 
   for (const slug of slugs) {

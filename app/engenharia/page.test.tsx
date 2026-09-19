@@ -14,6 +14,31 @@ describe("Página /engenharia (FR12)", () => {
     ).toBeInTheDocument();
   });
 
+  it("lista as obras por administração reais (portfólio)", () => {
+    render(<EngenhariaPage />);
+    expect(
+      screen.getByRole("heading", { name: /obras por administração/i }),
+    ).toBeInTheDocument();
+    // Um kicker "Obra por administração" por categoria (3).
+    expect(
+      screen.getAllByText(/^obra por administração$/i).length,
+    ).toBeGreaterThanOrEqual(3);
+    expect(
+      screen.getByRole("heading", { name: /casa de alto padrão/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /avenida condomínio/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /galpão comercial/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("cita a certificação ISO 9001", () => {
+    render(<EngenhariaPage />);
+    expect(screen.getAllByText(/ISO 9001/i).length).toBeGreaterThan(0);
+  });
+
   it("marca conteúdo pendente como TODO e tem CTA", () => {
     render(<EngenhariaPage />);
     expect(screen.getAllByText(/TODO: CONTENT REQUIRED/).length).toBeGreaterThan(0);

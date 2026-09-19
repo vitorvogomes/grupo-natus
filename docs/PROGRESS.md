@@ -45,8 +45,8 @@
 - ✅ 5.5 Envio por email + anti-spam (Route Handler + honeypot + rate-limit) — FR11 — 🔔 provedor/secret (Resend, a confirmar)
 
 ## Epic 6 — Páginas Institucionais  ✅ 2/2
-- ✅ 6.1 Quem Somos (`/quem-somos`; valores confirmados, resto 🔔 TODO) — FR13
-- ✅ 6.2 Serviços de Engenharia (`/engenharia`; 🔔 conteúdo TODO) — FR12
+- ✅ 6.1 Quem Somos (`/quem-somos`) — **conteúdo real** (holding · médio econômico e alto luxo · ALIATTO+OASI · ISO 9001 · hero recepção); história/números seguem 🔔 TODO — FR13
+- ✅ 6.2 Serviços de Engenharia (`/engenharia`) — **portfólio real** (obras por administração: Alphaville / Avenida condomínio / galpão); descrições/capacidade técnica seguem 🔔 TODO — FR12
 
 ## Epic 7 — Descoberta Orgânica & Qualidade  ✅ 4/4
 - ✅ 7.1 SEO site-wide (`sitemap.ts`, `robots.ts`, OG/metadataBase, JSON-LD Organization+Residence) — FR14
@@ -90,7 +90,8 @@
 - ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
 - ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras — inspirado no site atual). `DevelopmentImageKind` recategorizado; imagens re-tagueadas + fotos de **obra** (Viver Mais) e interiores extras (Follow Savassi)
 - ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
-- ✅ Verificação: 227 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
+- ✅ **Conteúdo institucional (Fase C2)** — Quem Somos + Engenharia reconstruídas com copy verbatim do site atual + material da empresa; 11 imagens institucionais otimizadas (`public/quem-somos/*`, `public/engenharia/*`, keyword `institucional` no pipeline); Home `InstitutionalIntro` grounded. Lacunas restantes rotuladas TODO (ver `docs/CONTENT-GAPS.md §3`)
+- ✅ Verificação: 232 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
 - 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
 
 ---

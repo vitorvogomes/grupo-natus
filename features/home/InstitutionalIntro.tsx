@@ -16,15 +16,14 @@ export function InstitutionalIntro() {
       <div className="grid gap-10 md:grid-cols-2 md:items-center">
         <div>
           <h2 className="text-3xl font-semibold text-ink">
-            Solidez, execução e proximidade
+            Uma holding de incorporação e engenharia
           </h2>
           <p className="mt-4 text-ink-soft">
-            {/* Texto editorial a validar com a empresa. */}
-            O Grupo Natus atua em incorporação imobiliária e engenharia em Minas
-            Gerais e no Rio de Janeiro.{" "}
-            <span className="text-muted-foreground">
-              (TODO: CONTENT REQUIRED — texto institucional definitivo)
-            </span>
+            {/* Copy do site atual (posicionamento). */}
+            O Grupo Natus é uma holding criada para desenvolver empreendimentos
+            imobiliários residenciais para o segmento médio econômico e alto
+            luxo — à frente das empresas ALIATTO Incorporadora e OASI
+            Engenharia.
           </p>
           <Link
             href="/quem-somos"
