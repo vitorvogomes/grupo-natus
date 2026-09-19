@@ -1,7 +1,7 @@
 "use client";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export type SelectFieldOption = { value: string; label: string };
@@ -42,7 +42,7 @@ export function SelectField({
           id={id}
           aria-labelledby={labelId}
           className={cn(
-            "inline-flex min-w-52 items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-ink outline-none transition-colors",
+            "group inline-flex min-w-52 items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm text-ink outline-none transition-colors",
             "hover:border-brand focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
             "data-[state=open]:border-brand",
             triggerClassName,
@@ -52,7 +52,7 @@ export function SelectField({
           <SelectPrimitive.Icon asChild>
             <ChevronDown
               aria-hidden="true"
-              className="size-4 shrink-0 text-muted-foreground transition-transform duration-200"
+              className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
             />
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
@@ -66,6 +66,9 @@ export function SelectField({
               "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
             )}
           >
+            <SelectPrimitive.ScrollUpButton className="flex items-center justify-center py-1 text-muted-foreground">
+              <ChevronUp aria-hidden="true" className="size-4" />
+            </SelectPrimitive.ScrollUpButton>
             <SelectPrimitive.Viewport className="p-1">
               {options.map((opt) => (
                 <SelectPrimitive.Item
@@ -85,6 +88,9 @@ export function SelectField({
                 </SelectPrimitive.Item>
               ))}
             </SelectPrimitive.Viewport>
+            <SelectPrimitive.ScrollDownButton className="flex items-center justify-center py-1 text-muted-foreground">
+              <ChevronDown aria-hidden="true" className="size-4" />
+            </SelectPrimitive.ScrollDownButton>
           </SelectPrimitive.Content>
         </SelectPrimitive.Portal>
       </SelectPrimitive.Root>
