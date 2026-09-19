@@ -35,6 +35,35 @@ type Seed = {
 
 const SEEDS: readonly Seed[] = [
   {
+    slug: "residenziale-colonnello-figueiredo",
+    name: "Residenziale Colonnello Figueiredo",
+    status: "pronto",
+    city: "Nova Lima",
+    state: "MG",
+    summary:
+      "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
+    highlights: [
+      "20 unidades: apartamentos de 2 e 3 quartos e coberturas lineares",
+      "Varandas em todas as unidades",
+      "A 10 minutos do BH Shopping, próximo ao Supermercado BH",
+    ],
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 e 3 quartos (69 e 79 m²)" },
+      { label: "Coberturas", value: "lineares de 138 e 158 m²" },
+      { label: "Vagas", value: "1 a 2 por unidade" },
+    ],
+    images: [
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada-rua.webp", alt: "Fachada vista da rua", kind: "externa" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura-fachada.webp", alt: "Cobertura — vista da fachada", kind: "externa" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura.webp", alt: "Cobertura", kind: "externa" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar.webp", alt: "Sala de estar (perspectiva)", kind: "apartamento" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar-2.webp", alt: "Sala de estar (perspectiva)", kind: "apartamento" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada.webp", alt: "Fachada do Residenziale Colonnello Figueiredo", kind: "externa" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-3-quartos.webp", alt: "Planta — apartamento de 3 quartos", kind: "planta" },
+      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-2-quartos.webp", alt: "Planta — apartamento de 2 quartos", kind: "planta" },
+    ],
+  },
+  {
     slug: "viver-mais",
     name: "Viver Mais",
     status: "pronto",
@@ -60,12 +89,12 @@ const SEEDS: readonly Seed[] = [
     city: "Belo Horizonte",
     state: "MG",
     images: [
-      { src: "/empreendimentos/residencial-denver/perspectiva-1.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
       { src: "/empreendimentos/residencial-denver/perspectiva-2.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-3.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-4.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-5.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-6.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
+      { src: "/empreendimentos/residencial-denver/perspectiva-4.webp", alt: "Perspectiva do Residencial Denver", kind: "apartamento" },
+      { src: "/empreendimentos/residencial-denver/perspectiva-5.webp", alt: "Perspectiva do Residencial Denver", kind: "apartamento" },
+      { src: "/empreendimentos/residencial-denver/perspectiva-6.webp", alt: "Perspectiva do Residencial Denver", kind: "apartamento" },
+      { src: "/empreendimentos/residencial-denver/perspectiva-1.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
+      { src: "/empreendimentos/residencial-denver/perspectiva-3.webp", alt: "Perspectiva do Residencial Denver", kind: "obra" },
     ],
   },
   {
@@ -151,11 +180,6 @@ const SEEDS: readonly Seed[] = [
       { src: "/empreendimentos/golden-ville-residence/planta-terreo.webp", alt: "Planta humanizada — térreo", kind: "planta" },
     ],
   },
-  { slug: "solar-manilha", name: "Solar Manilha", status: "lancamento", city: "Itaboraí", state: "RJ", highlight: "368 un. MCMV" },
-  { slug: "one-studios", name: "One Studios", status: "lancamento", city: "Niterói", state: "RJ", highlight: "180 studios" },
-  { slug: "vista-do-lago", name: "Vista do Lago", status: "lancamento", city: "Nova Lima", state: "MG", highlight: "508 lotes" },
-  { slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
-  { slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV" },
   {
     slug: "gutierrez",
     name: "Gutierrez",
@@ -164,45 +188,19 @@ const SEEDS: readonly Seed[] = [
     state: "MG",
     highlight: "20 un. alto luxo",
     images: [
+      { src: "/empreendimentos/gutierrez/maquete-5.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
+      { src: "/empreendimentos/gutierrez/maquete-6.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
       { src: "/empreendimentos/gutierrez/maquete-1.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
       { src: "/empreendimentos/gutierrez/maquete-2.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
       { src: "/empreendimentos/gutierrez/maquete-3.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
       { src: "/empreendimentos/gutierrez/maquete-4.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
-      { src: "/empreendimentos/gutierrez/maquete-5.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
-      { src: "/empreendimentos/gutierrez/maquete-6.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
     ],
   },
-  {
-    // 12º empreendimento (portfólio do site atual: natusgrupo.com.br).
-    // Pronto para morar (confirmado pelo cliente) — obra 100%.
-    slug: "residenziale-colonnello-figueiredo",
-    name: "Residenziale Colonnello Figueiredo",
-    status: "pronto",
-    city: "Nova Lima",
-    state: "MG",
-    summary:
-      "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
-    highlights: [
-      "20 unidades: apartamentos de 2 e 3 quartos e coberturas lineares",
-      "Varandas em todas as unidades",
-      "A 10 minutos do BH Shopping, próximo ao Supermercado BH",
-    ],
-    extraFeatures: [
-      { label: "Apartamentos", value: "2 e 3 quartos (69 e 79 m²)" },
-      { label: "Coberturas", value: "lineares de 138 e 158 m²" },
-      { label: "Vagas", value: "1 a 2 por unidade" },
-    ],
-    images: [
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada.webp", alt: "Fachada do Residenziale Colonnello Figueiredo", kind: "externa" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada-rua.webp", alt: "Fachada vista da rua", kind: "externa" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura-fachada.webp", alt: "Cobertura — vista da fachada", kind: "externa" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura.webp", alt: "Cobertura", kind: "externa" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar.webp", alt: "Sala de estar (perspectiva)", kind: "apartamento" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar-2.webp", alt: "Sala de estar (perspectiva)", kind: "apartamento" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-3-quartos.webp", alt: "Planta — apartamento de 3 quartos", kind: "planta" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-2-quartos.webp", alt: "Planta — apartamento de 2 quartos", kind: "planta" },
-    ],
-  },
+  { slug: "solar-manilha", name: "Solar Manilha", status: "lancamento", city: "Itaboraí", state: "RJ", highlight: "368 un. MCMV" },
+  { slug: "one-studios", name: "One Studios", status: "lancamento", city: "Niterói", state: "RJ", highlight: "180 studios" },
+  { slug: "vista-do-lago", name: "Vista do Lago", status: "lancamento", city: "Nova Lima", state: "MG", highlight: "508 lotes" },
+  { slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
+  { slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV" },
 ];
 
 function fromSeed(seed: Seed): Development {
