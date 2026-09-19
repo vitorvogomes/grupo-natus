@@ -1,6 +1,6 @@
 # Product Brief — Website Grupo Natus
 
-> Artefato BMAD (Fase 1 — Brief). Base: `ESCOPO`, `NOTAS` e discovery do site atual (natusgrupo.com.br) e da referência estrutural (novolar.com.br).
+> Artefato BMAD (Fase 1 — Brief). Base: `README`, `NOTAS` e discovery do site atual (natusgrupo.com.br) e da referência estrutural (novolar.com.br).
 > Idioma dos artefatos: Português (contexto do projeto). Marcações de conteúdo faltante: `TODO: CONTENT REQUIRED`.
 
 ## 1. Visão do produto

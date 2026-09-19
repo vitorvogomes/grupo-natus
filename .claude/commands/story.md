@@ -9,7 +9,7 @@ Implemente a story **$ARGUMENTS** com **TDD sagrado**. Não pule etapas.
 1. Localize a story em `@docs/epics.md` (e o epic pai). Releia seus **Critérios de Aceite (CA)**.
 2. Consulte `@docs/prd.md` (FR/NFR e modelo de dados) e `@CLAUDE.md` (restrições críticas).
 3. Carregue as skills relevantes ao que vai construir: `nextjs-app-router-patterns`, `tailwind-design-system`, `framer-motion-animator`, `nextjs-seo`, `supabase` / `supabase-postgres-best-practices`, `vitest-testing`.
-4. Respeite as regras do ESCOPO: **não inventar conteúdo** (`TODO: CONTENT REQUIRED`), **não tocar em RLS/env/secrets**, preservar branding Natus, sem over-engineering.
+4. Respeite as regras do README: **não inventar conteúdo** (`TODO: CONTENT REQUIRED`), **não tocar em RLS/env/secrets**, preservar branding Natus, sem over-engineering.
 
 ## Ciclo TDD (por unidade/comportamento)
 - 🔴 **RED**: escreva primeiro o(s) teste(s) que expressam os CA. Rode e veja falhar.

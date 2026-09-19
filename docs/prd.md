@@ -11,7 +11,7 @@
 4. Permitir acompanhamento da evolução das obras.
 5. Base técnica simples, performática e responsiva, pronta para crescer (Supabase/admin) sem over-engineering.
 
-**Sinais de sucesso** (qualitativos nesta fase): aprovação do `theme-showcase`, aprovação visual página a página pelo checklist de qualidade (§ ESCOPO 31), Lighthouse mobile saudável (perf/a11y/SEO), zero conteúdo inventado.
+**Sinais de sucesso** (qualitativos nesta fase): aprovação do `theme-showcase`, aprovação visual página a página pelo checklist de qualidade (§ README 31), Lighthouse mobile saudável (perf/a11y/SEO), zero conteúdo inventado.
 
 ## 2. Requisitos funcionais (FR)
 

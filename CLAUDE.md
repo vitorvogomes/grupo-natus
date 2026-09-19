@@ -12,7 +12,7 @@ Pastas: `app/`, `components/` (+`ui/`, `showcase/`), `features/` (`developments`
 
 Materiais de origem (ainda a base de verdade):
 
-- `ESCOPO` — the master brief / master prompt (Portuguese). This is the authoritative spec: read it in full before doing anything. It defines the product, design principles, page scope, data model sketches, development rules, and the 13-phase workflow (Discovery → Brief → UX → Design System → theme-showcase → Architecture → Foundation → Home → Development template → remaining developments → institutional pages → dynamic features → validation).
+- `README` — the master brief / master prompt (Portuguese). This is the authoritative spec: read it in full before doing anything. It defines the product, design principles, page scope, data model sketches, development rules, and the 13-phase workflow (Discovery → Brief → UX → Design System → theme-showcase → Architecture → Foundation → Home → Development template → remaining developments → institutional pages → dynamic features → validation).
 - `NOTAS` — condensed notes from the client (Portuguese): references, page list, functional requests.
 - `img/` — local visual assets (see below). These are real project materials, not placeholders.
 - `supabase/` — only Supabase CLI scratch dirs (`.branches/`, `.temp/`) exist; **no `config.toml`, no migrations, no schema.** Supabase is *not* initialized in this working tree yet, though the brief states a Supabase project already exists remotely.
@@ -51,7 +51,7 @@ Ainda não há repositório git. Os comandos abaixo já valem (scaffold criado n
 
 Env vars and credentials are used/manipulated **by name only; never print their values** into the transcript/context.
 - **Enforced** by a `PreToolUse` Bash hook (`.claude/hooks/secrets-guard.sh`) that blocks `cat/less/head/tail/source .env*`, `grep/sed/awk … .env*`, `printenv`, bare `env` dumps, and `echo/printf $…KEY/SECRET/TOKEN/PASSWORD/CREDENTIAL/SERVICE_ROLE`. `permissions.deny` also blocks `Read(**/.env*)`.
-- **Edit `.env` blindly** (Edit/Write) — set/change a key without displaying its value. Reference variables by name; validate via `lib/env` server-side (AD-4). Never log secrets, never commit them (`.env*` is gitignored). This upholds ESCOPO §17 (preserve RLS/env/secrets) and spine AD-4/AD-5.
+- **Edit `.env` blindly** (Edit/Write) — set/change a key without displaying its value. Reference variables by name; validate via `lib/env` server-side (AD-4). Never log secrets, never commit them (`.env*` is gitignored). This upholds README §17 (preserve RLS/env/secrets) and spine AD-4/AD-5.
 
 ## What is being built
 
@@ -62,7 +62,7 @@ Reference site for *structure/UX/interaction* (never for visual copying): novola
 ## Intended architecture (from the brief)
 
 - **Next.js App Router + TypeScript**, Server Components by default, Client Components only where needed. Keep it simple — this is an institutional site, not a SaaS. No microservices, no separate backend, no premature abstractions.
-- **Developments are data, not duplicated pages.** One `/empreendimentos/[slug]` template fed by a shared `Development` model (see the `type Development` and `type ConstructionProgress` sketches in `ESCOPO`). Validate one full development page before replicating the rest.
+- **Developments are data, not duplicated pages.** One `/empreendimentos/[slug]` template fed by a shared `Development` model (see the `type Development` and `type ConstructionProgress` sketches in `README`). Validate one full development page before replicating the rest.
 - **Content vs. persistence:** keep data as static content unless dynamic administration is genuinely required. Only create Supabase tables when there is a real need. If persistence is needed, use Supabase; auth (if ever needed) via Supabase Auth; APIs via Next.js Route Handlers. An `/admin` panel only if concretely justified.
 - **Cross-cutting abstractions to build once, not inline everywhere:** a single WhatsApp floating-button/link abstraction (context-aware messages), Google Maps location (start with embed/link, avoid coupling the whole app to the Maps API), forms with validation + spam strategy (email sending wired only after the flow is defined), and motion that serves hierarchy/storytelling (no gratuitous animation, protect Core Web Vitals).
 
