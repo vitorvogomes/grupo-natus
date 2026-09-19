@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { Image } from "@/components/ui/Image";
 import { cn } from "@/lib/utils";
+import { FeaturedImage } from "./FeaturedImage";
 import { GalleryLightbox } from "./GalleryLightbox";
 import type {
   DevelopmentImage,
@@ -38,7 +39,7 @@ type GridProps = {
 
 function ImageGrid({ list, all, onOpen }: GridProps) {
   return (
-    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       {list.map((img) => (
         <li key={img.src}>
           <button
@@ -51,13 +52,30 @@ function ImageGrid({ list, all, onOpen }: GridProps) {
               src={img.src}
               alt={img.alt}
               fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 22vw"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
               className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
             />
           </button>
         </li>
       ))}
     </ul>
+  );
+}
+
+/** Imagem em destaque (com lupa) + grade das demais da categoria. */
+function GallerySection({ list, all, onOpen }: GridProps) {
+  const [featured, ...rest] = list;
+  if (!featured) return null;
+  return (
+    <div className="flex flex-col gap-4">
+      <FeaturedImage
+        image={featured}
+        onOpen={() => onOpen(all.indexOf(featured))}
+      />
+      {rest.length > 0 ? (
+        <ImageGrid list={rest} all={all} onOpen={onOpen} />
+      ) : null}
+    </div>
   );
 }
 
@@ -99,7 +117,7 @@ export function Gallery({ images }: GalleryProps) {
           </TabsPrimitive.List>
           {categories.map((cat) => (
             <TabsPrimitive.Content key={cat} value={cat}>
-              <ImageGrid
+              <GallerySection
                 list={
                   cat === "all"
                     ? images
@@ -112,7 +130,7 @@ export function Gallery({ images }: GalleryProps) {
           ))}
         </TabsPrimitive.Root>
       ) : (
-        <ImageGrid list={images} all={images} onOpen={setLightbox} />
+        <GallerySection list={images} all={images} onOpen={setLightbox} />
       )}
 
       <GalleryLightbox
