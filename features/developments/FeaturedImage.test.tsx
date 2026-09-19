@@ -25,7 +25,9 @@ function stubRect(el: HTMLElement) {
     }) as DOMRect;
 }
 
-describe("FeaturedImage (lupa no hover)", () => {
+const zoomLayer = () => screen.getByRole("img", { name: "Fachada" }).closest("[data-zoom]");
+
+describe("FeaturedImage (hover-zoom)", () => {
   it("renderiza a imagem com botão de ampliar acessível", () => {
     render(<FeaturedImage image={image} onOpen={() => {}} />);
     expect(screen.getByRole("img", { name: "Fachada" })).toBeInTheDocument();
@@ -44,31 +46,26 @@ describe("FeaturedImage (lupa no hover)", () => {
     expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
-  it("mostra a lupa ao mover o mouse e some ao sair", () => {
+  it("amplia (zoom) com o mouse e volta ao sair", () => {
     render(<FeaturedImage image={image} onOpen={() => {}} />);
     const btn = screen.getByRole("button", { name: /ampliar imagem: fachada/i });
     stubRect(btn);
+    expect(zoomLayer()).toHaveAttribute("data-zoom", "off");
 
-    fireEvent.pointerMove(btn, {
-      pointerType: "mouse",
-      clientX: 200,
-      clientY: 125,
-    });
-    expect(screen.getByTestId("magnifier-lens")).toBeInTheDocument();
+    fireEvent.pointerEnter(btn, { pointerType: "mouse" });
+    fireEvent.pointerMove(btn, { pointerType: "mouse", clientX: 300, clientY: 60 });
+    expect(zoomLayer()).toHaveAttribute("data-zoom", "on");
 
     fireEvent.pointerLeave(btn);
-    expect(screen.queryByTestId("magnifier-lens")).not.toBeInTheDocument();
+    expect(zoomLayer()).toHaveAttribute("data-zoom", "off");
   });
 
-  it("ignora ponteiro de toque (sem lupa)", () => {
+  it("ignora ponteiro de toque (sem zoom)", () => {
     render(<FeaturedImage image={image} onOpen={() => {}} />);
     const btn = screen.getByRole("button", { name: /ampliar imagem: fachada/i });
     stubRect(btn);
-    fireEvent.pointerMove(btn, {
-      pointerType: "touch",
-      clientX: 200,
-      clientY: 125,
-    });
-    expect(screen.queryByTestId("magnifier-lens")).not.toBeInTheDocument();
+    fireEvent.pointerEnter(btn, { pointerType: "touch" });
+    fireEvent.pointerMove(btn, { pointerType: "touch", clientX: 300, clientY: 60 });
+    expect(zoomLayer()).toHaveAttribute("data-zoom", "off");
   });
 });
