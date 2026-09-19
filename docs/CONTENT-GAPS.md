@@ -29,6 +29,9 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 | 9 | Sunset Ville Residence | Belo Horizonte/MG | Lançamento | 72 un. MCMV |
 | 10 | Royal Ville Residence | Vespasiano/MG | Lançamento | 96 casas MCMV |
 | 11 | Gutierrez | Belo Horizonte/MG | Lançamento | 20 un. alto luxo |
+| 12 | Residenziale Colonnello Figueiredo | Nova Lima/MG | Em construção (obra 100% no site; **status/data a confirmar**) | 20 un. 2 e 3 quartos + coberturas lineares |
+
+> **12º empreendimento** confirmado pelo cliente (portfólio do site atual: natusgrupo.com.br/portfolio-item/residenziale-colonnello-figueiredo). Metadata factual cadastrada; **imagens** (pasta `img/Residenziale Colonnello Figueiredo …`, inclui fachadas, coberturas e `PLANTA-3-QUARTOS`) a otimizar/wire na replicação. Se a obra estiver entregue, migrar status → "Pronto".
 
 ## 2. Progresso das obras (Epic 4)
 - [ ] Para cada empreendimento "Em construção" (Follow Savassi, Golden Ville): **% geral**, **etapas** (nome + % + ordem) e **data da última atualização**.

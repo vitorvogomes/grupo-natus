@@ -5,7 +5,7 @@
 ## 1. Objetivos e métricas
 
 **Objetivos de produto**
-1. Apresentar os 11 empreendimentos de forma rica, visual e navegável.
+1. Apresentar os 12 empreendimentos de forma rica, visual e navegável.
 2. Maximizar conversão para contato (WhatsApp/formulário) com CTA clara em cada etapa.
 3. Transmitir a marca Grupo Natus (profissional, sólida, sofisticada) sem cara de template.
 4. Permitir acompanhamento da evolução das obras.
@@ -15,7 +15,7 @@
 
 ## 2. Requisitos funcionais (FR)
 
-- **FR1** — Home exibe apresentação institucional + catálogo dos 11 empreendimentos com card (nome, localização, status, imagem, características-chave, CTA, link).
+- **FR1** — Home exibe apresentação institucional + catálogo dos 12 empreendimentos com card (nome, localização, status, imagem, características-chave, CTA, link).
 - **FR2** — Catálogo permite filtrar por **status** (Lançamento / Em construção / Pronto para morar) e por **localização** (cidade/UF).
 - **FR3** — Cada empreendimento tem página própria em `/empreendimentos/[slug]`, gerada de um template único a partir de dados estruturados.
 - **FR4** — Página de empreendimento apresenta: galeria de imagens, características/features, localização (mapa), status, descrição, progresso da obra (quando houver) e CTA de contato contextualizado.
@@ -83,7 +83,7 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 | Epic | Título | Entrega de valor | FRs |
 |------|--------|------------------|-----|
 | 1 | Fundação & Identidade Navegável | Scaffold Next.js+TS+Vitest(90%), tokens da marca, shell, WhatsApp, theme-showcase (Gate A) | FR6 |
-| 2 | Descoberta (Home / Catálogo) | Modelo `Development`, seed dos 11, Home, grid, filtros | FR1, FR2 |
+| 2 | Descoberta (Home / Catálogo) | Modelo `Development`, seed dos 12, Home, grid, filtros | FR1, FR2 |
 | 3 | Página do Empreendimento & Catálogo | Template `[slug]` (galeria, mapa, status, CTA, SEO); Gate B | FR3,4,7,6,14 |
 | 4 | Evolução das Obras | Progresso (percentual+etapas), estático → Supabase | FR5 |
 | 5 | Conversão por Leads | Contato, Interesse, Negocie seu Terreno + email + anti-spam | FR8–11 |
@@ -94,14 +94,14 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 ## 7. Sequenciamento e gates
 
 - **Gate A (após Epic 1):** aprovação do `theme-showcase` antes de construir todas as páginas.
-- **Gate B (Epic 3, story de template):** validar uma página de empreendimento completa (desktop+mobile) antes de replicar as 11.
+- **Gate B (Epic 3, story de template):** validar uma página de empreendimento completa (desktop+mobile) antes de replicar as demais.
 - **Gate C (Epic 8):** só iniciar persistência/admin com necessidade concreta e explícita.
 - Epic 7 é transversal: SEO base/motion iniciam na fundação e fecham ao final.
 
 ## 8. Riscos e questões abertas
 
 - Conteúdo real dos empreendimentos (descrições, features, coordenadas, progresso, imagens por empreendimento) — hoje só há assets de render/planta genéricos em `img/`. **Bloqueante para conteúdo**, não para estrutura.
-- Confirmar status/nomes dos 11 empreendimentos com a empresa.
+- Confirmar status/nomes dos 12 empreendimentos com a empresa.
 - Google Maps: avaliar embed vs. API key (custo) antes de acoplar.
 - Estratégia de envio de email (provedor) e anti-spam a definir.
 - Necessidade real de admin/persistência — decidir no Gate C.

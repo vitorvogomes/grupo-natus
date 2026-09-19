@@ -23,8 +23,8 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 
 ## 5. Escopo (páginas)
 
-1. **Home / Catálogo** — institucional + catálogo dos 11 empreendimentos + conversão.
-2. **Empreendimento `[slug]`** — 11 páginas geradas de um único template a partir de dados.
+1. **Home / Catálogo** — institucional + catálogo dos 12 empreendimentos + conversão.
+2. **Empreendimento `[slug]`** — 12 páginas geradas de um único template a partir de dados.
 3. **Serviços de Engenharia**.
 4. **Negocie seu Terreno** — captação de proprietários/corretores.
 5. **Quem Somos**.
@@ -73,7 +73,7 @@ Deploy/CI/CD/hosting; painel admin e persistência em banco **antes de necessida
 
 - **Next.js (App Router) + TypeScript**; Server Components por padrão, Client só quando necessário.
 - Supabase apenas quando houver necessidade real de persistência; APIs via Route Handlers do Next; auth via Supabase Auth.
-- **Sem over-engineering.** Empreendimento como entidade de dados (não 11 páginas duplicadas). Componentizar por comportamento/reuso.
+- **Sem over-engineering.** Empreendimento como entidade de dados (não 12 páginas duplicadas). Componentizar por comportamento/reuso.
 - **Preservar** RLS, env vars e secrets do Supabase existente. Validação **100% local** primeiro.
 
 ## 12. Critérios de sucesso

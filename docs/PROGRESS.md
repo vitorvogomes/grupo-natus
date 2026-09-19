@@ -86,8 +86,9 @@
 - ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
 - ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
-- ✅ Fase C (piloto) — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP ~80%) + `npm run optimize:images`; **Follow Savassi** otimizado (72 MB→4 MB, −90–97%) servindo `.webp`. 🔔 Replicar nos demais empreendimentos com fotos prontas
-- ✅ Verificação: 227 testes · cobertura 98%+/91% · typecheck/lint/build (24 páginas) ok
+- ✅ Fase C (piloto) — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000) + `npm run optimize:images`; **Follow Savassi** otimizado (72 MB→~6 MB) servindo `.webp`. 🔔 Replicar nos demais com fotos prontas
+- ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; metadata factual, imagens na replicação). Catálogo/SSG agora com 12 empreendimentos
+- ✅ Verificação: 227 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
 - 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
 
 ---
