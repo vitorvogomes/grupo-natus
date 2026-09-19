@@ -29,7 +29,7 @@ describe("Seed dos empreendimentos", () => {
   it("Follow Savassi tem imagens reais atribuídas (Gate B)", () => {
     const fs = developments.find((d) => d.slug === "follow-savassi")!;
     expect(fs.images.length).toBeGreaterThanOrEqual(6);
-    expect(fs.images[0]?.kind).toBe("hero");
+    expect(fs.images[0]?.kind).toBe("externa");
   });
 
   it("inclui os empreendimentos-chave conhecidos", () => {

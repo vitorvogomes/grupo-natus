@@ -11,7 +11,7 @@ const base: Development = {
   summary: "Resumo factual do empreendimento",
   description: "d",
   images: [
-    { src: "/empreendimentos/follow-savassi/fachada-diurna.jpg", alt: "Fachada", kind: "hero" },
+    { src: "/empreendimentos/follow-savassi/fachada-diurna.jpg", alt: "Fachada", kind: "externa" },
   ],
   features: [],
   highlights: ["Lazer no rooftop", "Localização privilegiada"],

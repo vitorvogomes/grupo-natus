@@ -49,7 +49,7 @@ describe("DevelopmentCard", () => {
       <DevelopmentCard
         development={{
           ...base,
-          images: [{ src: "/brand/grupo-natus-principal.png", alt: "Foto", kind: "hero" }],
+          images: [{ src: "/brand/grupo-natus-principal.png", alt: "Foto", kind: "externa" }],
         }}
       />,
     );

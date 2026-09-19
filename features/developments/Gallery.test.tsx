@@ -5,9 +5,9 @@ import { Gallery } from "./Gallery";
 import type { DevelopmentImage } from "@/types/development";
 
 const images: DevelopmentImage[] = [
-  { src: "/brand/grupo-natus-principal.png", alt: "Fachada", kind: "render" },
-  { src: "/brand/grupo-natus-negativa.png", alt: "Planta 2Q", kind: "plant" },
-  { src: "/brand/grupo-natus-preta.png", alt: "Área externa", kind: "render" },
+  { src: "/brand/grupo-natus-principal.png", alt: "Fachada", kind: "externa" },
+  { src: "/brand/grupo-natus-negativa.png", alt: "Planta 2Q", kind: "planta" },
+  { src: "/brand/grupo-natus-preta.png", alt: "Área externa", kind: "externa" },
 ];
 
 const setup = () => userEvent.setup({ pointerEventsCheck: 0 });

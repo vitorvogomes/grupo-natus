@@ -19,10 +19,12 @@ export function ProgressTimeline({ progress }: ProgressTimelineProps) {
           label="Total Construído"
           size="lg"
         />
-        <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">
-          <CalendarClock aria-hidden="true" className="size-4 shrink-0" />
-          Última atualização: {formatProgressDate(progress.updatedAt)}
-        </p>
+        {progress.updatedAt ? (
+          <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">
+            <CalendarClock aria-hidden="true" className="size-4 shrink-0" />
+            Última atualização: {formatProgressDate(progress.updatedAt)}
+          </p>
+        ) : null}
       </div>
 
       {progress.isPreview ? (

@@ -7,7 +7,7 @@ import type { DevelopmentImage } from "@/types/development";
 const image: DevelopmentImage = {
   src: "/brand/grupo-natus-principal.png",
   alt: "Fachada",
-  kind: "render",
+  kind: "externa",
 };
 
 function stubRect(el: HTMLElement) {

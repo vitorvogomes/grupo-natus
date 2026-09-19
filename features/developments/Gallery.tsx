@@ -16,10 +16,10 @@ type GalleryProps = {
 };
 
 const CATEGORY_LABELS: Record<DevelopmentImageKind, string> = {
-  hero: "Destaque",
-  gallery: "Galeria",
-  plant: "Plantas",
-  render: "Renders",
+  externa: "Externa",
+  apartamento: "Apartamento",
+  planta: "Plantas",
+  obra: "Obras",
 };
 
 type Category = "all" | DevelopmentImageKind;

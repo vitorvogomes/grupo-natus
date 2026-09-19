@@ -32,7 +32,12 @@ export const STATUS_META: Record<DevelopmentStatus, StatusMeta> = {
   },
 };
 
-export type DevelopmentImageKind = "hero" | "gallery" | "plant" | "render";
+// Categorias de contexto da galeria (abas), inspiradas no site atual.
+export type DevelopmentImageKind =
+  | "externa"
+  | "apartamento"
+  | "planta"
+  | "obra";
 
 export type DevelopmentImage = {
   src: string;
@@ -62,7 +67,8 @@ export type ConstructionStage = {
 
 export type ConstructionProgress = {
   overallPercentage: number;
-  updatedAt: string; // ISO 8601
+  /** ISO 8601. Opcional: o site oficial nem sempre informa a data. */
+  updatedAt?: string;
   stages: ConstructionStage[];
   /** true = dados ilustrativos/mock (a UI rotula; nunca apresentar como real). */
   isPreview?: boolean;
