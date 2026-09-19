@@ -41,7 +41,7 @@ export function Select({
         className={cn(
           fieldControlClass,
           "appearance-none bg-background",
-          error ? "border-status-em-construcao" : "border-input",
+          error ? "border-destructive" : "border-input",
           className,
         )}
         {...props}
@@ -54,7 +54,7 @@ export function Select({
         ))}
       </select>
       {error ? (
-        <p id={errorId} role="alert" className="text-sm text-status-em-construcao">
+        <p id={errorId} role="alert" className="text-sm text-destructive">
           {error}
         </p>
       ) : null}

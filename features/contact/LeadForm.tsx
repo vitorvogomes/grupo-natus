@@ -181,7 +181,7 @@ export function LeadForm({
       })}
 
       {status === "error" ? (
-        <p role="alert" className="text-sm text-status-em-construcao">
+        <p role="alert" className="text-sm text-destructive">
           {formError}
         </p>
       ) : null}

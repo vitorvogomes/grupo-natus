@@ -38,13 +38,13 @@ export function Input({
         aria-describedby={error ? errorId : undefined}
         className={cn(
           fieldControlClass,
-          error ? "border-status-em-construcao" : "border-input",
+          error ? "border-destructive" : "border-input",
           className,
         )}
         {...props}
       />
       {error ? (
-        <p id={errorId} role="alert" className="text-sm text-status-em-construcao">
+        <p id={errorId} role="alert" className="text-sm text-destructive">
           {error}
         </p>
       ) : null}

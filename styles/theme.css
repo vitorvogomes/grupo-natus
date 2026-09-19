@@ -59,6 +59,9 @@
   --color-status-lancamento: var(--color-navy-500);
   --color-status-em-construcao: #b8823a; /* âmbar quente, harmônico com o nude */
   --color-status-pronto: #4f7a52; /* verde sóbrio */
+  /* Erro de formulário — vermelho acessível (≈6.3:1 em branco); NÃO reusar o
+   * âmbar de "em construção" (âmbar lê como aviso e reprova contraste). */
+  --color-status-error: #b3261e;
 
   /* ---- Ponte semântica shadcn/ui — mapeada 100% na marca (sem dark mode).
    * Gera as utilities bg-primary/text-foreground/bg-card/etc. usadas pelos
@@ -73,10 +76,12 @@
   --color-primary-foreground: var(--color-navy-900);
   --color-secondary: var(--color-surface-muted);
   --color-secondary-foreground: var(--color-ink);
-  --color-muted-foreground: var(--color-stone-400);
+  /* stone-600 (~6.1:1 em branco): passa AA p/ texto secundário; stone-400 (base
+   * da marca) reprovava (≈3:1). Segue mais claro que --color-ink (hierarquia). */
+  --color-muted-foreground: var(--color-stone-600);
   --color-accent: var(--color-nude-100);
   --color-accent-foreground: var(--color-ink);
-  --color-destructive: var(--color-status-em-construcao);
+  --color-destructive: var(--color-status-error);
   --color-destructive-foreground: var(--color-surface);
   --color-input: var(--color-border);
   --color-ring: var(--color-brand);
