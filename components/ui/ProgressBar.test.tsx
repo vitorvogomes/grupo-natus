@@ -23,4 +23,11 @@ describe("ProgressBar (acessível, não só cor)", () => {
       "100",
     );
   });
+
+  it("suporta a variante de destaque (size=lg) mantendo a acessibilidade", () => {
+    render(<ProgressBar value={62} label="Progresso geral" size="lg" />);
+    const bar = screen.getByRole("progressbar", { name: /progresso geral/i });
+    expect(bar).toHaveAttribute("aria-valuenow", "62");
+    expect(screen.getByText("62%")).toBeInTheDocument();
+  });
 });
