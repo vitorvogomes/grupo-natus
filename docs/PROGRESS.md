@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-09-16 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional, fora do plano atual) · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-09-18 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** Modernização de Frontend (ver seção abaixo) · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -58,6 +58,28 @@
 - ⬜ 8.1 Inicializar Supabase local — NFR5
 - ⬜ 8.2 Migrar entidades necessárias com RLS
 - ⬜ 8.3 Painel `/admin` com Supabase Auth — FR15
+
+---
+
+## Iniciativa — Modernização de Frontend & Design (desde 2026-09-18)
+
+> Fora do backlog original (Epics 1–8). Eleva o design a um patamar premium: shadcn/ui + Radix,
+> tipografia Fraunces/Inter, ícones lucide, motion. Gate baixado p/ 85% (ver `docs/adr/0001-coverage-85.md`).
+> Branch `feature/frontend-modernization`.
+
+- ✅ Fase 0 — tooling (npm, `cn`, deps, skills, MCP)
+- ✅ Gate 90→85 + ADR
+- ✅ A1 — Tipografia (Fraunces display + Inter)
+- ✅ A2 — Tokens shadcn ↔ marca (colisão `muted` resolvida)
+- ✅ A3 — Ícones lucide (zero emojis/glifos)
+- ✅ A4 — Primitivos → shadcn/Radix (Button cva; Dialog/Accordion Radix)
+- ✅ A5 — Motion (framer-motion): Reveal on scroll + hover de cards + **B5-a** (Header scroll-aware + link ativo)
+- ✅ B1 — Reorder (empreendimento antes da galeria)
+- ✅ B2 — Zoom/lightbox galeria (Radix Tabs + Radix Dialog lightbox com setas/teclado)
+- ✅ B3 — Google Maps do HQ
+- ⬜ A6/B4 — theme-showcase + polir cards/hero/catálogo (**não cobre header/footer**)
+- ✅ **B5 — Navegação (Header/Footer)**: CTA persistente, mega-menu (NavigationMenu), MobileNav→Sheet, Footer rico + sub-footer
+- ⬜ Verificação final (build/lint/typecheck/cobertura ≥85%) + `interface-review`
 
 ---
 

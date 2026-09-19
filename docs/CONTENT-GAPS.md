@@ -46,3 +46,10 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 - [ ] Confirmar direitos de uso das imagens em `img/` e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
 - [ ] **Comprimir/redimensionar os fontes** antes de produção: os renders originais têm ~3999×5000 e 6–14 MB cada. O `next/image` otimiza na entrega, mas o ideal é versionar fontes web-friendly (NFR1). (Follow Savassi já usa os originais como prévia.)
 - [ ] Vídeos/panorâmicas, se houver.
+
+## 6. Navegação — Header/Footer (B5)
+- [ ] **Redes sociais** do Grupo Natus (Instagram / Facebook / LinkedIn / YouTube): handles e URLs.
+- [ ] **CNPJ** e **CRECI** (registro imobiliário) para o rodapé legal / sub-footer.
+- [ ] **Selos/certificações** (se houver) e **links de políticas** (privacidade / termos de uso).
+- [ ] Confirmar o texto do **CTA persistente** do header (ex.: "Falar com consultor"?) e o destino (WhatsApp já configurado).
+> Enquanto não confirmado, cada item entra rotulado como `TODO: CONTENT REQUIRED` (nada inventado).
