@@ -40,3 +40,19 @@ export const CONTACT: Contact = {
   hours: "Seg–Sex, 09:00–19:00",
   mapsUrl: "https://www.google.com/maps?cid=2292552258238749315",
 } as const;
+
+/** Plataformas sociais suportadas (ícone lucide correspondente no Footer). */
+export type SocialPlatform = "instagram" | "facebook" | "linkedin" | "youtube";
+
+/**
+ * Redes sociais do Grupo Natus. TODO: CONTENT REQUIRED — URLs a confirmar
+ * (ver docs/CONTENT-GAPS.md §6). Vazio: o Footer não renderiza a seção
+ * (nada é inventado).
+ */
+export const SOCIAL: Readonly<Partial<Record<SocialPlatform, string>>> = {};
+
+/**
+ * Dados legais do rodapé. TODO: CONTENT REQUIRED — CNPJ/CRECI a confirmar.
+ * Campos vazios não são renderizados.
+ */
+export const LEGAL: Readonly<{ cnpj?: string; creci?: string }> = {};

@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { JsonLd, organizationSchema } from "@/features/seo/jsonLd";
 import { SITE_URL } from "@/lib/site";
+import { getDevelopmentsGroupedByStatus } from "@/content/developments";
 
 // Inter (corpo) + Fraunces (títulos/display, serifa) — identidade tipográfica
 // premium via next/font (self-hosted, font-display: swap, fallback com métricas).
@@ -51,7 +52,7 @@ export default function RootLayout({
         >
           Pular para o conteúdo
         </a>
-        <Header />
+        <Header empreendimentosMenu={getDevelopmentsGroupedByStatus()} />
         <div id="conteudo" className="flex-1">
           {children}
         </div>

@@ -4,6 +4,7 @@ import {
   findBySlug,
   getAllDevelopments,
   getDevelopmentBySlug,
+  getDevelopmentsGroupedByStatus,
 } from "./index";
 import type { Development } from "@/types/development";
 
@@ -43,5 +44,18 @@ describe("camada de conteúdo de empreendimentos (AD-2)", () => {
 
   it("getDevelopmentBySlug retorna undefined para slug inexistente", () => {
     expect(getDevelopmentBySlug("__nao-existe__")).toBeUndefined();
+  });
+
+  it("getDevelopmentsGroupedByStatus agrupa por status (só grupos com itens)", () => {
+    const groups = getDevelopmentsGroupedByStatus();
+    expect(groups.length).toBeGreaterThan(0);
+    // Todo grupo tem rótulo e ao menos um item.
+    for (const group of groups) {
+      expect(group.label).toBeTruthy();
+      expect(group.items.length).toBeGreaterThan(0);
+    }
+    // A soma dos itens é igual ao total de empreendimentos.
+    const total = groups.reduce((n, g) => n + g.items.length, 0);
+    expect(total).toBe(getAllDevelopments().length);
   });
 });
