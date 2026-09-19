@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { LeadForm, type LeadField } from "@/features/contact/LeadForm";
 import { CONTACT } from "@/lib/site";
+import { buildMapEmbedUrl } from "@/lib/maps";
+
+// Sede do Grupo Natus (Savassi/BH) — embed por endereço + link do perfil (cid).
+const HQ_MAP_EMBED = buildMapEmbedUrl({
+  city: "Belo Horizonte",
+  state: "MG",
+  address: "Av. Getúlio Vargas, 1621 - Savassi",
+});
 
 export const metadata: Metadata = {
   title: "Fale Conosco",
@@ -54,8 +62,25 @@ export default function ContatoPage() {
           >
             WhatsApp {CONTACT.whatsappDisplay}
           </a>
-          <p>{CONTACT.address}</p>
-          <p className="text-muted">{CONTACT.hours}</p>
+          <a
+            href={CONTACT.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-brand-strong"
+          >
+            {CONTACT.address}
+          </a>
+          <p className="text-muted-foreground">{CONTACT.hours}</p>
+
+          {HQ_MAP_EMBED ? (
+            <iframe
+              src={HQ_MAP_EMBED}
+              title="Mapa da sede do Grupo Natus"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="mt-2 aspect-video w-full rounded-lg border border-border"
+            />
+          ) : null}
         </aside>
       </div>
     </main>

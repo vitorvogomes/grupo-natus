@@ -57,11 +57,6 @@ export default async function DevelopmentPage({ params }: PageParams) {
       <DevelopmentHero development={development} />
       <DevelopmentAnchorNav />
 
-      <section id="imagens" className={sectionClass}>
-        <h2 className="mb-6 text-2xl font-semibold text-ink">Imagens</h2>
-        <Gallery images={development.images} />
-      </section>
-
       <section id="empreendimento" className="bg-surface-muted">
         <div className={sectionClass}>
           <DevelopmentOverview development={development} />
@@ -72,6 +67,11 @@ export default async function DevelopmentPage({ params }: PageParams) {
             <DevelopmentAmenities development={development} />
           </div>
         </div>
+      </section>
+
+      <section id="imagens" className={sectionClass}>
+        <h2 className="mb-6 text-2xl font-semibold text-ink">Imagens</h2>
+        <Gallery images={development.images} />
       </section>
 
       <section id="localizacao" className={sectionClass}>
@@ -89,7 +89,7 @@ export default async function DevelopmentPage({ params }: PageParams) {
           {development.progress ? (
             <ProgressTimeline progress={development.progress} />
           ) : (
-            <p className="text-muted">
+            <p className="text-muted-foreground">
               Acompanhamento da evolução da obra em breve.
             </p>
           )}

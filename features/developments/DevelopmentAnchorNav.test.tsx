@@ -5,8 +5,8 @@ import { DevelopmentAnchorNav, DEV_SECTIONS } from "./DevelopmentAnchorNav";
 describe("DevelopmentAnchorNav", () => {
   it("lista as âncoras de seção esperadas", () => {
     expect(DEV_SECTIONS.map((s) => s.label)).toEqual([
-      "Imagens",
       "Empreendimento",
+      "Imagens",
       "Localização",
       "Estágio de Obra",
       "Falar com Consultor",
