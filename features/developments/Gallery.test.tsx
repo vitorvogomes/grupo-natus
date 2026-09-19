@@ -10,55 +10,84 @@ const images: DevelopmentImage[] = [
   { src: "/brand/grupo-natus-preta.png", alt: "Área externa", kind: "render" },
 ];
 
+const setup = () => userEvent.setup({ pointerEventsCheck: 0 });
+
 describe("Gallery (FR4)", () => {
   it("mostra placeholder rotulado quando não há imagens", () => {
     render(<Gallery images={[]} />);
     expect(screen.getByText(/imagens em breve/i)).toBeInTheDocument();
   });
 
-  it("exibe a imagem principal com alt obrigatório", () => {
+  it("exibe as imagens (aba Todas por padrão) com alt obrigatório", () => {
     render(<Gallery images={images} />);
-    const main = screen.getByTestId("gallery-main");
-    expect(within(main).getByRole("img", { name: "Fachada" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Fachada" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Planta 2Q" })).toBeInTheDocument();
   });
 
-  it("permite filtrar por categoria", async () => {
-    const user = userEvent.setup();
+  it("filtra por categoria via Radix Tabs", async () => {
+    const user = setup();
     render(<Gallery images={images} />);
-    await user.click(screen.getByRole("button", { name: /plantas/i }));
-    const main = screen.getByTestId("gallery-main");
-    expect(within(main).getByRole("img", { name: "Planta 2Q" })).toBeInTheDocument();
+    await user.click(screen.getByRole("tab", { name: /plantas/i }));
+    expect(screen.getByRole("img", { name: "Planta 2Q" })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("img", { name: "Fachada" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("navega com as setas do teclado", async () => {
-    const user = userEvent.setup();
+  it("abre o lightbox ampliado ao clicar numa imagem", async () => {
+    const user = setup();
     render(<Gallery images={images} />);
-    const region = screen.getByRole("group", { name: /galeria/i });
-    region.focus();
+    await user.click(
+      screen.getByRole("button", { name: /ampliar imagem: fachada/i }),
+    );
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("img", { name: "Fachada" })).toBeInTheDocument();
+  });
+
+  it("navega no lightbox com as setas (avança e dá a volta)", async () => {
+    const user = setup();
+    render(<Gallery images={images} />);
+    await user.click(
+      screen.getByRole("button", { name: /ampliar imagem: fachada/i }),
+    );
+    const dialog = screen.getByRole("dialog");
     await user.keyboard("{ArrowRight}");
-    const main = screen.getByTestId("gallery-main");
-    expect(within(main).getByRole("img", { name: "Planta 2Q" })).toBeInTheDocument();
-  });
-
-  it("navega para trás com ArrowLeft (dá a volta)", async () => {
-    const user = userEvent.setup();
-    render(<Gallery images={images} />);
-    const region = screen.getByRole("group", { name: /galeria/i });
-    region.focus();
+    expect(
+      within(dialog).getByRole("img", { name: "Planta 2Q" }),
+    ).toBeInTheDocument();
+    // De Planta (1) volta a Fachada (0); mais um ArrowLeft dá a volta p/ Área externa (2).
     await user.keyboard("{ArrowLeft}");
-    const main = screen.getByTestId("gallery-main");
+    await user.keyboard("{ArrowLeft}");
     expect(
-      within(main).getByRole("img", { name: "Área externa" }),
+      within(dialog).getByRole("img", { name: "Área externa" }),
     ).toBeInTheDocument();
   });
 
-  it("seleciona imagem pelo thumbnail", async () => {
-    const user = userEvent.setup();
+  it("navega pelos botões de próximo/anterior", async () => {
+    const user = setup();
     render(<Gallery images={images} />);
-    await user.click(screen.getByRole("button", { name: /ver imagem: área externa/i }));
-    const main = screen.getByTestId("gallery-main");
+    await user.click(
+      screen.getByRole("button", { name: /ampliar imagem: fachada/i }),
+    );
+    const dialog = screen.getByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: /próxima imagem/i }));
     expect(
-      within(main).getByRole("img", { name: "Área externa" }),
+      within(dialog).getByRole("img", { name: "Planta 2Q" }),
     ).toBeInTheDocument();
+    await user.click(
+      within(dialog).getByRole("button", { name: /imagem anterior/i }),
+    );
+    expect(within(dialog).getByRole("img", { name: "Fachada" })).toBeInTheDocument();
+  });
+
+  it("fecha o lightbox no Escape", async () => {
+    const user = setup();
+    render(<Gallery images={images} />);
+    await user.click(
+      screen.getByRole("button", { name: /ampliar imagem: fachada/i }),
+    );
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });
