@@ -84,6 +84,7 @@
 - ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
 - ✅ Galeria — **imagem em destaque + hover-zoom (zoom-and-pan seguindo o cursor, estilo 21st.dev)** + grade das demais + lightbox (gated por `prefers-reduced-motion`/pointer)
 - ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
+- ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
 - ✅ Verificação: 224 testes · cobertura 98%+/91% · typecheck/lint/build (24 páginas) ok
 - 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
