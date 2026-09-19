@@ -1,4 +1,7 @@
+"use client";
+
 import * as Progress from "@radix-ui/react-progress";
+import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type ProgressBarProps = {
@@ -20,6 +23,8 @@ export function ProgressBar({
 }: ProgressBarProps) {
   const pct = clamp(value);
   const large = size === "lg";
+  const reduce = useReducedMotion();
+  const target = pct / 100;
 
   return (
     <div className={className}>
@@ -38,9 +43,8 @@ export function ProgressBar({
         </span>
         <span
           className={cn(
-            large
-              ? "font-heading text-2xl font-semibold text-brand-strong tabular-nums"
-              : "text-sm font-medium text-muted-foreground tabular-nums",
+            "tabular-nums text-ink",
+            large ? "font-heading text-2xl font-semibold text-brand-strong" : "text-sm font-medium",
           )}
         >
           {pct}%
@@ -54,10 +58,19 @@ export function ProgressBar({
           large ? "h-3" : "h-2",
         )}
       >
-        <Progress.Indicator
-          className="h-full w-full flex-1 rounded-full bg-gradient-to-r from-brand to-brand-strong transition-transform duration-700 ease-out motion-reduce:transition-none"
-          style={{ transform: `translateX(-${100 - pct}%)` }}
-        />
+        <Progress.Indicator asChild>
+          <motion.div
+            className="h-full w-full origin-left rounded-full bg-gradient-to-r from-brand to-brand-strong"
+            initial={{ scaleX: reduce ? target : 0 }}
+            whileInView={{ scaleX: target }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={
+              reduce
+                ? { duration: 0 }
+                : { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+            }
+          />
+        </Progress.Indicator>
       </Progress.Root>
     </div>
   );
