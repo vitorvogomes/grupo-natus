@@ -15,15 +15,18 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
   const href = `/empreendimentos/${development.slug}`;
 
   return (
-    <Card as="article" className="flex flex-col overflow-hidden">
-      <div className="relative aspect-[4/3] bg-surface-muted">
+    <Card
+      as="article"
+      className="group flex flex-col overflow-hidden transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
         {hero ? (
           <Image
             src={hero.src}
             alt={hero.alt}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">

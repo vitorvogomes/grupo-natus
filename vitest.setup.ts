@@ -19,6 +19,27 @@ if (!Element.prototype.hasPointerCapture) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
+if (!("IntersectionObserver" in globalThis)) {
+  // No-op observer que reporta o alvo como visível — assim `whileInView`
+  // (framer-motion) resolve nos testes em vez de deixar o conteúdo em opacity:0.
+  globalThis.IntersectionObserver = class {
+    constructor(private cb: IntersectionObserverCallback) {}
+    observe(el: Element) {
+      this.cb(
+        [{ isIntersecting: true, target: el } as IntersectionObserverEntry],
+        this as unknown as IntersectionObserver,
+      );
+    }
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+    root = null;
+    rootMargin = "";
+    thresholds = [];
+  } as unknown as typeof IntersectionObserver;
+}
 if (!window.matchMedia) {
   window.matchMedia = (query: string) =>
     ({
