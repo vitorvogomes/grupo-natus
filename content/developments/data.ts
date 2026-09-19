@@ -46,14 +46,14 @@ const SEEDS: readonly Seed[] = [
     summary:
       "Empreendimento em construção na Savassi, em Belo Horizonte/MG, com fachada contemporânea e área de lazer no rooftop.",
     images: [
-      { src: "/empreendimentos/follow-savassi/fachada-diurna.jpg", alt: "Fachada diurna do Follow Savassi", kind: "hero" },
-      { src: "/empreendimentos/follow-savassi/fachada-noturna.jpg", alt: "Fachada noturna do Follow Savassi", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/voo-do-passaro.jpg", alt: "Vista aérea do Follow Savassi", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/rooftop-piscina.jpg", alt: "Piscina no rooftop", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/rooftop-gourmet.jpg", alt: "Espaço gourmet no rooftop", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/academia.jpg", alt: "Academia", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/hall.jpg", alt: "Hall de entrada", kind: "render" },
-      { src: "/empreendimentos/follow-savassi/apartamento-1001.jpg", alt: "Apartamento decorado (unidade 1001)", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/fachada-diurna.webp", alt: "Fachada diurna do Follow Savassi", kind: "hero" },
+      { src: "/empreendimentos/follow-savassi/fachada-noturna.webp", alt: "Fachada noturna do Follow Savassi", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/voo-do-passaro.webp", alt: "Vista aérea do Follow Savassi", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/rooftop-piscina.webp", alt: "Piscina no rooftop", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/rooftop-gourmet.webp", alt: "Espaço gourmet no rooftop", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/academia.webp", alt: "Academia", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/hall.webp", alt: "Hall de entrada", kind: "render" },
+      { src: "/empreendimentos/follow-savassi/apartamento-1001.webp", alt: "Apartamento decorado (unidade 1001)", kind: "render" },
     ],
     extraFeatures: [
       { label: "Lazer", value: "Rooftop com piscina" },
