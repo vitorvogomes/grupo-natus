@@ -87,7 +87,9 @@
 - ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
 - ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB. 🔔 Faltam 5 lançamentos sem foto (assets da empresa); Denver com assets fracos
-- ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; metadata factual, imagens na replicação). Catálogo/SSG agora com 12 empreendimentos
+- ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
+- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras — inspirado no site atual). `DevelopmentImageKind` recategorizado; imagens re-tagueadas + fotos de **obra** (Viver Mais) e interiores extras (Follow Savassi)
+- ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
 - ✅ Verificação: 227 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
 - 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
 
