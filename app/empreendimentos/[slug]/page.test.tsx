@@ -36,7 +36,7 @@ describe("Rota /empreendimentos/[slug] (FR3)", () => {
     });
     render(ui);
     expect(
-      screen.getByRole("progressbar", { name: /progresso geral/i }),
+      screen.getByRole("progressbar", { name: /total construído/i }),
     ).toBeInTheDocument();
   });
 

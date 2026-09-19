@@ -1,6 +1,6 @@
 import { CalendarClock, Info } from "lucide-react";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { formatProgressDate, sortedStages } from "./progress";
+import { canonicalStages, formatProgressDate } from "./progress";
 import type { ConstructionProgress } from "@/types/development";
 
 type ProgressTimelineProps = {
@@ -8,14 +8,15 @@ type ProgressTimelineProps = {
 };
 
 export function ProgressTimeline({ progress }: ProgressTimelineProps) {
-  const stages = sortedStages(progress);
+  const stages = canonicalStages(progress);
 
   return (
     <div className="flex flex-col gap-8">
+      {/* Total Construído = percentual geral, em destaque. */}
       <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
         <ProgressBar
           value={progress.overallPercentage}
-          label="Progresso geral"
+          label="Total Construído"
           size="lg"
         />
         <p className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground">
@@ -31,15 +32,18 @@ export function ProgressTimeline({ progress }: ProgressTimelineProps) {
         </p>
       ) : null}
 
-      {stages.length > 0 ? (
-        <ol className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+      <div>
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Etapas da obra
+        </h3>
+        <ol className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
           {stages.map((stage) => (
-            <li key={stage.name}>
+            <li key={stage.name} className="px-5 py-4">
               <ProgressBar value={stage.percentage} label={stage.name} />
             </li>
           ))}
         </ol>
-      ) : null}
+      </div>
     </div>
   );
 }

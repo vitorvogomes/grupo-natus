@@ -72,15 +72,20 @@ const SEEDS: readonly Seed[] = [
       },
       { category: "Comodidades", items: ["Academia", "Hall de entrada"] },
     ],
-    // MOCK rotulado (isPreview) — % reais são TODO (docs/CONTENT-GAPS.md §2).
+    // MOCK rotulado (isPreview) — etapas oficiais da Natus; % reais são TODO
+    // (docs/CONTENT-GAPS.md §2). "Total Construído" = overallPercentage.
     progress: {
       overallPercentage: 55,
       updatedAt: "2026-09-01T00:00:00.000Z",
       isPreview: true,
       stages: [
-        { name: "Fundação", percentage: 100, order: 1 },
-        { name: "Estrutura", percentage: 70, order: 2 },
-        { name: "Acabamento", percentage: 15, order: 3 },
+        { name: "Terraplanagem", percentage: 100, order: 1 },
+        { name: "Infraestrutura", percentage: 100, order: 2 },
+        { name: "Fundações", percentage: 100, order: 3 },
+        { name: "Estrutura", percentage: 80, order: 4 },
+        { name: "Instalações", percentage: 40, order: 5 },
+        { name: "Revestimento", percentage: 15, order: 6 },
+        { name: "Acabamentos", percentage: 0, order: 7 },
       ],
     },
   },

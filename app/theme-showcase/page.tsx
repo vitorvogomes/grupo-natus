@@ -45,10 +45,13 @@ const SHOWCASE_PROGRESS: ConstructionProgress = {
   updatedAt: "2026-08-01T00:00:00.000Z",
   isPreview: true,
   stages: [
-    { name: "Fundação", percentage: 100, order: 1 },
-    { name: "Estrutura", percentage: 70, order: 2 },
-    { name: "Instalações", percentage: 35, order: 3 },
-    { name: "Acabamento", percentage: 10, order: 4 },
+    { name: "Terraplanagem", percentage: 100, order: 1 },
+    { name: "Infraestrutura", percentage: 100, order: 2 },
+    { name: "Fundações", percentage: 100, order: 3 },
+    { name: "Estrutura", percentage: 70, order: 4 },
+    { name: "Instalações", percentage: 35, order: 5 },
+    { name: "Revestimento", percentage: 10, order: 6 },
+    { name: "Acabamentos", percentage: 0, order: 7 },
   ],
 };
 
