@@ -36,6 +36,10 @@ const JOBS = {
       { src: "0065-OASIS_INTERIORES_ACADEMIA_POS.jpg", out: "academia" },
       { src: "0065-OASIS_INTERIORES_HALL_POS.jpg", out: "hall" },
       { src: "0065-OASIS_APARTAMENTO 1001 4k_POS.jpg", out: "apartamento-1001" },
+      { src: "0065-OASIS_INTERIORES_AP 1003_4K_POS.jpg", out: "apartamento-1003" },
+      { src: "0065-OASIS_INTERIORES_APARTAMNETO 303_POS.jpg", out: "apartamento-303" },
+      { src: "0065-OASIS_INTERIORES_SUITE 702_POS.jpg", out: "suite-702" },
+      { src: "0065-ROOFTOP_AREA DO TERRAÇO_4K.jpg", out: "rooftop-terraco" },
     ],
   },
 
@@ -63,6 +67,10 @@ const JOBS = {
       { src: "pic-imovei-itaborai-4.jpeg", out: "perspectiva-4" },
       { src: "pic-imovei-itaborai-5.jpeg", out: "perspectiva-5" },
       { src: "pic-imovei-itaborai-6.jpeg", out: "perspectiva-6" },
+      { src: "Viver_Mais_01.jpg", out: "obra-1" },
+      { src: "Viver_Mais_02.jpg", out: "obra-2" },
+      { src: "pic-vivermais-estrutura-1.jpg", out: "obra-estrutura-1" },
+      { src: "pic-obra-viver-mais-2.jpeg", out: "obra-3" },
     ],
   },
 
