@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { MapPin } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
 import { Image } from "@/components/ui/Image";
+import { cn } from "@/lib/utils";
 import { pickHeroImage } from "./pickHeroImage";
 import type { Development } from "@/types/development";
 
@@ -40,7 +42,8 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-lg font-semibold text-ink">{development.name}</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+          <MapPin aria-hidden="true" className="size-3.5 shrink-0" />
           {development.location.city}/{development.location.state}
         </p>
 
@@ -58,8 +61,11 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
         ) : null}
 
         <div className="mt-auto pt-5">
-          <Link href={href}>
-            <Button className="w-full">Ver empreendimento</Button>
+          <Link
+            href={href}
+            className={cn(buttonVariants({ variant: "primary" }), "w-full")}
+          >
+            Ver empreendimento
           </Link>
         </div>
       </div>
