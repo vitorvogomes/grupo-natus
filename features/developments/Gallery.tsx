@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Image } from "@/components/ui/Image";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 import type {
   DevelopmentImage,
   DevelopmentImageKind,
@@ -42,7 +42,7 @@ export function Gallery({ images }: GalleryProps) {
 
   if (images.length === 0) {
     return (
-      <div className="flex aspect-video items-center justify-center rounded-lg bg-surface-muted text-muted">
+      <div className="flex aspect-video items-center justify-center rounded-lg bg-surface-muted text-muted-foreground">
         Imagens em breve
       </div>
     );
@@ -80,7 +80,7 @@ export function Gallery({ images }: GalleryProps) {
               type="button"
               onClick={() => selectCategory(cat)}
               aria-pressed={category === cat}
-              className={cx(
+              className={cn(
                 "rounded-full px-3 py-1 text-sm",
                 category === cat
                   ? "bg-ink text-white"
@@ -114,7 +114,7 @@ export function Gallery({ images }: GalleryProps) {
               aria-label={`Ver imagem: ${img.alt}`}
               aria-current={i === safeIndex}
               onClick={() => setIndex(i)}
-              className={cx(
+              className={cn(
                 "relative size-16 overflow-hidden rounded-md border",
                 i === safeIndex ? "border-brand" : "border-border",
               )}

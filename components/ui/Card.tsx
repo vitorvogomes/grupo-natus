@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from "react";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 
 type CardProps = {
   children: ReactNode;
@@ -11,8 +11,9 @@ type CardProps = {
 export function Card({ children, className, as: Tag = "div" }: CardProps) {
   return (
     <Tag
-      className={cx(
-        "rounded-lg border border-border bg-surface shadow-sm",
+      data-slot="card"
+      className={cn(
+        "rounded-lg border border-border bg-card text-card-foreground shadow-sm",
         className,
       )}
     >

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/site";
 
 /**
@@ -30,7 +31,11 @@ export function MobileNav() {
         onClick={() => setOpen((v) => !v)}
         className="inline-flex size-10 items-center justify-center rounded-md text-ink"
       >
-        <span aria-hidden="true">{open ? "✕" : "☰"}</span>
+        {open ? (
+          <X aria-hidden="true" className="size-5" />
+        ) : (
+          <Menu aria-hidden="true" className="size-5" />
+        )}
       </button>
 
       {open ? (

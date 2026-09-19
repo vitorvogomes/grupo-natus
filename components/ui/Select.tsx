@@ -1,5 +1,6 @@
 import type { SelectHTMLAttributes } from "react";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
+import { fieldControlClass } from "./Input";
 
 export type SelectOption = { value: string; label: string };
 
@@ -11,6 +12,8 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
   placeholder?: string;
 };
 
+// Select nativo (robusto em mobile/no-JS e no lead form) estilizado com os
+// tokens shadcn — decisão em docs/adr/0001 / plano de modernização.
 export function Select({
   id,
   label,
@@ -23,7 +26,7 @@ export function Select({
 }: SelectProps) {
   const errorId = `${id}-error`;
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
         {required ? <span aria-hidden="true"> *</span> : null}
@@ -33,9 +36,10 @@ export function Select({
         required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className={cx(
-          "rounded-md border bg-surface px-3 py-2 text-ink outline-none focus-visible:ring-2 focus-visible:ring-brand",
-          error ? "border-status-em-construcao" : "border-border",
+        className={cn(
+          fieldControlClass,
+          "appearance-none bg-background",
+          error ? "border-status-em-construcao" : "border-input",
           className,
         )}
         {...props}

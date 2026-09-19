@@ -1,5 +1,6 @@
 import type { TextareaHTMLAttributes } from "react";
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
+import { fieldControlClass } from "./Input";
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   id: string;
@@ -17,7 +18,7 @@ export function Textarea({
 }: TextareaProps) {
   const errorId = `${id}-error`;
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
         {required ? <span aria-hidden="true"> *</span> : null}
@@ -27,9 +28,10 @@ export function Textarea({
         required={required}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errorId : undefined}
-        className={cx(
-          "rounded-md border px-3 py-2 text-ink outline-none focus-visible:ring-2 focus-visible:ring-brand",
-          error ? "border-status-em-construcao" : "border-border",
+        className={cn(
+          fieldControlClass,
+          "min-h-24 resize-y",
+          error ? "border-status-em-construcao" : "border-input",
           className,
         )}
         {...props}

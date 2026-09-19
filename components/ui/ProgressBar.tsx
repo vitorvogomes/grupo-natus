@@ -1,4 +1,4 @@
-import { cx } from "@/lib/cx";
+import { cn } from "@/lib/utils";
 
 type ProgressBarProps = {
   value: number;
@@ -27,7 +27,7 @@ export function ProgressBar({ value, label, className }: ProgressBarProps) {
         className="h-2.5 w-full overflow-hidden rounded-full bg-surface-muted"
       >
         <div
-          className={cx("h-full rounded-full bg-status-em-construcao")}
+          className={cn("h-full rounded-full bg-status-em-construcao")}
           style={{ width: `${pct}%` }}
         />
       </div>
