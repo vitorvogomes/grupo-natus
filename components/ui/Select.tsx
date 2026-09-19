@@ -1,10 +1,10 @@
-import type { SelectHTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "@/lib/utils";
 import { fieldControlClass } from "./Input";
 
 export type SelectOption = { value: string; label: string };
 
-type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+type SelectProps = ComponentPropsWithRef<"select"> & {
   id: string;
   label: string;
   options: readonly SelectOption[];
@@ -22,6 +22,7 @@ export function Select({
   required,
   placeholder,
   className,
+  ref,
   ...props
 }: SelectProps) {
   const errorId = `${id}-error`;
@@ -32,6 +33,7 @@ export function Select({
         {required ? <span aria-hidden="true"> *</span> : null}
       </label>
       <select
+        ref={ref}
         id={id}
         required={required}
         aria-invalid={error ? true : undefined}

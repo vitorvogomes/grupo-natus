@@ -1,7 +1,7 @@
-import type { InputHTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "@/lib/utils";
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+type InputProps = ComponentPropsWithRef<"input"> & {
   id: string;
   label: string;
   error?: string;
@@ -20,6 +20,7 @@ export function Input({
   error,
   required,
   className,
+  ref,
   ...props
 }: InputProps) {
   const errorId = `${id}-error`;
@@ -30,6 +31,7 @@ export function Input({
         {required ? <span aria-hidden="true"> *</span> : null}
       </label>
       <input
+        ref={ref}
         id={id}
         required={required}
         aria-invalid={error ? true : undefined}

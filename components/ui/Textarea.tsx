@@ -1,8 +1,8 @@
-import type { TextareaHTMLAttributes } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "@/lib/utils";
 import { fieldControlClass } from "./Input";
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type TextareaProps = ComponentPropsWithRef<"textarea"> & {
   id: string;
   label: string;
   error?: string;
@@ -14,6 +14,7 @@ export function Textarea({
   error,
   required,
   className,
+  ref,
   ...props
 }: TextareaProps) {
   const errorId = `${id}-error`;
@@ -24,6 +25,7 @@ export function Textarea({
         {required ? <span aria-hidden="true"> *</span> : null}
       </label>
       <textarea
+        ref={ref}
         id={id}
         required={required}
         aria-invalid={error ? true : undefined}
