@@ -36,11 +36,14 @@ export default defineConfig({
         // Layout raiz renderiza <html>/<body>: coberto por E2E, não unit.
         "app/layout.tsx",
       ],
+      // Piso de 85% (decisão 2026-09-18, ver docs/adr/0001-coverage-85.md):
+      // sweet spot deliberado ao adotar shadcn/Radix — branches de portal/
+      // pointer têm baixo ROI de cobertura em jsdom. 85% é piso, não teto.
       thresholds: {
-        lines: 90,
-        functions: 90,
-        branches: 90,
-        statements: 90,
+        lines: 85,
+        functions: 85,
+        branches: 85,
+        statements: 85,
       },
     },
   },

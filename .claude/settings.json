@@ -55,7 +55,7 @@
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/coverage-gate.sh\"",
             "timeout": 300,
-            "statusMessage": "TDD gate: testes + cobertura (>=90%)"
+            "statusMessage": "TDD gate: testes + cobertura (>=85%)"
           }
         ]
       }

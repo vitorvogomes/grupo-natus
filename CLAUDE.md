@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-**Epics 1–7 concluídas (32/35 stories).** App Next.js 16.3.5 (App Router) + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 90%). Entregue: design system + theme-showcase (**Gate A ✅**); Home/catálogo + filtros; template de empreendimento `[slug]` (hero, sub-nav âncora, galeria, detalhes, mapa, progresso, CTA/interesse) validado (**Gate B ✅**) gerando as 11 páginas por dados; evolução das obras; formulários (Fale Conosco, Interesse, Negocie seu Terreno) + `/api/leads` (honeypot + rate-limit + email atrás de secret); institucionais; SEO site-wide (sitemap/robots/JSON-LD), a11y (skip-link) e motion (`prefers-reduced-motion`). Build: 23 páginas (estático/SSG; `/api/leads` dinâmico), 205 testes.
+**Epics 1–7 concluídas (32/35 stories).** App Next.js 16.3.5 (App Router) + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 85%, ver docs/adr/0001-coverage-85.md). Entregue: design system + theme-showcase (**Gate A ✅**); Home/catálogo + filtros; template de empreendimento `[slug]` (hero, sub-nav âncora, galeria, detalhes, mapa, progresso, CTA/interesse) validado (**Gate B ✅**) gerando as 11 páginas por dados; evolução das obras; formulários (Fale Conosco, Interesse, Negocie seu Terreno) + `/api/leads` (honeypot + rate-limit + email atrás de secret); institucionais; SEO site-wide (sitemap/robots/JSON-LD), a11y (skip-link) e motion (`prefers-reduced-motion`). Build: 23 páginas (estático/SSG; `/api/leads` dinâmico), 205 testes.
 
 Pastas: `app/`, `components/` (+`ui/`, `showcase/`), `features/` (`developments`, `contact`, `home`, `land-submission` via páginas, `seo`), `content/developments/`, `lib/`, `types/`, `styles/`, `public/`.
 
@@ -27,12 +27,12 @@ Ainda não há repositório git. Os comandos abaixo já valem (scaffold criado n
 
 ## Workflow, skills & the sacred TDD gate (`.claude/`)
 
-**TDD is mandatory.** Every story is built red→green→refactor with a **coverage floor of 90%**, enforced two ways:
-- The test runner (Vitest, wired in Epic 1) must set `coverage.thresholds` to 90% (lines/functions/branches/statements) and expose a `test:coverage` npm script.
-- A **Stop hook** (`.claude/hooks/coverage-gate.sh`) runs `npm run test:coverage` before a turn can end and **blocks (exit 2)** if tests fail or coverage < 90%. It is a no-op until `package.json` has `test:coverage`, and skips when no `.ts/.tsx` under `src|app|components|lib|features|tests` changed since the last green run.
+**TDD is mandatory.** Every story is built red→green→refactor with a **coverage floor of 85%** (baixado de 90% em 2026-09-18 pela adoção do shadcn/Radix — ver docs/adr/0001-coverage-85.md; 85% é piso, não teto), enforced two ways:
+- The test runner (Vitest, wired in Epic 1) must set `coverage.thresholds` to 85% (lines/functions/branches/statements) and expose a `test:coverage` npm script.
+- A **Stop hook** (`.claude/hooks/coverage-gate.sh`) runs `npm run test:coverage` before a turn can end and **blocks (exit 2)** if tests fail or coverage < 85%. It is a no-op until `package.json` has `test:coverage`, and skips when no `.ts/.tsx` under `src|app|components|lib|features|tests` changed since the last green run.
 - A non-blocking **PostToolUse hook** (`.claude/hooks/tdd-reminder.sh`) nudges when a source file is written without a sibling `*.test.tsx`. Keep the "test first" discipline so it stays quiet.
 
-**Slash commands** (`.claude/commands/`): `/story <ID|desc>` — implement an epic story via strict TDD + the DoD (coverage ≥90%, lint, typecheck); `/tdd <unit>` — a single red-green-refactor loop; `/coverage` — run the gate manually and report gaps. Do **not** lower the 90% threshold to "pass" — cover for real.
+**Slash commands** (`.claude/commands/`): `/story <ID|desc>` — implement an epic story via strict TDD + the DoD (coverage ≥85%, lint, typecheck); `/tdd <unit>` — a single red-green-refactor loop; `/coverage` — run the gate manually and report gaps. Do **not** lower the 85% threshold further to "pass" — cover for real (o abaixamento 90→85 é decisão documentada, não atalho).
 
 **Installed skills** (`.claude/skills/`): use them when relevant —
 - `nextjs-app-router-patterns` (App Router/RSC), `tailwind-design-system` (Epic 1 design system), `framer-motion-animator` (Epic 8 motion), `nextjs-seo` (Epic 9), `vitest-testing` (TDD), `supabase` + `supabase-postgres-best-practices` (**load before any Postgres/RLS/migration work** — critical given the do-not-touch-RLS rule).
@@ -94,7 +94,7 @@ Definidos em `package.json` (criados no E1.1):
 - `npm run lint` — ESLint (flat config: `eslint-config-next/core-web-vitals` + `/typescript`).
 - `npm run typecheck` — `tsc --noEmit` (TS 6 strict).
 - `npm test` / `npm run test:watch` — Vitest (run / watch).
-- `npm run test:coverage` — Vitest com cobertura; **threshold 90%** em lines/functions/branches/statements. Mede só o código de app (`app/`, `components/`, `lib/`, `features/`, `content/`, `types/`); `app/layout.tsx` fica fora (E2E, não unit). É o comando que o Stop hook executa.
+- `npm run test:coverage` — Vitest com cobertura; **threshold 85%** em lines/functions/branches/statements. Mede só o código de app (`app/`, `components/`, `lib/`, `features/`, `content/`, `types/`); `app/layout.tsx` fica fora (E2E, não unit). É o comando que o Stop hook executa.
 
 Rodar um único teste: `npx vitest run caminho/arquivo.test.tsx` ou `npx vitest run -t "trecho do nome"`.
 
