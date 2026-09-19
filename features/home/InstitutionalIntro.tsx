@@ -22,7 +22,7 @@ export function InstitutionalIntro() {
             {/* Texto editorial a validar com a empresa. */}
             O Grupo Natus atua em incorporação imobiliária e engenharia em Minas
             Gerais e no Rio de Janeiro.{" "}
-            <span className="text-muted">
+            <span className="text-muted-foreground">
               (TODO: CONTENT REQUIRED — texto institucional definitivo)
             </span>
           </p>
@@ -40,7 +40,7 @@ export function InstitutionalIntro() {
               key={stat.label}
               className="rounded-lg border border-border p-4 text-center"
             >
-              <dt className="text-xs text-muted">{stat.label}</dt>
+              <dt className="text-xs text-muted-foreground">{stat.label}</dt>
               <dd className="mt-1 text-sm font-semibold text-ink">
                 TODO: CONTENT REQUIRED
               </dd>

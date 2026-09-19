@@ -26,7 +26,7 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted">
+          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
             Imagem em breve
           </div>
         )}
@@ -37,7 +37,7 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="text-lg font-semibold text-ink">{development.name}</h3>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-sm text-muted-foreground">
           {development.location.city}/{development.location.state}
         </p>
 

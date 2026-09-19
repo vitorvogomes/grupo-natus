@@ -25,7 +25,7 @@ export default function EngenhariaPage() {
       </h1>
       <p className="mt-4 max-w-2xl text-lg text-ink-soft">
         Engenharia com solidez e capacidade de execução.{" "}
-        <span className="text-muted">
+        <span className="text-muted-foreground">
           (TODO: CONTENT REQUIRED — apresentação definitiva)
         </span>
       </p>
@@ -35,7 +35,7 @@ export default function EngenhariaPage() {
           <section key={section.title}>
             <h2 className="text-xl font-semibold text-ink">{section.title}</h2>
             <p className="mt-2 text-ink-soft">{section.body}</p>
-            <p className="mt-1 text-sm text-muted">TODO: CONTENT REQUIRED</p>
+            <p className="mt-1 text-sm text-muted-foreground">TODO: CONTENT REQUIRED</p>
           </section>
         ))}
       </div>

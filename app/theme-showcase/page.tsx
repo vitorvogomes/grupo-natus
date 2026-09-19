@@ -74,7 +74,7 @@ export default function ThemeShowcasePage() {
         <div className="flex flex-wrap items-center gap-8">
           <div className="rounded-lg border border-border p-6">
             <Logo className="h-10 w-auto" />
-            <p className="mt-2 text-xs text-muted">Principal (fundo claro)</p>
+            <p className="mt-2 text-xs text-muted-foreground">Principal (fundo claro)</p>
           </div>
           <div className="rounded-lg bg-navy-600 p-6">
             <Logo negative className="h-10 w-auto" />
@@ -99,7 +99,7 @@ export default function ThemeShowcasePage() {
                         backgroundColor: `var(--color-${scale.name}-${step})`,
                       }}
                     />
-                    <span className="text-xs text-muted">{step}</span>
+                    <span className="text-xs text-muted-foreground">{step}</span>
                   </div>
                 ))}
               </div>
@@ -114,7 +114,7 @@ export default function ThemeShowcasePage() {
                     className="size-14 rounded-md border border-border"
                     style={{ backgroundColor: `var(--color-${token})` }}
                   />
-                  <span className="text-xs text-muted">{token}</span>
+                  <span className="text-xs text-muted-foreground">{token}</span>
                 </div>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function ThemeShowcasePage() {
                 </h3>
                 <Badge status="em_construcao" />
               </div>
-              <p className="text-sm text-muted">Belo Horizonte/MG</p>
+              <p className="text-sm text-muted-foreground">Belo Horizonte/MG</p>
               <Button className="mt-4 w-full">Ver empreendimento</Button>
             </div>
           </Card>
@@ -222,7 +222,7 @@ export default function ThemeShowcasePage() {
           <div className="h-3 w-full overflow-hidden rounded-full bg-surface-muted">
             <div className="h-full w-[65%] rounded-full bg-status-em-construcao" />
           </div>
-          <p className="mt-2 text-xs text-muted">
+          <p className="mt-2 text-xs text-muted-foreground">
             Componente real (ProgressBar/Timeline) chega na Epic 4.
           </p>
         </div>
@@ -245,7 +245,7 @@ export default function ThemeShowcasePage() {
               placeholder="Sua mensagem"
             />
           </label>
-          <p className="text-xs text-muted">
+          <p className="text-xs text-muted-foreground">
             Primitivos acessíveis reais (Input/Select/Textarea) chegam na Epic 5.
           </p>
         </div>
@@ -271,7 +271,7 @@ export default function ThemeShowcasePage() {
       </Section>
 
       <Section id="mapa" title="Mapa (localização)">
-        <div className="flex h-48 max-w-xl items-center justify-center rounded-lg border border-dashed border-border bg-surface-muted text-muted">
+        <div className="flex h-48 max-w-xl items-center justify-center rounded-lg border border-dashed border-border bg-surface-muted text-muted-foreground">
           Embed do Google Maps por empreendimento (Epic 3).
         </div>
       </Section>

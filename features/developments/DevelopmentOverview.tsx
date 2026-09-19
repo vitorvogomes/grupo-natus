@@ -22,7 +22,7 @@ export function DevelopmentOverview({ development }: DevelopmentOverviewProps) {
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted">
+          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
             Imagem em breve
           </div>
         )}

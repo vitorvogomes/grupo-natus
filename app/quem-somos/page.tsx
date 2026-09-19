@@ -22,7 +22,7 @@ const VALUES = [
 const STATS = ["Anos de mercado", "Empreendimentos entregues", "Unidades"];
 
 function TodoText({ children }: { children: string }) {
-  return <span className="text-muted">{children}</span>;
+  return <span className="text-muted-foreground">{children}</span>;
 }
 
 export default function QuemSomosPage() {
@@ -75,7 +75,7 @@ export default function QuemSomosPage() {
               key={label}
               className="rounded-lg border border-border p-4 text-center"
             >
-              <dt className="text-xs text-muted">{label}</dt>
+              <dt className="text-xs text-muted-foreground">{label}</dt>
               <dd className="mt-1 text-sm font-semibold text-ink">
                 TODO: CONTENT REQUIRED
               </dd>

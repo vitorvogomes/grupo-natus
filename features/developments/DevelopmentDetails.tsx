@@ -10,7 +10,7 @@ export function DevelopmentDetails({ development }: DevelopmentDetailsProps) {
     <section className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
         <Badge status={development.status} />
-        <span className="text-sm text-muted">
+        <span className="text-sm text-muted-foreground">
           {development.location.city}/{development.location.state}
         </span>
       </div>
@@ -36,7 +36,7 @@ export function DevelopmentDetails({ development }: DevelopmentDetailsProps) {
             ))}
           </dl>
         ) : (
-          <p className="text-muted">Características em breve.</p>
+          <p className="text-muted-foreground">Características em breve.</p>
         )}
       </div>
     </section>

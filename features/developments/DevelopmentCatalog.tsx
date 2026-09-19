@@ -82,7 +82,7 @@ export function DevelopmentCatalog({ developments }: DevelopmentCatalogProps) {
           </select>
         </div>
 
-        <p className="ml-auto text-sm text-muted" aria-live="polite">
+        <p className="ml-auto text-sm text-muted-foreground" aria-live="polite">
           {filtered.length}{" "}
           {filtered.length === 1 ? "empreendimento" : "empreendimentos"}
         </p>

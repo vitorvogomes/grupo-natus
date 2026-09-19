@@ -13,12 +13,12 @@ export function ProgressTimeline({ progress }: ProgressTimelineProps) {
     <div className="flex flex-col gap-6">
       <ProgressBar value={progress.overallPercentage} label="Progresso geral" />
 
-      <p className="text-sm text-muted">
+      <p className="text-sm text-muted-foreground">
         Última atualização: {formatProgressDate(progress.updatedAt)}
       </p>
 
       {progress.isPreview ? (
-        <p className="rounded-md bg-surface-muted px-3 py-2 text-xs text-muted">
+        <p className="rounded-md bg-surface-muted px-3 py-2 text-xs text-muted-foreground">
           Percentuais ilustrativos — a confirmar com a empresa.
         </p>
       ) : null}
