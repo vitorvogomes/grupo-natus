@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Image } from "@/components/ui/Image";
 import type { Development } from "@/types/development";
@@ -30,20 +31,21 @@ export function DevelopmentOverview({ development }: DevelopmentOverviewProps) {
 
       <div>
         <Badge status={development.status} />
-        <h2 className="mt-4 text-3xl font-semibold text-ink">
+        <h2 className="mt-4 text-2xl font-semibold text-ink md:text-3xl">
           {development.location.city}, {development.location.state}
-          {development.location.address ? (
-            <span className="text-ink-soft"> — {development.location.address}</span>
-          ) : null}
         </h2>
+        {development.location.address ? (
+          <p className="mt-1 text-ink-soft">{development.location.address}</p>
+        ) : null}
 
         {highlights.length > 0 ? (
-          <ul className="mt-6 flex flex-col">
+          <ul className="mt-6 flex flex-col gap-3">
             {highlights.map((item) => (
-              <li
-                key={item}
-                className="border-b border-border py-3 text-ink-soft"
-              >
+              <li key={item} className="flex items-start gap-3 text-ink-soft">
+                <Check
+                  aria-hidden="true"
+                  className="mt-0.5 size-5 shrink-0 text-brand-strong"
+                />
                 {item}
               </li>
             ))}
