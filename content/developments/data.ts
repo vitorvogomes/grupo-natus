@@ -6,7 +6,7 @@ import type {
 } from "@/types/development";
 
 /**
- * Seed dos 11 empreendimentos ativos do Grupo Natus.
+ * Seed dos 12 empreendimentos ativos do Grupo Natus.
  * Fonte de verdade estática — AD-2.
  *
  * CONFIRMADO (site atual + product-brief): name, slug, cidade/UF, status e o
@@ -96,6 +96,28 @@ const SEEDS: readonly Seed[] = [
   { slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
   { slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV" },
   { slug: "gutierrez", name: "Gutierrez", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "20 un. alto luxo" },
+  {
+    // 12º empreendimento (portfólio do site atual: natusgrupo.com.br). Status
+    // "em construção" conforme o site; obra a 100% na origem — data a confirmar.
+    slug: "residenziale-colonnello-figueiredo",
+    name: "Residenziale Colonnello Figueiredo",
+    status: "em_construcao",
+    city: "Nova Lima",
+    state: "MG",
+    summary:
+      "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
+    highlights: [
+      "20 unidades: apartamentos de 2 e 3 quartos e coberturas lineares",
+      "Varandas em todas as unidades",
+      "A 10 minutos do BH Shopping, próximo ao Supermercado BH",
+    ],
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 e 3 quartos (69 e 79 m²)" },
+      { label: "Coberturas", value: "lineares de 138 e 158 m²" },
+      { label: "Vagas", value: "1 a 2 por unidade" },
+    ],
+    // TODO: imagens (img/Residenziale Colonnello Figueiredo …) na replicação.
+  },
 ];
 
 function fromSeed(seed: Seed): Development {

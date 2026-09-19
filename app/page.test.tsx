@@ -23,11 +23,11 @@ describe("Home", () => {
     ).toHaveAttribute("href", "/quem-somos");
   });
 
-  it("exibe o catálogo com os 11 empreendimentos", () => {
+  it("exibe o catálogo com os 12 empreendimentos", () => {
     render(<Home />);
     // Nome exato "Ver empreendimento" (card), não o CTA "Ver empreendimentos" do hero.
     expect(
       screen.getAllByRole("link", { name: "Ver empreendimento" }),
-    ).toHaveLength(11);
+    ).toHaveLength(12);
   });
 });

@@ -3,8 +3,8 @@ import { developments } from "./data";
 import { DEVELOPMENT_STATUSES } from "@/types/development";
 
 describe("Seed dos empreendimentos", () => {
-  it("cadastra os 11 empreendimentos ativos", () => {
-    expect(developments).toHaveLength(11);
+  it("cadastra os 12 empreendimentos ativos", () => {
+    expect(developments).toHaveLength(12);
   });
 
   it("cada empreendimento tem nome, slug kebab-case, cidade/UF e status válido", () => {

@@ -10,11 +10,11 @@ describe("Página de catálogo /empreendimentos", () => {
     ).toBeInTheDocument();
   });
 
-  it("lista os 11 empreendimentos", () => {
+  it("lista os 12 empreendimentos", () => {
     render(<EmpreendimentosPage />);
     // cada card tem um link "Ver empreendimento"
     expect(
       screen.getAllByRole("link", { name: "Ver empreendimento" }),
-    ).toHaveLength(11);
+    ).toHaveLength(12);
   });
 });
