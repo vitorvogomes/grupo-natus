@@ -1,28 +1,38 @@
 import { Hero } from "@/features/home/Hero";
-import { InstitutionalIntro } from "@/features/home/InstitutionalIntro";
-import { DevelopmentGrid } from "@/features/developments/DevelopmentGrid";
+import { FeaturedDevelopments } from "@/features/home/FeaturedDevelopments";
+import { MinhaCasaMinhaVida } from "@/features/home/MinhaCasaMinhaVida";
+import { AboutNatus } from "@/features/home/AboutNatus";
+import { DevelopmentSearchBar } from "@/features/developments/DevelopmentSearchBar";
 import { Reveal } from "@/components/motion/Reveal";
-import { getAllDevelopments } from "@/content/developments";
+import {
+  getAllDevelopments,
+  getHomeDevelopments,
+} from "@/content/developments";
 
 export default function Home() {
-  const developments = getAllDevelopments();
   return (
     <main>
       <Hero />
+
+      {/* Alvo da seta do hero; a busca é a primeira coisa depois da dobra.
+          `scroll-mt-20` desconta o header, que na Home é `fixed` e cobriria o
+          topo da seção ao saltar para a âncora. */}
+      <section
+        id="buscar"
+        className="scroll-mt-20 bg-surface-muted py-10 sm:py-12"
+      >
+        <div className="mx-auto max-w-[var(--container-max)] px-4 sm:px-6 lg:px-8">
+          <DevelopmentSearchBar developments={getAllDevelopments()} />
+        </div>
+      </section>
+
       <Reveal>
-        <InstitutionalIntro />
+        <FeaturedDevelopments developments={getHomeDevelopments()} />
       </Reveal>
-      <Reveal>
-        <section
-          id="empreendimentos"
-          className="mx-auto max-w-[var(--container-max)] px-4 pb-20 sm:px-6 lg:px-8"
-        >
-          <h2 className="mb-8 text-3xl font-semibold text-ink">
-            Empreendimentos
-          </h2>
-          <DevelopmentGrid developments={developments} />
-        </section>
-      </Reveal>
+      {/* Sem Reveal aqui: estas duas seções animam por dentro (painel e cards
+          em cascata), e um fade por cima duplicaria o movimento. */}
+      <MinhaCasaMinhaVida />
+      <AboutNatus />
     </main>
   );
 }

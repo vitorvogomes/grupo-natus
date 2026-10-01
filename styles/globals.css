@@ -11,7 +11,9 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Títulos semânticos em serifa display (Fraunces); corpo permanece Inter. */
+/* Títulos semânticos na sans display (Outfit); corpo permanece Inter.
+   Tracking em dois níveis: a Outfit é geométrica e de espaçamento generoso —
+   o -0.02em calibrado para a serifa colava as letras em h4..h6 (16-20px). */
 h1,
 h2,
 h3,
@@ -19,7 +21,12 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.011em;
+}
+
+h1,
+h2 {
+  letter-spacing: -0.022em;
 }
 
 html {

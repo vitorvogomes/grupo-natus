@@ -182,7 +182,7 @@ export default function ThemeShowcasePage() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-lg border border-border p-6">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                Títulos — Fraunces (serifa)
+                Títulos — Outfit (sans geométrica)
               </p>
               <p className="mt-2 font-heading text-4xl font-semibold text-ink">
                 Grupo Natus

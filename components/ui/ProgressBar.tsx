@@ -44,7 +44,10 @@ export function ProgressBar({
         <span
           className={cn(
             "tabular-nums text-ink",
-            large ? "font-heading text-2xl font-semibold text-brand-strong" : "text-sm font-medium",
+            // Sem `font-heading`: a Outfit não tem figuras tabulares, e o utilitário
+            // `tabular-nums` acima viraria no-op — o número dançaria de largura
+            // enquanto a barra anima. A Inter tem, então o percentual fica firme.
+            large ? "text-2xl font-semibold text-brand-strong" : "text-sm font-medium",
           )}
         >
           {pct}%

@@ -47,4 +47,46 @@ describe("Reveal", () => {
     );
     expect(screen.getByText("sem motion")).toBeInTheDocument();
   });
+
+  it("renderiza como item de lista sem quebrar a semântica da lista", () => {
+    render(
+      <ul>
+        <Reveal as="li">
+          <span>item animado</span>
+        </Reveal>
+      </ul>,
+    );
+    // O <li> precisa ser filho direto do <ul>: um wrapper div no meio tiraria
+    // o item da lista para leitores de tela.
+    expect(screen.getByRole("listitem")).toContainElement(
+      screen.getByText("item animado"),
+    );
+  });
+
+  it("mantém o elemento escolhido também sem motion", () => {
+    vi.stubGlobal(
+      "matchMedia",
+      (query: string) =>
+        ({
+          matches: true,
+          media: query,
+          onchange: null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          addListener: () => {},
+          removeListener: () => {},
+          dispatchEvent: () => false,
+        }) as unknown as MediaQueryList,
+    );
+    render(
+      <ul>
+        <Reveal as="li">
+          <span>item estático</span>
+        </Reveal>
+      </ul>,
+    );
+    expect(screen.getByRole("listitem")).toContainElement(
+      screen.getByText("item estático"),
+    );
+  });
 });

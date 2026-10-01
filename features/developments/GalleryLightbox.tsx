@@ -18,7 +18,7 @@ type GalleryLightboxProps = {
 const navButtonClass = cn(
   "absolute top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center",
   "rounded-full bg-surface/90 text-ink shadow-md transition-colors hover:bg-surface",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
 );
 
 export function GalleryLightbox({
@@ -101,7 +101,7 @@ export function GalleryLightbox({
             className={cn(
               "absolute right-4 top-4 z-10 inline-flex size-11 items-center justify-center",
               "rounded-full bg-surface/90 text-ink shadow-md transition-colors hover:bg-surface",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
             )}
           >
             <X aria-hidden="true" className="size-6" />

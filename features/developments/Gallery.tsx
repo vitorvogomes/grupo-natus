@@ -28,7 +28,7 @@ const tabTriggerClass = cn(
   "rounded-full px-3 py-1 text-sm transition-colors",
   "data-[state=inactive]:bg-surface-muted data-[state=inactive]:text-ink",
   "data-[state=active]:bg-ink data-[state=active]:text-white",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
 );
 
 type GridProps = {
@@ -46,7 +46,7 @@ function ImageGrid({ list, all, onOpen }: GridProps) {
             type="button"
             aria-label={`Ampliar imagem: ${img.alt}`}
             onClick={() => onOpen(all.indexOf(img))}
-            className="group relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="group relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             <Image
               src={img.src}

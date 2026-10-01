@@ -5,6 +5,8 @@ import {
   getAllDevelopments,
   getDevelopmentBySlug,
   getDevelopmentsGroupedByStatus,
+  getHomeDevelopments,
+  FEATURED_SLUGS,
 } from "./index";
 import type { Development } from "@/types/development";
 
@@ -57,5 +59,31 @@ describe("camada de conteúdo de empreendimentos (AD-2)", () => {
     // A soma dos itens é igual ao total de empreendimentos.
     const total = groups.reduce((n, g) => n + g.items.length, 0);
     expect(total).toBe(getAllDevelopments().length);
+  });
+
+
+  it("getHomeDevelopments mostra o catálogo inteiro, sem repetir nem perder nenhum", () => {
+    const home = getHomeDevelopments();
+    const all = getAllDevelopments();
+    expect(home).toHaveLength(all.length);
+    expect(new Set(home.map((d) => d.slug)).size).toBe(all.length);
+    for (const dev of all) {
+      expect(home.some((d) => d.slug === dev.slug)).toBe(true);
+    }
+  });
+
+  it("getHomeDevelopments abre pelos destaques, na ordem editorial", () => {
+    // Guard: renomear um slug em data.ts tiraria o empreendimento da abertura.
+    expect(
+      getHomeDevelopments()
+        .slice(0, FEATURED_SLUGS.length)
+        .map((d) => d.slug),
+    ).toEqual([...FEATURED_SLUGS]);
+  });
+
+  it("os destaques têm imagem própria (a home não abre com placeholder)", () => {
+    for (const dev of getHomeDevelopments().slice(0, FEATURED_SLUGS.length)) {
+      expect(dev.images.length).toBeGreaterThan(0);
+    }
   });
 });

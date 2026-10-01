@@ -3,6 +3,7 @@ import {
   filterDevelopments,
   locationLabel,
   uniqueLocations,
+  uniquePropertyTypes,
 } from "./filterDevelopments";
 import type { Development } from "@/types/development";
 
@@ -11,12 +12,14 @@ function make(
   status: Development["status"],
   city: string,
   state: string,
+  propertyType?: Development["propertyType"],
 ): Development {
   return {
     slug,
     name: slug,
     status,
     location: { city, state },
+    ...(propertyType ? { propertyType } : {}),
     summary: "s",
     description: "d",
     images: [],
@@ -25,9 +28,9 @@ function make(
 }
 
 const list: Development[] = [
-  make("a", "pronto", "Belo Horizonte", "MG"),
-  make("b", "lancamento", "Belo Horizonte", "MG"),
-  make("c", "lancamento", "Niterói", "RJ"),
+  make("a", "pronto", "Belo Horizonte", "MG", "apartamento"),
+  make("b", "lancamento", "Belo Horizonte", "MG", "lote"),
+  make("c", "lancamento", "Niterói", "RJ"), // tipologia ainda não confirmada
 ];
 
 describe("filterDevelopments", () => {
@@ -62,5 +65,35 @@ describe("filterDevelopments", () => {
 
   it("uniqueLocations retorna localizações únicas ordenadas", () => {
     expect(uniqueLocations(list)).toEqual(["Belo Horizonte/MG", "Niterói/RJ"]);
+  });
+
+  it("filtra por tipologia", () => {
+    expect(
+      filterDevelopments(list, { propertyType: "lote" }).map((d) => d.slug),
+    ).toEqual(["b"]);
+  });
+
+  it("empreendimento sem tipologia confirmada nunca casa com um filtro de tipo", () => {
+    // "c" não tem propertyType: some do resultado em vez de aparecer como palpite.
+    expect(
+      filterDevelopments(list, { propertyType: "apartamento" }).map(
+        (d) => d.slug,
+      ),
+    ).toEqual(["a"]);
+  });
+
+  it("combina as três facetas", () => {
+    expect(
+      filterDevelopments(list, {
+        status: "lancamento",
+        location: "Belo Horizonte/MG",
+        propertyType: "lote",
+      }).map((d) => d.slug),
+    ).toEqual(["b"]);
+  });
+
+  it("uniquePropertyTypes lista só os tipos presentes, na ordem canônica", () => {
+    expect(uniquePropertyTypes(list)).toEqual(["apartamento", "lote"]);
+    expect(uniquePropertyTypes([])).toEqual([]);
   });
 });

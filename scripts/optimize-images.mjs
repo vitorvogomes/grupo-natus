@@ -138,12 +138,29 @@ const SINGLES = [
     maxSide: 1600,
   },
   {
+    // Fachada noturna do Follow Savassi. É um render retrato (3071x3840) num
+    // hero em paisagem, então o object-cover mostra só uma faixa: o
+    // `object-position` do Hero a fixa na entrada (madeira + lobby + jardim),
+    // que é onde o prédio lê como lugar. Centralizada mostraria só parede.
     name: "home hero",
     src: "img/Follow Savassi - Belo Horizonte MG/0065-OASIS_FACHADA NOTURNA CAM 02_4K.jpg",
     out: "public/home/hero.webp",
     maxSide: 3000,
   },
+  {
+    // 2560 (e não 2000): o painel da Home renderiza esta foto a ~930 CSS px,
+    // o que pede uma variante de 1920 em telas 2x — que deve vir de um
+    // original maior, não de uma ampliação.
+    name: "home: família (seção Minha Casa Minha Vida)",
+    src: "img/home/familia-mcmv.jpg",
+    out: "public/home/familia-mcmv.webp",
+    maxSide: 2560,
+  },
 ];
+
+// Marca federal do Minha Casa Minha Vida: line-art plano com alfa. O PNG de
+// origem (46 KB) é menor que qualquer webp lossless (74 KB) e o next/image
+// converte na entrega — servimos o PNG direto, como os logos de public/brand/.
 
 // Imagens institucionais (Quem Somos + Engenharia). Rode com o slug "institucional".
 const INSTITUTIONAL = [
@@ -241,21 +258,27 @@ const KB = (bytes) => `${Math.round(bytes / 1024)} KB`;
 async function optimizeFlat(label, list) {
   console.log(`\n▸ ${label} (${list.length})`);
   for (const item of list) {
-    const outPath = join(ROOT, item.out);
-    await mkdir(join(outPath, ".."), { recursive: true });
-    const before = (await stat(join(ROOT, item.src))).size;
-    await sharp(join(ROOT, item.src))
-      .rotate()
-      .resize({
-        width: item.maxSide,
-        height: item.maxSide,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
-      .toFile(outPath);
-    const after = (await stat(outPath)).size;
-    console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
+    // Um source ausente não pode abortar o lote inteiro (o loop é sequencial).
+    try {
+      const outPath = join(ROOT, item.out);
+      await mkdir(join(outPath, ".."), { recursive: true });
+      const before = (await stat(join(ROOT, item.src))).size;
+      await sharp(join(ROOT, item.src))
+        .rotate()
+        .resize({
+          width: item.maxSide,
+          height: item.maxSide,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
+        .toFile(outPath);
+      const after = (await stat(outPath)).size;
+      console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
+    } catch (err) {
+      console.warn(`  ⚠ pulando "${item.name}" (${item.src}): ${err.message}`);
+      process.exitCode = 1;
+    }
   }
 }
 
@@ -286,26 +309,34 @@ async function run() {
     console.log(`\n▸ ${slug} (${job.images.length} imagens)`);
 
     for (const img of job.images) {
-      const srcPath = join(ROOT, job.srcDir, img.src);
-      const outPath = join(outDir, `${img.out}.webp`);
-      const before = (await stat(srcPath)).size;
+      // Mesmo guard do optimizeFlat: sem ele, um único asset ausente rejeita
+      // para fora do run() e leva junto todos os slugs seguintes — e este é o
+      // caminho percorrido quando o script roda sem argumentos.
+      try {
+        const srcPath = join(ROOT, job.srcDir, img.src);
+        const outPath = join(outDir, `${img.out}.webp`);
+        const before = (await stat(srcPath)).size;
 
-      if (extname(img.src).toLowerCase() === ".webp" && before <= PASSTHROUGH_MAX) {
-        await copyFile(srcPath, outPath);
-        console.log(`  ${img.out}.webp  ${KB(before)}  (copiado — já otimizado)`);
-        continue;
+        if (extname(img.src).toLowerCase() === ".webp" && before <= PASSTHROUGH_MAX) {
+          await copyFile(srcPath, outPath);
+          console.log(`  ${img.out}.webp  ${KB(before)}  (copiado — já otimizado)`);
+          continue;
+        }
+
+        const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
+        await sharp(srcPath)
+          .rotate()
+          .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true })
+          .webp({ quality: QUALITY, effort: 6 })
+          .toFile(outPath);
+
+        const after = (await stat(outPath)).size;
+        const saved = Math.round((1 - after / before) * 100);
+        console.log(`  ${img.out}.webp  ${KB(before)} → ${KB(after)}  (-${saved}%)`);
+      } catch (err) {
+        console.warn(`  ⚠ pulando ${slug}/${img.out} (${img.src}): ${err.message}`);
+        process.exitCode = 1;
       }
-
-      const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
-      await sharp(srcPath)
-        .rotate()
-        .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true })
-        .webp({ quality: QUALITY, effort: 6 })
-        .toFile(outPath);
-
-      const after = (await stat(outPath)).size;
-      const saved = Math.round((1 - after / before) * 100);
-      console.log(`  ${img.out}.webp  ${KB(before)} → ${KB(after)}  (-${saved}%)`);
     }
   }
 }

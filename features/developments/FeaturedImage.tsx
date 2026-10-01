@@ -47,7 +47,7 @@ export function FeaturedImage({ image, onOpen }: FeaturedImageProps) {
       }}
       onPointerMove={handleMove}
       onPointerLeave={() => setZooming(false)}
-      className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden rounded-lg bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+      className="group relative block aspect-[16/10] w-full cursor-zoom-in overflow-hidden rounded-lg bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       <motion.div
         data-zoom={zooming ? "on" : "off"}

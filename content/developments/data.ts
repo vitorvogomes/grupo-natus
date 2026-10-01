@@ -25,6 +25,12 @@ type Seed = {
   city: string;
   state: string;
   highlight?: string; // destaque confirmado (tipologia)
+  /**
+   * Tipo de produto — faceta de busca. Preencher SÓ com evidência no material
+   * do empreendimento (tipologia declarada, plantas, alt das imagens).
+   * Ausente = não confirmado; ver docs/CONTENT-GAPS.md.
+   */
+  propertyType?: Development["propertyType"];
   summary?: string; // resumo factual (quando derivável de dados confirmados)
   images?: DevelopmentImage[]; // imagens reais atribuídas
   extraFeatures?: DevelopmentFeature[]; // features visíveis nos assets reais
@@ -40,6 +46,8 @@ const SEEDS: readonly Seed[] = [
     status: "pronto",
     city: "Nova Lima",
     state: "MG",
+    // Evidência: feature "Apartamentos: 2 e 3 quartos" + plantas de 2 e 3 quartos.
+    propertyType: "apartamento",
     summary:
       "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
     highlights: [
@@ -69,6 +77,7 @@ const SEEDS: readonly Seed[] = [
     status: "pronto",
     city: "Itaboraí",
     state: "RJ",
+    // TODO: CONTENT REQUIRED — propertyType (só há perspectivas e fotos de obra).
     images: [
       { src: "/empreendimentos/viver-mais/lazer.webp", alt: "Área de lazer do Residencial Viver Mais", kind: "externa" },
       { src: "/empreendimentos/viver-mais/perspectiva-2.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "externa" },
@@ -88,6 +97,8 @@ const SEEDS: readonly Seed[] = [
     status: "pronto",
     city: "Belo Horizonte",
     state: "MG",
+    // Evidência: imagens internas classificadas como kind: "apartamento".
+    propertyType: "apartamento",
     images: [
       { src: "/empreendimentos/residencial-denver/perspectiva-2.webp", alt: "Perspectiva do Residencial Denver", kind: "externa" },
       { src: "/empreendimentos/residencial-denver/perspectiva-4.webp", alt: "Perspectiva do Residencial Denver", kind: "apartamento" },
@@ -103,6 +114,8 @@ const SEEDS: readonly Seed[] = [
     status: "pronto",
     city: "Lagoa Santa",
     state: "MG",
+    // Evidência: alt "Planta humanizada — apartamento tipo".
+    propertyType: "apartamento",
     images: [
       { src: "/empreendimentos/torres-da-lagoa/fachada.webp", alt: "Fachada dos blocos do Torres da Lagoa", kind: "externa" },
       { src: "/empreendimentos/torres-da-lagoa/piscina.webp", alt: "Piscina do Torres da Lagoa", kind: "externa" },
@@ -121,6 +134,8 @@ const SEEDS: readonly Seed[] = [
     status: "em_construcao",
     city: "Belo Horizonte",
     state: "MG",
+    // Evidência: alts "Apartamento decorado (unidade 1001/1003/303)".
+    propertyType: "apartamento",
     summary:
       "Empreendimento em construção na Savassi, em Belo Horizonte/MG, com fachada contemporânea e área de lazer no rooftop.",
     images: [
@@ -167,6 +182,8 @@ const SEEDS: readonly Seed[] = [
     status: "em_construcao",
     city: "São Gonçalo",
     state: "RJ",
+    // Evidência: alts "Sala do apartamento" e "Planta — apartamento tipo".
+    propertyType: "apartamento",
     images: [
       { src: "/empreendimentos/golden-ville-residence/fachada.webp", alt: "Fachada do Golden Ville Residence", kind: "externa" },
       { src: "/empreendimentos/golden-ville-residence/piscina.webp", alt: "Piscina", kind: "externa" },
@@ -186,6 +203,7 @@ const SEEDS: readonly Seed[] = [
     status: "lancamento",
     city: "Belo Horizonte",
     state: "MG",
+    // TODO: CONTENT REQUIRED — propertyType ("20 un. alto luxo" não diz o produto).
     highlight: "20 un. alto luxo",
     images: [
       { src: "/empreendimentos/gutierrez/maquete-5.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
@@ -196,11 +214,16 @@ const SEEDS: readonly Seed[] = [
       { src: "/empreendimentos/gutierrez/maquete-4.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "externa" },
     ],
   },
+  // TODO: CONTENT REQUIRED — propertyType ("un. MCMV" não diz se é apto ou casa).
   { slug: "solar-manilha", name: "Solar Manilha", status: "lancamento", city: "Itaboraí", state: "RJ", highlight: "368 un. MCMV" },
-  { slug: "one-studios", name: "One Studios", status: "lancamento", city: "Niterói", state: "RJ", highlight: "180 studios" },
-  { slug: "vista-do-lago", name: "Vista do Lago", status: "lancamento", city: "Nova Lima", state: "MG", highlight: "508 lotes" },
+  // Evidência: highlight "180 studios".
+  { slug: "one-studios", name: "One Studios", status: "lancamento", city: "Niterói", state: "RJ", highlight: "180 studios", propertyType: "studio" },
+  // Evidência: highlight "508 lotes".
+  { slug: "vista-do-lago", name: "Vista do Lago", status: "lancamento", city: "Nova Lima", state: "MG", highlight: "508 lotes", propertyType: "lote" },
+  // TODO: CONTENT REQUIRED — propertyType ("un. MCMV" não diz se é apto ou casa).
   { slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
-  { slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV" },
+  // Evidência: highlight "96 casas MCMV".
+  { slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV", propertyType: "casa" },
 ];
 
 function fromSeed(seed: Seed): Development {
@@ -213,6 +236,7 @@ function fromSeed(seed: Seed): Development {
     name: seed.name,
     status: seed.status,
     location: { city: seed.city, state: seed.state },
+    ...(seed.propertyType ? { propertyType: seed.propertyType } : {}),
     summary: seed.summary ?? `${TODO} — resumo de ${seed.name}`,
     description: `${TODO} — descrição completa de ${seed.name}`,
     images: seed.images ?? [], // TODO: mapear renders/plantas de img/ por empreendimento

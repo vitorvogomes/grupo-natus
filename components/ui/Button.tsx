@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export const buttonVariants = cva(
   cn(
     "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
     "disabled:cursor-not-allowed disabled:opacity-50 active:translate-y-px",
     // Ícones lucide dentro do botão herdam tamanho/estado.
     "[&_svg]:pointer-events-none [&_svg]:size-[1.1em] [&_svg]:shrink-0",

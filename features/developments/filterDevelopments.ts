@@ -1,8 +1,14 @@
-import type { Development, DevelopmentStatus } from "@/types/development";
+import {
+  PROPERTY_TYPES,
+  type Development,
+  type DevelopmentStatus,
+  type PropertyType,
+} from "@/types/development";
 
 export type DevelopmentFilters = {
   status?: DevelopmentStatus | null;
   location?: string | null;
+  propertyType?: PropertyType | null;
 };
 
 /** Rótulo de localização no formato "Cidade/UF". */
@@ -17,7 +23,23 @@ export function uniqueLocations(list: readonly Development[]): string[] {
   );
 }
 
-/** Filtra por status e/ou localização (ausência de filtro = sem restrição). */
+/**
+ * Tipologias presentes na lista, na ordem canônica de PROPERTY_TYPES.
+ * Empreendimento sem tipologia confirmada não entra — a faceta só oferece
+ * o que o conteúdo sustenta.
+ */
+export function uniquePropertyTypes(
+  list: readonly Development[],
+): PropertyType[] {
+  const present = new Set(list.flatMap((dev) => dev.propertyType ?? []));
+  return PROPERTY_TYPES.filter((type) => present.has(type));
+}
+
+/**
+ * Filtra por status, localização e/ou tipologia (ausência de filtro = sem
+ * restrição). Um empreendimento sem `propertyType` nunca casa com um filtro
+ * de tipo: melhor sumir do resultado do que aparecer como palpite.
+ */
 export function filterDevelopments(
   list: readonly Development[],
   filters: DevelopmentFilters,
@@ -25,6 +47,7 @@ export function filterDevelopments(
   return list.filter(
     (dev) =>
       (!filters.status || dev.status === filters.status) &&
-      (!filters.location || locationLabel(dev) === filters.location),
+      (!filters.location || locationLabel(dev) === filters.location) &&
+      (!filters.propertyType || dev.propertyType === filters.propertyType),
   );
 }

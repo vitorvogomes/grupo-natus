@@ -32,6 +32,35 @@ export function getDevelopmentBySlug(slug: string): Development | undefined {
   return findBySlug(developments, slug);
 }
 
+/**
+ * Curadoria editorial da Home: estes abrem o carrossel, nesta ordem.
+ * Critério: empreendimentos com imagens próprias cadastradas — quem abre a
+ * Home não entra com placeholder. Solar Manilha entra quando os renders
+ * chegarem (ver docs/CONTENT-GAPS.md).
+ */
+export const FEATURED_SLUGS = [
+  "follow-savassi",
+  "golden-ville-residence",
+  "torres-da-lagoa",
+] as const;
+
+/**
+ * Catálogo inteiro na ordem da Home: destaques primeiro, depois o restante
+ * na ordem de `data.ts`. O carrossel mostra todos — a curadoria define quem
+ * aparece primeiro, não quem aparece. Slug de destaque sem correspondência é
+ * ignorado: um erro de curadoria custa a posição, nunca um empreendimento.
+ */
+export function getHomeDevelopments(): readonly Development[] {
+  const featured = FEATURED_SLUGS.flatMap(
+    (slug) => getDevelopmentBySlug(slug) ?? [],
+  );
+  const featuredSlugs = new Set(featured.map((dev) => dev.slug));
+  return [
+    ...featured,
+    ...getAllDevelopments().filter((dev) => !featuredSlugs.has(dev.slug)),
+  ];
+}
+
 export type StatusNavGroup = {
   status: DevelopmentStatus;
   label: string;

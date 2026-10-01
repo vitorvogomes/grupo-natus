@@ -11,6 +11,27 @@ export const DEVELOPMENT_STATUSES = [
 
 export type DevelopmentStatus = (typeof DEVELOPMENT_STATUSES)[number];
 
+/**
+ * Tipo de produto do empreendimento — faceta de busca do catálogo.
+ * Só é preenchido quando há evidência no material do próprio empreendimento
+ * (tipologia declarada, plantas, alt das imagens); nunca por suposição.
+ */
+export const PROPERTY_TYPES = [
+  "apartamento",
+  "casa",
+  "lote",
+  "studio",
+] as const;
+
+export type PropertyType = (typeof PROPERTY_TYPES)[number];
+
+export const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
+  apartamento: "Apartamentos",
+  casa: "Casas",
+  lote: "Lotes",
+  studio: "Studios",
+};
+
 type StatusMeta = {
   readonly label: string;
   /** Classe Tailwind de fundo derivada dos tokens de status (AD-7). */
@@ -85,6 +106,8 @@ export type Development = {
   name: string;
   status: DevelopmentStatus;
   location: DevelopmentLocation;
+  /** Tipo de produto (faceta de busca). Ausente = ainda não confirmado. */
+  propertyType?: PropertyType;
   /** Tipologia curta para o hero (ex.: "2 e 3 quartos"). */
   tagline?: string;
   summary: string;

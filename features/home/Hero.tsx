@@ -1,48 +1,45 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { ChevronDown } from "lucide-react";
 import { Image } from "@/components/ui/Image";
 
 /**
- * Hero da Home. Copy factual (atuação confirmada: incorporação + engenharia,
- * MG e RJ). Imagem de fundo full-bleed (LCP → preload) + overlay para leitura.
+ * Hero da Home: imagem em tela cheia, sem texto sobreposto.
+ *
+ * A altura é explícita porque a `<Image fill>` é absoluta e não gera altura —
+ * sem ela a seção colapsaria. `svh` (e não `vh`) evita o salto quando a barra
+ * do navegador móvel se recolhe. 84svh (e não a tela inteira) deixa a borda da
+ * busca assomar na dobra: sem isso a Home parece ter só a imagem.
+ * É o elemento de LCP: sem `Reveal`, sem animação de entrada, com `preload`.
  */
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-700 text-navy-50">
+    <section className="relative isolate h-[84svh] min-h-[460px] w-full overflow-hidden bg-navy-700">
+      <h1 className="sr-only">
+        Grupo Natus — incorporação e engenharia em Minas Gerais e no Rio de
+        Janeiro
+      </h1>
+
       <Image
         src="/home/hero.webp"
-        alt="Fachada noturna de empreendimento do Grupo Natus"
+        alt="Fachada noturna de empreendimento do Grupo Natus, com entrada iluminada"
         fill
         preload
         sizes="100vw"
-        className="object-cover"
+        // Render retrato num hero em paisagem: fixa a faixa visível na
+        // entrada, não no meio da fachada.
+        className="object-cover object-[center_75%]"
       />
-      {/* Overlay para legibilidade do texto (tokens de marca). */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/55 to-navy-900/20" />
 
-      <div className="relative mx-auto grid max-w-[var(--container-max)] gap-8 px-4 py-24 sm:px-6 md:py-32 lg:px-8">
-        <div className="max-w-2xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-brand">
-            Grupo Natus
-          </p>
-          <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl">
-            Incorporação e engenharia em Minas Gerais e no Rio de Janeiro
-          </h1>
-          <p className="mt-4 text-lg text-navy-100">
-            Conheça os empreendimentos do Grupo Natus — do lançamento à entrega.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link href="/empreendimentos">
-              <Button size="lg">Ver empreendimentos</Button>
-            </Link>
-            <Link href="/contato">
-              <Button size="lg" variant="outlineInverse">
-                Falar com o time
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Escurece topo e base o suficiente para o header e a seta lerem sobre
+          qualquer imagem, deixando o miolo limpo. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-navy-900/45 via-transparent to-navy-900/40" />
+
+      <a
+        href="#buscar"
+        aria-label="Ir para a busca de empreendimentos"
+        className="absolute inset-x-0 bottom-10 z-10 mx-auto flex size-12 items-center justify-center rounded-full text-white/90 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      >
+        <ChevronDown aria-hidden="true" className="size-7 animate-bounce" />
+      </a>
     </section>
   );
 }

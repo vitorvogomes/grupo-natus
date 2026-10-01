@@ -77,9 +77,13 @@ const VALUES = [
   },
 ] as const;
 
-// Parâmetros inspirados na ref (experiência / área construída / unidades).
-// Valores: DADOS — nunca inventar (TODO até a empresa fornecer).
-const STATS = ["Anos de experiência", "Área construída (m²)", "Unidades entregues"];
+// Números da operação, fornecidos pela empresa (2026-09-30). Mesmos valores
+// exibidos na Home (features/home/AboutNatus.tsx) — manter em sincronia.
+const STATS = [
+  { value: "10", label: "Anos de experiência" },
+  { value: "100 mil", label: "Área construída (m²)" },
+  { value: "+1.500", label: "Unidades entregues" },
+] as const;
 
 function TodoText({ children }: { children: string }) {
   return <span className="text-muted-foreground">{children}</span>;
@@ -237,20 +241,20 @@ export default function QuemSomosPage() {
           </Reveal>
         </section>
 
-        {/* Números — dados: nunca inventar (TODO até a empresa fornecer). */}
+        {/* Números confirmados pela empresa. */}
         <section className="mt-16">
           <Reveal>
             <h2 className="text-2xl font-semibold text-ink">Números</h2>
           </Reveal>
           <dl className="mt-4 grid grid-cols-3 gap-4">
-            {STATS.map((label) => (
+            {STATS.map((stat) => (
               <div
-                key={label}
+                key={stat.label}
                 className="rounded-lg border border-border p-4 text-center"
               >
-                <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="mt-1 text-sm font-semibold text-ink">
-                  TODO: CONTENT REQUIRED
+                <dt className="text-xs text-muted-foreground">{stat.label}</dt>
+                <dd className="mt-1 text-2xl font-semibold text-brand-strong">
+                  {stat.value}
                 </dd>
               </div>
             ))}
