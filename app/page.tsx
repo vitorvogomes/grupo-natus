@@ -1,6 +1,6 @@
 import { Hero } from "@/features/home/Hero";
 import { FeaturedDevelopments } from "@/features/home/FeaturedDevelopments";
-import { MinhaCasaMinhaVida } from "@/features/home/MinhaCasaMinhaVida";
+import { MinhaCasaMinhaVida } from "@/features/mcmv/MinhaCasaMinhaVida";
 import { AboutNatus } from "@/features/home/AboutNatus";
 import { DevelopmentSearchBar } from "@/features/developments/DevelopmentSearchBar";
 import { Reveal } from "@/components/motion/Reveal";

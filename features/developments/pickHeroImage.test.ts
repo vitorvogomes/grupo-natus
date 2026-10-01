@@ -3,15 +3,23 @@ import { pickHeroImage } from "./pickHeroImage";
 import type { DevelopmentImage } from "@/types/development";
 
 describe("pickHeroImage", () => {
-  it("prefere a primeira imagem 'externa' (fachada)", () => {
+  it("prefere a primeira imagem da categoria 'imagens'", () => {
     const imgs: DevelopmentImage[] = [
-      { src: "/i.jpg", alt: "i", kind: "apartamento" },
-      { src: "/e.jpg", alt: "e", kind: "externa" },
+      { src: "/p.jpg", alt: "p", kind: "planta" },
+      { src: "/e.jpg", alt: "e", kind: "imagens" },
     ];
     expect(pickHeroImage(imgs)?.src).toBe("/e.jpg");
   });
 
-  it("cai para a primeira imagem quando não há externa", () => {
+  it("nunca escolhe obra quando há render disponível", () => {
+    const imgs: DevelopmentImage[] = [
+      { src: "/o.jpg", alt: "o", kind: "obra" },
+      { src: "/e.jpg", alt: "e", kind: "imagens" },
+    ];
+    expect(pickHeroImage(imgs)?.src).toBe("/e.jpg");
+  });
+
+  it("cai para a primeira imagem quando o acervo não tem render", () => {
     const imgs: DevelopmentImage[] = [{ src: "/a.jpg", alt: "a" }];
     expect(pickHeroImage(imgs)?.src).toBe("/a.jpg");
   });

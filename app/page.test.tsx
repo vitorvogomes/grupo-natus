@@ -28,7 +28,7 @@ describe("Home", () => {
   it("permite navegar por todos os empreendimentos no carrossel", () => {
     render(<Home />);
     expect(
-      screen.getAllByRole("link", { name: "Ver empreendimento" }),
+      screen.getAllByRole("link", { name: /^Ver empreendimento/ }),
     ).toHaveLength(getAllDevelopments().length);
     expect(
       screen.getByRole("link", { name: /ver todos os empreendimentos/i }),

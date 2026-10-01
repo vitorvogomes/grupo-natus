@@ -85,10 +85,6 @@ const STATS = [
   { value: "+1.500", label: "Unidades entregues" },
 ] as const;
 
-function TodoText({ children }: { children: string }) {
-  return <span className="text-muted-foreground">{children}</span>;
-}
-
 export default function QuemSomosPage() {
   return (
     <main>
@@ -227,19 +223,6 @@ export default function QuemSomosPage() {
             </div>
           </section>
         </Reveal>
-
-        {/* Nossa história — sem copy no site atual: pendente da empresa. */}
-        <section className="mt-16">
-          <Reveal>
-            <h2 className="text-2xl font-semibold text-ink">Nossa história</h2>
-            <p className="mt-3 max-w-3xl text-ink-soft">
-              <TodoText>
-                TODO: CONTENT REQUIRED — história, fundação e trajetória do
-                grupo (a validar com a empresa).
-              </TodoText>
-            </p>
-          </Reveal>
-        </section>
 
         {/* Números confirmados pela empresa. */}
         <section className="mt-16">

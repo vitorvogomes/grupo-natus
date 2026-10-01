@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildMapEmbedUrl, buildMapLink } from "./maps";
+import { buildMapEmbedUrl, buildMapLink, buildWazeLink } from "./maps";
 import type { DevelopmentLocation } from "@/types/development";
 
 const cityOnly: DevelopmentLocation = { city: "Belo Horizonte", state: "MG" };
@@ -43,6 +43,24 @@ describe("lib/maps (AD-3, sem API key)", () => {
     expect(buildMapLink(cityOnly)).toBe(
       "https://www.google.com/maps/search/?api=1&query=" +
         encodeURIComponent("Belo Horizonte, MG"),
+    );
+  });
+
+  it("waze navega por coordenada quando existe", () => {
+    expect(buildWazeLink(withCoords)).toBe(
+      "https://www.waze.com/ul?ll=-19.9%2C-43.9&navigate=yes",
+    );
+  });
+
+  it("waze cai para o endereço completo, não só a cidade", () => {
+    const url = buildWazeLink(withAddress);
+    expect(url).toContain(encodeURIComponent("Av. Getúlio Vargas, 1621, BH, MG"));
+    expect(url).toContain("navigate=yes");
+  });
+
+  it("waze com só cidade/UF ainda devolve um link utilizável", () => {
+    expect(buildWazeLink(cityOnly)).toContain(
+      encodeURIComponent("Belo Horizonte, MG"),
     );
   });
 });

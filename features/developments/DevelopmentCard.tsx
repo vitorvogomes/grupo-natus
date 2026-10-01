@@ -60,8 +60,12 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
         ) : null}
 
         <div className="mt-auto pt-5">
+          {/* O nome entra no rótulo acessível: numa lista de 11 cards, 11 links
+              chamados só "Ver empreendimento" são indistinguíveis para quem
+              navega por links. O texto visível segue contido no nome (WCAG 2.5.3). */}
           <Link
             href={href}
+            aria-label={`Ver empreendimento ${development.name}`}
             className={cn(buttonVariants({ variant: "primary" }), "w-full")}
           >
             Ver empreendimento

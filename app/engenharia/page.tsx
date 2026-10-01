@@ -4,7 +4,7 @@ import { BadgeCheck, Home, Map, Warehouse, Workflow, Wrench } from "lucide-react
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Image } from "@/components/ui/Image";
-import { cn } from "@/lib/utils";
+import { Gallery } from "@/features/developments/Gallery";
 import { Reveal } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
@@ -42,6 +42,14 @@ const PORTFOLIO = [
         src: "/engenharia/residencial-5.webp",
         alt: "Varanda gourmet integrada à área externa da residência",
       },
+      {
+        src: "/engenharia/residencial-6.webp",
+        alt: "Cozinha integrada com ilha e bancada para refeições",
+      },
+      {
+        src: "/engenharia/residencial-7.webp",
+        alt: "Área gourmet interna com ilha, churrasqueira e abertura para o jardim",
+      },
     ],
   },
   {
@@ -72,6 +80,10 @@ const PORTFOLIO = [
         src: "/engenharia/comercial-2.webp",
         alt: "Vista lateral do galpão comercial",
       },
+      {
+        src: "/engenharia/comercial-3.webp",
+        alt: "Interior do galpão, com estrutura metálica de cobertura e piso concretado",
+      },
     ],
   },
 ] as const;
@@ -81,9 +93,11 @@ export default function EngenhariaPage() {
     <main>
       {/* Hero — obra residencial de alto padrão (LCP: preload, sem Reveal). */}
       <section className="relative isolate overflow-hidden bg-navy-700 text-navy-50">
+        {/* Fachada, e não o deck: o deck é a capa da primeira obra logo abaixo,
+            e a mesma foto duas vezes na mesma rolagem lia como erro. */}
         <Image
-          src="/engenharia/residencial-1.webp"
-          alt="Área externa de residência de alto padrão executada pela engenharia do Grupo Natus"
+          src="/engenharia/residencial-3.webp"
+          alt="Fachada de residência de alto padrão executada pela engenharia do Grupo Natus"
           fill
           preload
           sizes="100vw"
@@ -188,30 +202,11 @@ export default function EngenhariaPage() {
                       </div>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      {project.images.map((img, idx) => (
-                        <div
-                          key={img.src}
-                          className={cn(
-                            "relative overflow-hidden rounded-lg bg-surface-muted",
-                            idx === 0
-                              ? "col-span-2 aspect-[16/10]"
-                              : "aspect-square",
-                          )}
-                        >
-                          <Image
-                            src={img.src}
-                            alt={img.alt}
-                            fill
-                            sizes={
-                              idx === 0
-                                ? "(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 800px"
-                                : "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 400px"
-                            }
-                            className="object-cover"
-                          />
-                        </div>
-                      ))}
+                    {/* Mesma galeria da página do empreendimento: uma obra de
+                        7 fotos cabe numa peça só, em vez de sete miniaturas
+                        empilhando a página. */}
+                    <div className="mt-5">
+                      <Gallery images={project.images} />
                     </div>
                   </article>
                 </Reveal>

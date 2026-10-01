@@ -12,7 +12,7 @@ const base: Development = {
   summary: "s",
   description: "d",
   images: [
-    { src: "/empreendimentos/follow-savassi/fachada-diurna.jpg", alt: "Fachada", kind: "externa" },
+    { src: "/empreendimentos/follow-savassi/fachada-diurna.jpg", alt: "Fachada", kind: "imagens" },
   ],
   features: [],
 };

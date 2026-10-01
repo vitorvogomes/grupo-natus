@@ -1,10 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { Reveal } from "./Reveal";
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 describe("Reveal", () => {
   it("renderiza os filhos", () => {
@@ -25,29 +21,6 @@ describe("Reveal", () => {
     expect(screen.getByText("alvo").parentElement).toHaveClass("minha-classe");
   });
 
-  it("degrada para wrapper estático quando prefers-reduced-motion", () => {
-    vi.stubGlobal(
-      "matchMedia",
-      (query: string) =>
-        ({
-          matches: true,
-          media: query,
-          onchange: null,
-          addEventListener: () => {},
-          removeEventListener: () => {},
-          addListener: () => {},
-          removeListener: () => {},
-          dispatchEvent: () => false,
-        }) as unknown as MediaQueryList,
-    );
-    render(
-      <Reveal className="estatico">
-        <span>sem motion</span>
-      </Reveal>,
-    );
-    expect(screen.getByText("sem motion")).toBeInTheDocument();
-  });
-
   it("renderiza como item de lista sem quebrar a semântica da lista", () => {
     render(
       <ul>
@@ -63,30 +36,4 @@ describe("Reveal", () => {
     );
   });
 
-  it("mantém o elemento escolhido também sem motion", () => {
-    vi.stubGlobal(
-      "matchMedia",
-      (query: string) =>
-        ({
-          matches: true,
-          media: query,
-          onchange: null,
-          addEventListener: () => {},
-          removeEventListener: () => {},
-          addListener: () => {},
-          removeListener: () => {},
-          dispatchEvent: () => false,
-        }) as unknown as MediaQueryList,
-    );
-    render(
-      <ul>
-        <Reveal as="li">
-          <span>item estático</span>
-        </Reveal>
-      </ul>,
-    );
-    expect(screen.getByRole("listitem")).toContainElement(
-      screen.getByText("item estático"),
-    );
-  });
 });

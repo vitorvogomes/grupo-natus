@@ -43,11 +43,15 @@ describe("Página /quem-somos (FR13)", () => {
     expect(screen.getByText(/Área construída/i)).toBeInTheDocument();
   });
 
-  it("marca conteúdo pendente como TODO (não inventa números/história)", () => {
+  it("não deixa placeholder rotulado na tela", () => {
+    // A seção "Nossa história" foi removida a pedido do cliente: era o único
+    // TODO visível da página, e um bloco com o texto do placeholder na tela
+    // valia menos que a ausência dele.
     render(<QuemSomosPage />);
+    expect(screen.queryByText(/TODO: CONTENT REQUIRED/)).not.toBeInTheDocument();
     expect(
-      screen.getAllByText(/TODO: CONTENT REQUIRED/).length,
-    ).toBeGreaterThan(0);
+      screen.queryByRole("heading", { name: /nossa história/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("tem CTA de contato", () => {

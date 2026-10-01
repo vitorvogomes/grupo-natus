@@ -52,7 +52,7 @@ describe("FeaturedDevelopments (carrossel da home)", () => {
       screen.getByRole("heading", { name: /nossos empreendimentos/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getAllByRole("link", { name: "Ver empreendimento" }),
+      screen.getAllByRole("link", { name: /^Ver empreendimento/ }),
     ).toHaveLength(3);
   });
 

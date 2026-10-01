@@ -34,6 +34,10 @@ const BENEFITS: readonly {
 /**
  * Seção do programa Minha Casa, Minha Vida.
  *
+ * Vive em `features/mcmv/` e não em `features/home/` porque a Home deixou de
+ * ser a única consumidora: a página do empreendimento a exibe nos que estão
+ * de fato enquadrados (campo `mcmv`).
+ *
  * Painel único: o conteúdo e a foto dividem uma só peça, encostados, em vez de
  * dois blocos soltos — e os benefícios vêm como uma faixa separada por fios,
  * não como três caixas. A marca do programa é federal: exibida no arquivo

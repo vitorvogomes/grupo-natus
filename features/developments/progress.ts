@@ -26,13 +26,6 @@ export const CONSTRUCTION_STAGES = [
 
 export type ConstructionStageName = (typeof CONSTRUCTION_STAGES)[number];
 
-/** Etapas ordenadas por `order` (não muta o array original). */
-export function sortedStages(
-  progress: ConstructionProgress,
-): ConstructionStage[] {
-  return [...progress.stages].sort((a, b) => a.order - b.order);
-}
-
 /**
  * Projeta o progresso nas 7 etapas canônicas da Natus, em ordem — casando por
  * nome com o que houver em `progress.stages` e preenchendo 0% no que faltar.

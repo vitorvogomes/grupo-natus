@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import EngenhariaPage from "./page";
 
@@ -32,6 +33,23 @@ describe("Página /engenharia (FR12)", () => {
     expect(
       screen.getByRole("heading", { name: /galpão comercial/i }),
     ).toBeInTheDocument();
+  });
+
+  it("agrupa as fotos de cada obra numa galeria, uma por serviço", async () => {
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
+    render(<EngenhariaPage />);
+    // Um palco por obra (3), em vez de 12 imagens soltas empilhadas.
+    const palcos = screen.getAllByRole("button", {
+      name: /^ampliar imagem:/i,
+    });
+    expect(palcos).toHaveLength(3);
+
+    // A régua de miniaturas troca o palco dentro da própria obra.
+    const miniaturas = screen.getAllByRole("button", { name: /^ver imagem:/i });
+    await user.click(miniaturas[1]!);
+    expect(
+      screen.getAllByRole("button", { name: /^ampliar imagem:/i })[0],
+    ).toHaveAccessibleName(/piscina/i);
   });
 
   it("cita a certificação ISO 9001", () => {

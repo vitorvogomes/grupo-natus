@@ -180,7 +180,7 @@ export function FeaturedDevelopments({
                 >
                   <span
                     className={cn(
-                      "h-2 rounded-full transition-all",
+                      "h-2 rounded-full transition-[width,background-color] duration-200",
                       i === index
                         ? "w-8 bg-brand-strong"
                         : "w-2 bg-border group-hover/dot:bg-brand",

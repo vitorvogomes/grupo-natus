@@ -53,12 +53,25 @@ export const STATUS_META: Record<DevelopmentStatus, StatusMeta> = {
   },
 };
 
-// Categorias de contexto da galeria (abas), inspiradas no site atual.
-export type DevelopmentImageKind =
-  | "externa"
-  | "apartamento"
-  | "planta"
-  | "obra";
+/**
+ * Categorias de contexto da galeria (abas). A ordem aqui é a ordem das abas —
+ * derivar da ordem de aparição no dado faria a mesma galeria trocar de ordem
+ * conforme alguém reorganizasse o array de imagens.
+ *
+ * "imagens" cobre render externo, área comum e interior: a separação
+ * externa/apartamento que existia antes dividia o acervo em duas abas quase
+ * idênticas (34 contra 18) sem ajudar a escolher. Aba de vídeo entra quando
+ * houver arquivo.
+ */
+export const DEVELOPMENT_IMAGE_KINDS = ["imagens", "planta", "obra"] as const;
+
+export type DevelopmentImageKind = (typeof DEVELOPMENT_IMAGE_KINDS)[number];
+
+export const IMAGE_KIND_LABELS: Record<DevelopmentImageKind, string> = {
+  imagens: "Imagens",
+  planta: "Plantas",
+  obra: "Obra",
+};
 
 export type DevelopmentImage = {
   src: string;
@@ -78,6 +91,8 @@ export type DevelopmentLocation = {
   lat?: number;
   lng?: number;
   googleMapsUrl?: string;
+  /** Texto curto sobre o entorno/bairro, exibido na seção Localização. */
+  note?: string;
 };
 
 export type ConstructionStage = {
@@ -108,20 +123,22 @@ export type Development = {
   location: DevelopmentLocation;
   /** Tipo de produto (faceta de busca). Ausente = ainda não confirmado. */
   propertyType?: PropertyType;
+  /**
+   * Enquadrado no Minha Casa, Minha Vida. Preencher só com evidência no
+   * material: exibir a marca federal num empreendimento fora do programa
+   * sugere credenciamento que não existe.
+   */
+  mcmv?: boolean;
   /** Tipologia curta para o hero (ex.: "2 e 3 quartos"). */
   tagline?: string;
   summary: string;
   description: string;
   images: DevelopmentImage[];
   features: DevelopmentFeature[];
-  /** Destaques do empreendimento (bullets da seção de visão geral). */
-  highlights?: string[];
   /** Diferenciais agrupados por categoria (accordion). */
   amenities?: DevelopmentAmenityGroup[];
   /** URL de vídeo de apresentação ("assista ao vídeo"). */
   videoUrl?: string;
-  /** PDF de apresentação para download. */
-  presentationUrl?: string;
   progress?: ConstructionProgress;
   contact?: { whatsappMessage?: string };
   seo?: { title?: string; description?: string; ogImage?: string };

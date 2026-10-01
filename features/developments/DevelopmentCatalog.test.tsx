@@ -31,7 +31,7 @@ const list: Development[] = [
 ];
 
 const countCards = () =>
-  screen.getAllByRole("link", { name: "Ver empreendimento" }).length;
+  screen.getAllByRole("link", { name: /^Ver empreendimento/ }).length;
 
 async function pick(
   user: ReturnType<typeof userEvent.setup>,

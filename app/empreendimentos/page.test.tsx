@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import EmpreendimentosPage from "./page";
 
 const countCards = () =>
-  screen.getAllByRole("link", { name: "Ver empreendimento" }).length;
+  screen.getAllByRole("link", { name: /^Ver empreendimento/ }).length;
 
 async function renderPage(
   searchParams: Record<string, string | string[] | undefined> = {},
