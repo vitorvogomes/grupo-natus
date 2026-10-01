@@ -46,7 +46,10 @@
 
   /* ---- Cores semânticas da marca ---- */
   --color-brand: var(--color-nude-400);
-  --color-brand-strong: var(--color-nude-600);
+  /* nude-700 (não 600): como TEXTO de acento sobre superfície clara, o 600
+   * media 3,77:1 — abaixo dos 4,5:1 de AA. Medido: nenhuma ocorrência de
+   * text-brand-strong renderiza sobre fundo escuro, então escurecer é seguro. */
+  --color-brand-strong: var(--color-nude-700);
   --color-ink: var(--color-navy-600);
   --color-ink-soft: var(--color-navy-400);
   --color-surface: #ffffff;
@@ -57,7 +60,7 @@
 
   /* ---- Status de empreendimento (DevelopmentStatus) ---- */
   --color-status-lancamento: var(--color-navy-500);
-  --color-status-em-construcao: #b8823a; /* âmbar quente, harmônico com o nude */
+  --color-status-em-construcao: #976b30; /* âmbar quente; escurecido p/ 4,71:1 com texto branco (AA) */
   --color-status-pronto: #4f7a52; /* verde sóbrio */
   /* Erro de formulário — vermelho acessível (≈6.3:1 em branco); NÃO reusar o
    * âmbar de "em construção" (âmbar lê como aviso e reprova contraste). */
@@ -83,18 +86,25 @@
   --color-accent-foreground: var(--color-ink);
   --color-destructive: var(--color-status-error);
   --color-destructive-foreground: var(--color-surface);
-  --color-input: var(--color-border);
-  --color-ring: var(--color-brand);
+  /* Borda de CAMPO tem papel próprio: é o que delimita o controle, e precisa
+   * de 3:1 (WCAG 1.4.11). O --color-border (stone-200, 1,56:1) continua certo
+   * para divisórias e cartões, que são estrutura, não controle. */
+  --color-input: var(--color-stone-400);
+  /* Anel de foco: único passo do ramp que cobre 3:1 contra branco (3,77),
+   * surface-muted (3,46), navy-600 (3,01) e navy-700 (3,53). O brand (nude-400)
+   * media 2,19:1 sobre branco. */
+  --color-ring: var(--color-nude-600);
   --radius: var(--radius-lg);
 
   /* ---- Tipografia ----
-   * Corpo: Inter (--font-inter). Títulos/display: Fraunces serifa (--font-fraunces).
+   * Corpo: Inter (--font-inter). Títulos/display: Outfit sans (--font-outfit).
    * Variáveis injetadas por next/font em app/layout.tsx; fallback de sistema abaixo. */
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
   --font-heading:
-    var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+    var(--font-outfit), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;

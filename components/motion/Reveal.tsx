@@ -8,6 +8,11 @@ type RevealProps = {
   className?: string;
   /** Atraso em segundos (para escalonar blocos irmãos). */
   delay?: number;
+  /**
+   * Elemento renderizado. `"li"` permite escalonar itens sem inserir um `div`
+   * entre a lista e seus itens, o que quebraria a semântica de `ul`/`ol`.
+   */
+  as?: "div" | "li";
 };
 
 /**
@@ -16,15 +21,23 @@ type RevealProps = {
  * (renderiza estático, conteúdo visível — protege CWV e no-JS). Usar apenas
  * em conteúdo abaixo da dobra (nunca no elemento de LCP).
  */
-export function Reveal({ children, className, delay = 0 }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  as = "div",
+}: RevealProps) {
   const reduce = useReducedMotion();
 
   if (reduce) {
-    return <div className={className}>{children}</div>;
+    const Tag = as;
+    return <Tag className={className}>{children}</Tag>;
   }
 
+  const MotionTag = as === "li" ? motion.li : motion.div;
+
   return (
-    <motion.div
+    <MotionTag
       className={className}
       initial={{ opacity: 0, transform: "translateY(16px)" }}
       whileInView={{ opacity: 1, transform: "translateY(0px)" }}
@@ -32,6 +45,6 @@ export function Reveal({ children, className, delay = 0 }: RevealProps) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 }

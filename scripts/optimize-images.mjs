@@ -138,12 +138,29 @@ const SINGLES = [
     maxSide: 1600,
   },
   {
+    // Fachada noturna do Follow Savassi. É um render retrato (3071x3840) num
+    // hero em paisagem, então o object-cover mostra só uma faixa: o
+    // `object-position` do Hero a fixa na entrada (madeira + lobby + jardim),
+    // que é onde o prédio lê como lugar. Centralizada mostraria só parede.
     name: "home hero",
     src: "img/Follow Savassi - Belo Horizonte MG/0065-OASIS_FACHADA NOTURNA CAM 02_4K.jpg",
     out: "public/home/hero.webp",
     maxSide: 3000,
   },
+  {
+    // 2560 (e não 2000): o painel da Home renderiza esta foto a ~930 CSS px,
+    // o que pede uma variante de 1920 em telas 2x — que deve vir de um
+    // original maior, não de uma ampliação.
+    name: "home: família (seção Minha Casa Minha Vida)",
+    src: "img/home/familia-mcmv.jpg",
+    out: "public/home/familia-mcmv.webp",
+    maxSide: 2560,
+  },
 ];
+
+// Marca federal do Minha Casa Minha Vida: line-art plano com alfa. O PNG de
+// origem (46 KB) é menor que qualquer webp lossless (74 KB) e o next/image
+// converte na entrega — servimos o PNG direto, como os logos de public/brand/.
 
 // Imagens institucionais (Quem Somos + Engenharia). Rode com o slug "institucional".
 const INSTITUTIONAL = [
@@ -207,6 +224,18 @@ const INSTITUTIONAL = [
     out: "public/engenharia/residencial-5.webp",
     maxSide: 2560,
   },
+  {
+    name: "engenharia: residencial (cozinha integrada)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-4.jpeg",
+    out: "public/engenharia/residencial-6.webp",
+    maxSide: 2560,
+  },
+  {
+    name: "engenharia: residencial (área gourmet interna)",
+    src: "img/Servico - Casa Alto Luxo/pic-gal-casa-alphaville-7.jpeg",
+    out: "public/engenharia/residencial-7.webp",
+    maxSide: 2560,
+  },
   // Engenharia — Loteamento / condomínio (Avenida)
   {
     name: "engenharia: loteamento (masterplan)",
@@ -233,41 +262,145 @@ const INSTITUTIONAL = [
     out: "public/engenharia/comercial-2.webp",
     maxSide: 2560,
   },
+  {
+    name: "engenharia: comercial (interior do galpão)",
+    src: "img/Servico - Galpão Comercial/IMG-20230801-WA0062.jpg",
+    out: "public/engenharia/comercial-3.webp",
+    maxSide: 2560,
+  },
 ];
 
 const KB = (bytes) => `${Math.round(bytes / 1024)} KB`;
+
+/**
+ * Marcador do Grupo Natus para o mapa (seção Localização do empreendimento).
+ *
+ * O "N" é o símbolo oficial (img/LOGOS/Favicon) e entra sem recorte,
+ * recoloração ou distorção — a moldura navy com ponteira é só o invólucro de
+ * marcador, do mesmo jeito que um pin de mapa emoldura qualquer logotipo.
+ * `trim()` remove a margem transparente do arquivo de origem para que o
+ * símbolo fique opticamente centrado, e não centrado pela caixa.
+ *
+ * Sai em 2x (204x252) e é declarado a 102x126 CSS no componente.
+ */
+async function buildMapPin() {
+  console.log("\n▸ brand: pin do mapa");
+  const SIZE = 192; // lado do quadrado arredondado
+  const PAD = 6; // folga para o contorno branco não ser cortado
+  const TAIL = 44; // altura da ponteira
+  const RADIUS = 52;
+  const W = SIZE + PAD * 2;
+  const H = SIZE + TAIL + PAD * 2;
+
+  const shape = `M ${RADIUS},0
+    H ${SIZE - RADIUS} A ${RADIUS},${RADIUS} 0 0 1 ${SIZE},${RADIUS}
+    V ${SIZE - RADIUS} A ${RADIUS},${RADIUS} 0 0 1 ${SIZE - RADIUS},${SIZE}
+    H ${SIZE / 2 + 20} L ${SIZE / 2},${SIZE + TAIL} L ${SIZE / 2 - 20},${SIZE}
+    H ${RADIUS} A ${RADIUS},${RADIUS} 0 0 1 0,${SIZE - RADIUS}
+    V ${RADIUS} A ${RADIUS},${RADIUS} 0 0 1 ${RADIUS},0 Z`;
+
+  // navy-600 (#243c54) com contorno branco: o pin precisa ler tanto sobre o
+  // cinza do mapa quanto sobre o verde dos parques e o azul da água.
+  const frame = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <g transform="translate(${PAD},${PAD})">
+        <path d="${shape}" fill="#243c54" stroke="#ffffff" stroke-width="10"
+              stroke-linejoin="round" paint-order="stroke" />
+      </g>
+    </svg>`,
+  );
+
+  try {
+    const MARK = 104;
+    const mark = await sharp(join(ROOT, "img/LOGOS/Favicon/favicon-natus-beige.png"))
+      .trim()
+      .resize({ width: MARK, height: MARK, fit: "inside" })
+      .toBuffer();
+    const { height: markH = MARK, width: markW = MARK } =
+      await sharp(mark).metadata();
+
+    const outPath = join(ROOT, "public/brand/pin-natus.png");
+    await mkdir(join(outPath, ".."), { recursive: true });
+    await sharp(frame)
+      .composite([
+        {
+          input: mark,
+          left: Math.round(PAD + (SIZE - markW) / 2),
+          top: Math.round(PAD + (SIZE - markH) / 2),
+        },
+      ])
+      .png({ compressionLevel: 9 })
+      .toFile(outPath);
+    const after = (await stat(outPath)).size;
+    console.log(`  public/brand/pin-natus.png  ${W}x${H}  ${KB(after)}`);
+  } catch (err) {
+    console.warn(`  ⚠ pulando o pin do mapa: ${err.message}`);
+    process.exitCode = 1;
+  }
+}
+
+/**
+ * Favicon do site a partir do símbolo oficial. O app não tinha nenhum — o
+ * Next serve app/icon.png automaticamente como /icon e <link rel="icon">.
+ */
+async function buildFavicon() {
+  console.log("\n▸ brand: favicon");
+  try {
+    const outPath = join(ROOT, "app/icon.png");
+    await sharp(join(ROOT, "img/LOGOS/Favicon/favicon-natus-beige.png"))
+      .resize({ width: 192, height: 192, fit: "contain", background: { r: 36, g: 60, b: 84, alpha: 1 } })
+      .flatten({ background: "#243c54" })
+      .png({ compressionLevel: 9 })
+      .toFile(outPath);
+    const after = (await stat(outPath)).size;
+    console.log(`  app/icon.png  192x192  ${KB(after)}`);
+  } catch (err) {
+    console.warn(`  ⚠ pulando o favicon: ${err.message}`);
+    process.exitCode = 1;
+  }
+}
 
 /** Processa uma lista de assets avulsos (src/out/maxSide explícitos). */
 async function optimizeFlat(label, list) {
   console.log(`\n▸ ${label} (${list.length})`);
   for (const item of list) {
-    const outPath = join(ROOT, item.out);
-    await mkdir(join(outPath, ".."), { recursive: true });
-    const before = (await stat(join(ROOT, item.src))).size;
-    await sharp(join(ROOT, item.src))
-      .rotate()
-      .resize({
-        width: item.maxSide,
-        height: item.maxSide,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
-      .toFile(outPath);
-    const after = (await stat(outPath)).size;
-    console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
+    // Um source ausente não pode abortar o lote inteiro (o loop é sequencial).
+    try {
+      const outPath = join(ROOT, item.out);
+      await mkdir(join(outPath, ".."), { recursive: true });
+      const before = (await stat(join(ROOT, item.src))).size;
+      await sharp(join(ROOT, item.src))
+        .rotate()
+        .resize({
+          width: item.maxSide,
+          height: item.maxSide,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
+        .toFile(outPath);
+      const after = (await stat(outPath)).size;
+      console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
+    } catch (err) {
+      console.warn(`  ⚠ pulando "${item.name}" (${item.src}): ${err.message}`);
+      process.exitCode = 1;
+    }
   }
 }
 
 async function run() {
   const requested = process.argv.slice(2);
-  const KEYWORDS = new Set(["singles", "institucional"]);
+  const KEYWORDS = new Set(["singles", "institucional", "brand"]);
 
   if (!requested.length || requested.includes("singles")) {
     await optimizeFlat("singles", SINGLES);
   }
   if (!requested.length || requested.includes("institucional")) {
     await optimizeFlat("institucional", INSTITUTIONAL);
+  }
+  if (!requested.length || requested.includes("brand")) {
+    await buildMapPin();
+    await buildFavicon();
   }
 
   const slugs = requested.length
@@ -286,26 +419,34 @@ async function run() {
     console.log(`\n▸ ${slug} (${job.images.length} imagens)`);
 
     for (const img of job.images) {
-      const srcPath = join(ROOT, job.srcDir, img.src);
-      const outPath = join(outDir, `${img.out}.webp`);
-      const before = (await stat(srcPath)).size;
+      // Mesmo guard do optimizeFlat: sem ele, um único asset ausente rejeita
+      // para fora do run() e leva junto todos os slugs seguintes — e este é o
+      // caminho percorrido quando o script roda sem argumentos.
+      try {
+        const srcPath = join(ROOT, job.srcDir, img.src);
+        const outPath = join(outDir, `${img.out}.webp`);
+        const before = (await stat(srcPath)).size;
 
-      if (extname(img.src).toLowerCase() === ".webp" && before <= PASSTHROUGH_MAX) {
-        await copyFile(srcPath, outPath);
-        console.log(`  ${img.out}.webp  ${KB(before)}  (copiado — já otimizado)`);
-        continue;
+        if (extname(img.src).toLowerCase() === ".webp" && before <= PASSTHROUGH_MAX) {
+          await copyFile(srcPath, outPath);
+          console.log(`  ${img.out}.webp  ${KB(before)}  (copiado — já otimizado)`);
+          continue;
+        }
+
+        const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
+        await sharp(srcPath)
+          .rotate()
+          .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true })
+          .webp({ quality: QUALITY, effort: 6 })
+          .toFile(outPath);
+
+        const after = (await stat(outPath)).size;
+        const saved = Math.round((1 - after / before) * 100);
+        console.log(`  ${img.out}.webp  ${KB(before)} → ${KB(after)}  (-${saved}%)`);
+      } catch (err) {
+        console.warn(`  ⚠ pulando ${slug}/${img.out} (${img.src}): ${err.message}`);
+        process.exitCode = 1;
       }
-
-      const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
-      await sharp(srcPath)
-        .rotate()
-        .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true })
-        .webp({ quality: QUALITY, effort: 6 })
-        .toFile(outPath);
-
-      const after = (await stat(outPath)).size;
-      const saved = Math.round((1 - after / before) * 100);
-      console.log(`  ${img.out}.webp  ${KB(before)} → ${KB(after)}  (-${saved}%)`);
     }
   }
 }

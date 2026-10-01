@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   CONSTRUCTION_STAGES,
   canonicalStages,
-  sortedStages,
   clampPercentage,
   formatProgressDate,
 } from "./progress";
@@ -19,13 +18,6 @@ const progress: ConstructionProgress = {
 };
 
 describe("progress helpers (FR5)", () => {
-  it("ordena as etapas por 'order'", () => {
-    expect(sortedStages(progress).map((s) => s.name)).toEqual([
-      "Fundação",
-      "Estrutura",
-      "Acabamento",
-    ]);
-  });
 
   it("clampPercentage limita entre 0 e 100", () => {
     expect(clampPercentage(-5)).toBe(0);

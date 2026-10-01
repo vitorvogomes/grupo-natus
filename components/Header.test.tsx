@@ -80,4 +80,9 @@ describe("Header", () => {
       await screen.findByRole("link", { name: "Solar Manilha" }),
     ).toHaveAttribute("href", "/empreendimentos/solar-manilha");
   });
+
+  it("não sobrepõe a marca do hero fora da Home", () => {
+    render(<Header />);
+    expect(screen.queryByTestId("hero-brand")).toBeNull();
+  });
 });

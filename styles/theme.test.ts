@@ -50,4 +50,13 @@ describe("Design tokens Natus (@theme)", () => {
     expect(themeCss).toMatch(/--breakpoint-/);
     expect(themeCss).toMatch(/--ease-/);
   });
+
+  it("usa uma sans geométrica (Outfit) nos títulos, não mais uma serifa", () => {
+    // Títulos e corpo são ambos sans: o contraste vem da família e do peso,
+    // nunca de um fallback serifado que apareceria durante o swap.
+    expect(themeCss).toMatch(/--font-heading:[\s\S]*?ui-sans-serif/);
+    expect(themeCss).toMatch(/--font-heading:\s*\n?\s*var\(--font-outfit\)/);
+    expect(themeCss.toLowerCase()).not.toContain("fraunces");
+    expect(themeCss).not.toMatch(/--font-heading:[\s\S]*?ui-serif/);
+  });
 });

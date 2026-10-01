@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-09-19 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** Modernização de Frontend — **implementação concluída** (ver seção abaixo); pendente `interface-review` manual · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-01 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v2 (feedback do cliente)** — Home ✅ · **Página do empreendimento, Quem Somos e Engenharia ✅** · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -27,10 +27,10 @@
 - ✅ 3.1 Rota dinâmica `/empreendimentos/[slug]` (generateStaticParams + 404) — FR3
 - ✅ 3.2 Galeria de imagens (categorias, teclado, next/image) — FR4
 - ✅ 3.3 Características, descrição e status — FR4
-- ✅ 3.4 Localização via Google Maps (embed/link, sem API key) — FR7
+- ✅ 3.4 Localização via Google Maps (embed/link, sem API key; a revisão v2 acrescentou o caminho opcional com chave + pin da marca) — FR7
 - ✅ 3.5 CTA contextualizado (WhatsApp com nome do empreendimento) — FR6
 - ✅ 3.6 Metadata de SEO por empreendimento — FR14
-- ✅ 3.7 Template validado **[Gate B aprovada]** — hero full-bleed, sub-nav âncora, visão geral, galeria com abas, accordion de diferenciais; 11 páginas via SSG
+- ✅ 3.7 Template validado **[Gate B aprovada]** — hero full-bleed, sub-nav âncora, visão geral, galeria, accordion de diferenciais; **12** páginas via SSG (template reorganizado na revisão v2)
 
 ## Epic 4 — Evolução das Obras  ✅ 3/3
 - ✅ 4.1 Modelo `ConstructionProgress` + helpers (sortedStages/clamp/formatDate)
@@ -53,6 +53,72 @@
 - ✅ 7.2 Performance: RSC padrão, `next/image` em todo lugar, tudo estático/SSG — NFR1 (validar Lighthouse local; comprimir fontes de img)
 - ✅ 7.3 Responsividade & Acessibilidade: skip-link, landmarks, labels, alt obrigatório, foco/teclado — NFR2/3
 - ✅ 7.4 Motion global: `prefers-reduced-motion` neutraliza transições/scroll — NFR4
+
+## Revisão v2 — Parte 2: empreendimento, Quem Somos, Engenharia ✅ (2026-10-01)
+
+Continuação da Home v2, com o feedback do cliente sobre a página do empreendimento.
+
+**Página do empreendimento** — nova ordem: descrição → galeria → o que oferece →
+localização → estágio de obra → CTA → MCMV → explore empreendimentos.
+
+- **Três formas, uma só página.** O status diz quais seções fazem sentido (obra
+  só em "em construção") e o dado presente diz quais aparecem. Resultado: Follow
+  Savassi completo; os 6 com material, reduzido; os 5 lançamentos sem imagem,
+  um painel `DevelopmentComingSoon` no lugar de uma sequência de "em breve".
+  Não há três templates — há uma composição condicional em `page.tsx`.
+- **Galeria reescrita** (`Gallery.tsx`): palco + régua de miniaturas que sempre
+  cabe (a ativa cresce, as outras encolhem), contador `3 / 12`, setas sobre o
+  palco, clique abre o lightbox existente. Saiu o `FeaturedImage` com hover-zoom.
+  Piso de `min-w-6` nas miniaturas por causa do alvo de 24×24 (WCAG 2.5.8) — a
+  referência usa lascas de ~10 px. Reaproveitada em `/engenharia`.
+- **Categorias de imagem simplificadas**: `externa`+`apartamento` → `imagens`;
+  ficam `imagens · planta · obra`. 52/5/5 das 62 imagens. Ordem das abas vem de
+  `DEVELOPMENT_IMAGE_KINDS`, não da ordem de aparição no dado.
+- **Descrição ao lado da imagem**, sem checks (`DevelopmentOverview`), e o
+  `<h2>` passou a ser o nome do empreendimento, não "Cidade, Estado".
+  `DevelopmentDetails` foi apagado: a descrição subiu para a visão geral e as
+  "Características" viraram o primeiro grupo do accordion.
+- **"O que o X oferece"**: accordion com ícone lucide por categoria + foto ao
+  lado, primeiro grupo aberto. Os emojis do texto de origem viraram ícones.
+- **Localização**: painel navy com endereço, texto de entorno e botões Google
+  Maps + **Waze** (`buildWazeLink`, novo em `lib/maps.ts`), com o mapa sangrado
+  abaixo. **Era a primeira vez que o mapa renderizava** — nenhum empreendimento
+  tinha endereço até agora.
+- **`DevelopmentMap`** (novo): sem chave usa o embed público do Google (caminho
+  atual); com `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` + `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`
+  carrega a JS API e põe um `AdvancedMarkerElement` com o pin da Natus. O embed
+  público **não aceita marcador customizado** — daí os dois caminhos.
+- **Pin e favicon**: `public/brand/pin-natus.png` compõe o símbolo oficial
+  (`img/LOGOS/Favicon`) sobre moldura navy; `app/icon.png` dá ao site o favicon
+  que ele não tinha. Ambos gerados por `npm run optimize:images brand`.
+- **Estágio de obra** em duas colunas: etapas oficiais à esquerda, galeria do
+  canteiro à direita. 🔔 O Follow Savassi **não tem foto de obra** — cai no
+  painel de "em breve" (ver CONTENT-GAPS).
+- **CTA compacto**: uma faixa com "Quer saber mais?" + Nome/Telefone/E-mail +
+  "Quero saber mais!". O campo "Empreendimento" saiu da tela e virou contexto do
+  `LeadForm` (segue no e-mail do lead).
+- **`ExploreDevelopments`** (novo): carrossel de saída, sem o empreendimento
+  aberto. Deliberadamente mais simples que o `FeaturedDevelopments` da Home —
+  mexer naquele arriscaria regredir uma home já aprovada.
+- **Sub-nav âncora** passou a receber as seções por prop e lista só as que a
+  página renderizou; antes era fixa e apontava para âncoras inexistentes.
+- **MCMV por enquadramento**: novo campo `mcmv`, hoje em Solar Manilha, Sunset
+  Ville e Royal Ville. A marca federal não aparece em alto luxo nem na Savassi.
+
+**Quem Somos**: seção "Nossa história" removida (era o único TODO visível).
+
+**Engenharia**: cada obra passou a ter a galeria da página do empreendimento, no
+lugar do grid de imagens. 3 fotos que estavam em `img/` sem nunca chegar ao site
+entraram no pipeline (galerias: 7 · 2 · 3). O hero deixou de repetir a capa da
+primeira obra.
+
+**Limpeza de modelo**: saíram `highlights` (virou a `description` do Residenziale,
+que era o único a usá-lo) e `presentationUrl` (inalcançável a partir de
+`fromSeed`). `Accordion` ganhou `defaultOpen` e título como `ReactNode`.
+
+**Gate:** 343 testes · cobertura 95,7% stmts · 92,9% branches · build 26 páginas.
+
+---
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 - ⬜ 8.1 Inicializar Supabase local — NFR5
@@ -82,17 +148,17 @@
 - ✅ Rebuild da seção do empreendimento (Overview/Details): remove duplicação status+localização; características em grid de cards; placeholder discreto p/ descrição TODO
 - ✅ Progresso → **Radix Progress** (somente leitura): geral em card destaque + etapas em grid; fill em gradiente de marca (sliders descartados; referência usa barras)
 - ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
-- ✅ Galeria — **imagem em destaque + hover-zoom (zoom-and-pan seguindo o cursor, estilo 21st.dev)** + grade das demais + lightbox (gated por `prefers-reduced-motion`/pointer)
+- ✅ Galeria — imagem em destaque + hover-zoom + grade das demais + lightbox — **substituída na revisão v2** por palco + régua de miniaturas (ver o bloco da Parte 2)
 - ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
 - ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
 - ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB. 🔔 Faltam 5 lançamentos sem foto (assets da empresa); Denver com assets fracos
 - ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
-- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras — inspirado no site atual). `DevelopmentImageKind` recategorizado; imagens re-tagueadas + fotos de **obra** (Viver Mais) e interiores extras (Follow Savassi)
+- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras). **Simplificada na revisão v2** para `imagens · planta · obra` — Externa e Apartamento viravam duas abas quase idênticas
 - ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
 - ✅ **Conteúdo institucional (Fase C2)** — Quem Somos + Engenharia reconstruídas com copy verbatim do site atual + material da empresa; 11 imagens institucionais otimizadas (`public/quem-somos/*`, `public/engenharia/*`, keyword `institucional` no pipeline); Home `InstitutionalIntro` grounded. Lacunas restantes rotuladas TODO (ver `docs/CONTENT-GAPS.md §3`)
 - ✅ Verificação: 232 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
-- 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
+- ✅ `interface-review` — skills `better-*` de domínio **instaladas** (ver `skills-lock.json`) e a revisão formal foi executada na Home v2 e na revisão v2 (ver blocos abaixo)
 
 ---
 
@@ -104,6 +170,40 @@ Ao concluir uma story, verifique se a mudança exige atualizar — e atualize:
 - [ ] **ARCHITECTURE-SPINE.md** — se uma decisão de arquitetura foi tomada/alterada; registrar no `.memlog.md` e resolver `[ASSUMPTION]` confirmados.
 - [ ] **PRD / product-brief** — se requisito, dado real ou status de empreendimento mudou.
 - [ ] **CLAUDE.md** — se comandos, scripts, stack ou convenções mudaram.
+
+## Iniciativa — Home v2 (feedback do cliente, desde 2026-09-30)
+
+Retorno do cliente sobre a v1: tipografia de título serifada, hero com ruído e home poluída pelo catálogo inteiro. Nova ordem: **hero limpo → busca → carrossel de 3 destaques → MCMV → Grupo Natus**.
+
+- ✅ **Tipografia** — títulos de **Fraunces (serifa) → Outfit (sans geométrica)**, escolhida por ecoar a geometria circular do logotipo NATUS. Só `--font-heading` + o import no layout mudaram: os 41 headings herdam do seletor global. De quebra, **9 arquivos de fonte → 2** (a Fraunces carregava 4 pesos × 2 estilos, com itálico que o site nunca usou). Tracking regravado em dois níveis (−0.011em geral, −0.022em em h1/h2): o −0.02em fora calibrado para serifa e colava as letras em h4–h6. `font-heading` saiu do `ProgressBar` — a Outfit não tem figuras tabulares e anulava o `tabular-nums`.
+- ✅ **Hero** só com imagem, sem texto nem CTA, `<h1>` em `sr-only` (SEO/a11y) e seta animada para `#buscar`. Altura **84svh** (não a tela inteira): a borda da busca assoma na dobra, senão a Home parece ter só a imagem. Imagem: **fachada noturna do Follow Savassi** — render retrato (3071×3840) num hero em paisagem, então `object-position: center 75%` fixa a faixa visível na entrada (madeira + lobby + jardim); centralizada mostraria só parede. **Logo branca sobreposta** no topo enquanto o header está oculto — some na rolagem, exatamente onde a logo do header entra, e é `aria-hidden` (o link real vive no header, acessível por Tab). Preparado para virar `<video>` quando houver asset animado.
+- ✅ **Header revela na rolagem** — `fixed` + oculto só na Home (`usePathname() === "/"`), `sticky` nas demais rotas. Oculto é opacidade + transform com `focus-within` de volta: nunca `hidden`/`aria-hidden`, para o Tab não perder a navegação. Estado observável em `data-revealed`. `Header.test.tsx` seguiu intacto; o caso da Home vive em `Header.home.test.tsx` (mock de rota é por arquivo).
+- ✅ **Busca de empreendimentos** (`DevelopmentSearchBar`) — Status · Cidade · Tipo de imóvel. "Buscar" é um `<Link>`, não `router.push`: a ação é navegação, então ganha prefetch, Ctrl+clique e URL compartilhável — e o destino é verificável no DOM sem mock de router.
+- ✅ **Estado de filtro na URL** — `parseDevelopmentFilters`/`buildDevelopmentsHref` (`features/developments/searchParams.ts`, puro e exaustivamente testado). O catálogo recebe `searchParams` como prop do RSC e monta já filtrado (sem flash). **`/empreendimentos` passou a ser dinâmica (SSR)** — build agora: 24 estáticas + `/empreendimentos` e `/api/leads` dinâmicas.
+- ✅ **Nova faceta `propertyType`** em `types/development.ts` (apartamento/casa/lote/studio), preenchida **só com evidência no material** — 8 dos 12 confirmados, 4 pendentes e invisíveis ao filtro de tipo (ver CONTENT-GAPS §1).
+- ✅ **Carrossel do catálogo** (`FeaturedDevelopments`) — **modo centralizado**: o slide ativo fica no meio em tamanho cheio e os vizinhos espiam reduzidos dos dois lados (margens percentuais nas pontas, porque padding em container de scroll é inconsistente entre browsers). Mostra **todos os 12**; `FEATURED_SLUGS` passou a definir só quem abre (Follow Savassi · Golden Ville · **Torres da Lagoa**, no lugar do Solar Manilha, que não tem imagem) via `getHomeDevelopments()`. O índice **acompanha a rolagem**, para que o swipe mude o destaque, com trava durante a rolagem programática — sem ela, os eventos da própria animação reescreviam o índice e cliques rápidos avançavam um slide só. Scroll-snap nativo + wrap, **sem embla/shadcn**: o `carousel.tsx` do shadcn cairia dentro do `coverage.include` (≈250 linhas a cobrir) e o embla mede layout, que o jsdom não faz — os botões renderizariam `disabled` e o teste de "avançar slide" seria impossível sem mockar a lib.
+- ✅ **Seção Minha Casa Minha Vida** — logo oficial do programa (arquivo do cliente, sem recolorir/distorcer), copy fornecida, "Simule agora" via `buildWhatsAppUrl` (AD-3) e 3 cards de benefício. **Redesenhada para não espelhar a referência**: painel único (conteúdo e foto encostados numa só peça, em vez de dois blocos soltos) e benefícios como **faixa separada por fios**, não três caixas — cada um com título próprio e linha de apoio, no lugar dos rótulos soltos. Fundo no **navy-600 do rodapé** (era navy-800, destoava do resto do site). Nitidez da foto: **`sizes` tem de descrever a largura RENDERIZADA, não a do box**. Com `object-cover` num box mais alto que a proporção da foto (637×520 contra 16:9), o browser desenha a imagem a ~930 px e corta as laterais; declarar os 640 px do box o fazia baixar a variante de 640 e ampliá-la 1,46×. Corrigido para `950px` (medido no browser: fator 1,46 → 0,86) e o original subiu para 2560, para que a variante de 1920 das telas 2× venha de um arquivo maior. **Reconferir esse valor sempre que o painel mudar de altura** — já quebrou duas vezes por mudança de layout.
+- ✅ **Seção Grupo Natus** (`AboutNatus`, substitui `InstitutionalIntro`) — copy real do cliente e os 3 números agora reais (10 anos · 100 mil m² · +1.500), empilhados à direita, com selo de ícone em navy, número em destaque e rótulo abaixo (referência: Pro Domo). Os mesmos números preencheram o `STATS` de `/quem-somos`, que estava em `TODO: CONTENT REQUIRED`.
+- 🔔 Pendente do cliente: vídeo/GIF do hero; tipologia de 4 empreendimentos; imagens do Solar Manilha; direito de uso da marca MCMV.
+
+- ✅ **Motion nas seções da Home** — `Reveal` ganhou `as?: "div" | "li"` para escalonar itens sem meter um `div` entre a lista e seus itens (quebraria a semântica para leitores de tela). Benefícios do MCMV e cards de números entram em cascata (delay de 90 ms por item); as duas seções perderam o `Reveal` externo em `app/page.tsx`, que duplicaria o movimento. Verificado no browser: opacidade 0 → 0,98/0,90/0,66 a 300 ms → 1 ao final, e item fora da viewport não antecipa.
+- ✅ **Aviso do Next** `next-image-unconfigured-qualities`: `images.qualities = [75, 90]` em `next.config.ts` (75 é o padrão; 90 só nas fotos com rosto, onde o artefato aparece na pele).
+- ✅ **Aviso do Next** `missing-data-scroll-behavior` eliminado: `data-scroll-behavior="smooth"` no `<html>` declara que o scroll suave do `globals.css` é intencional (verificado navegando entre 3 rotas — zero avisos no log).
+
+Verificação: **300 testes** (eram 239) · cobertura **98,4% stmts / 93,5% branches** (era 91,5%) / 98,6% funcs / 99% lines · typecheck, lint e build ok · inspeção visual em 1440px e 390px · animações medidas no browser via CDP.
+
+### Correções da revisão (code review + interface review)
+
+Rodadas `/code-review` e `better-interface` com as skills `better-*` (que estavam ausentes do `.claude/skills/` — só o orquestrador fora instalado). Todas as medições feitas no browser via CDP, antes e depois.
+
+- ✅ **Cor — quatro tokens, alcance em todo o site.** `--color-brand-strong` nude-600 → **nude-700**: como texto de acento media 3,77:1, abaixo de AA, e isso atingia eyebrows *e todos os links de acento* (“Ver no Google Maps”, “Ver todos os empreendimentos”) em 4 rotas → agora 5,49:1. `--color-ring` deixou de apontar para `--color-brand` (2,19:1) e virou **nude-600**, o único passo do ramp que cobre 3:1 contra branco, surface-muted, navy-600 e navy-700 → 3,77:1; os dois mecanismos de foco (`outline-brand` e `ring-ring`) foram unificados em `outline-ring`. `--color-input` ganhou papel próprio (**stone-400**, 3,09:1): a borda que delimita um campo precisa de 3:1, enquanto `--color-border` segue em stone-200 para divisórias, que são estrutura. `--color-status-em-construcao` escurecido para **#976b30** (4,71:1 com texto branco, antes 3,34).
+- ✅ **A11y/layout.** Dots do carrossel passaram de 8×8 para **24×24** (WCAG 2.5.8) sem engordar o traço — o botão virou a área, a barra virou `<span>`. `#buscar` ganhou `scroll-mt-20`: a âncora cobria 17px do card de busca sob o header fixo (medido: agora 0). `/empreendimentos` ganhou um `<h2>` em `sr-only`, fechando o único salto `h1 → h3` do site. O header passa a revelar-se também no **hover** perto do topo — o teclado já tinha `focus-within`, o ponteiro não tinha equivalente.
+- ✅ **Regressão corrigida.** Os números de “Quem somos” tinham virado `<ul>` para caber o `Reveal as="li"`, perdendo o par rótulo↔valor e divergindo de `/quem-somos`, que seguia em `<dl>`. Voltaram a `<dl>`: o próprio `Reveal` carrega o estilo do cartão, porque o modelo de conteúdo de `<dl>` não admite um segundo `div` entre o grupo e `dt`/`dd`.
+- ✅ **Tipografia.** O `<br>` manual no h2 do MCMV custava uma linha extra abaixo de ~400px → `text-balance` (4 linhas → 3).
+- ✅ **Correções funcionais.** `cidade` era a única faceta sem validação: `?cidade=Niteroi` (sem acento) zerava o catálogo com o select em branco — agora é validada contra as localizações existentes e, não casando, cai fora. O catálogo ganhou **“Limpar filtros”**, sem o qual um filtro vindo da URL podia ficar sem controle na tela para desfazê-lo. O guard de “fonte ausente não aborta o lote” foi estendido ao laço de `JOBS` em `optimize-images.mjs`, que era o caminho padrão e seguia desprotegido. `syncIndexToScroll` passou a medir por `getBoundingClientRect` em vez de `offsetLeft`, que só coincidia enquanto o trilho começasse em x=0.
+- 🔔 **Não aplicado, por ser conteúdo seu:** “conquistar o seu próprio **Natus**” (seção MCMV) não fecha em português e espelha o “o seu próprio Novolar” da referência. É a copy que você enviou — registrado em CONTENT-GAPS para confirmação, não reescrito por conta própria.
+
+Verificação: **306 testes** · cobertura 98,4% stmts / **93,9% branches** / 98,7% funcs / 99% lines · typecheck, lint e build ok · contraste, área de toque, âncora e hierarquia remedidos no browser depois da mudança.
 
 ## Decisões & pendências em aberto
 - Provedor de email (FR11) — `[ASSUMPTION]` Resend, a confirmar.

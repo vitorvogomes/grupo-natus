@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "@/styles/globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -8,20 +8,19 @@ import { JsonLd, organizationSchema } from "@/features/seo/jsonLd";
 import { SITE_URL } from "@/lib/site";
 import { getDevelopmentsGroupedByStatus } from "@/content/developments";
 
-// Inter (corpo) + Fraunces (títulos/display, serifa) — identidade tipográfica
-// premium via next/font (self-hosted, font-display: swap, fallback com métricas).
+// Inter (corpo) + Outfit (títulos/display, sans geométrica) — a geometria
+// circular da Outfit ecoa o logotipo NATUS. Ambas variáveis: um arquivo por
+// família via next/font (self-hosted, font-display: swap, fallback métrico).
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });
 
-const fraunces = Fraunces({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-outfit",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -43,7 +42,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${fraunces.variable}`}>
+    // `data-scroll-behavior="smooth"` declara ao router que o scroll suave do
+    // globals.css é intencional (sem isso o Next avisa a cada navegação).
+    <html
+      lang="pt-BR"
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${outfit.variable}`}
+    >
       <body className="flex min-h-screen flex-col">
         <JsonLd data={organizationSchema()} />
         <a

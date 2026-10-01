@@ -34,7 +34,7 @@ export function WhatsAppButton({
       className={cn(
         "fixed bottom-5 right-5 z-40 inline-flex size-14 items-center justify-center rounded-full",
         "bg-status-pronto text-white shadow-lg transition-transform hover:scale-105",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className,
       )}
     >

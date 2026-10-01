@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { DevelopmentCta } from "./DevelopmentCta";
+import { DevelopmentCta, contextualMessage } from "./DevelopmentCta";
 import type { Development } from "@/types/development";
 
 const base: Development = {
@@ -14,28 +14,38 @@ const base: Development = {
   features: [],
 };
 
-describe("DevelopmentCta (FR6 contextual)", () => {
-  it("gera link de WhatsApp com o nome do empreendimento na mensagem", () => {
+describe("DevelopmentCta (FR6/FR9)", () => {
+  it("usa o título e o subtítulo pedidos pelo cliente", () => {
+    render(<DevelopmentCta development={base} />);
+    expect(
+      screen.getByRole("heading", { name: "Quer saber mais?" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/consultor da Natus/i)).toBeInTheDocument();
+  });
+
+  it("traz o formulário de interesse na mesma faixa", () => {
+    render(<DevelopmentCta development={base} />);
+    expect(screen.getByLabelText(/nome/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Quero saber mais!" }),
+    ).toBeInTheDocument();
+  });
+
+  it("oferece o WhatsApp com mensagem contextual", () => {
     render(<DevelopmentCta development={base} />);
     const link = screen.getByRole("link", { name: /whatsapp/i });
-    expect(link.getAttribute("href")).toContain("https://wa.me/");
-    expect(decodeURIComponent(link.getAttribute("href") ?? "")).toContain(
+    expect(link).toHaveAttribute("href", expect.stringContaining("https://wa.me/"));
+    expect(decodeURIComponent(link.getAttribute("href")!)).toContain(
       "Follow Savassi",
     );
   });
 
-  it("usa a mensagem contextual customizada quando informada", () => {
-    render(
-      <DevelopmentCta
-        development={{
-          ...base,
-          contact: { whatsappMessage: "Quero o Follow Savassi na planta" },
-        }}
-      />,
-    );
-    const link = screen.getByRole("link", { name: /whatsapp/i });
-    expect(decodeURIComponent(link.getAttribute("href") ?? "")).toContain(
-      "Quero o Follow Savassi na planta",
-    );
+  it("respeita a mensagem de WhatsApp cadastrada no empreendimento", () => {
+    expect(
+      contextualMessage({
+        ...base,
+        contact: { whatsappMessage: "Mensagem própria" },
+      }),
+    ).toBe("Mensagem própria");
   });
 });
