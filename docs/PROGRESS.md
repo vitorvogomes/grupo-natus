@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-09-30 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Home v2** (feedback do cliente sobre a v1) — **home concluída**; a seguir, página de empreendimento e serviços de engenharia · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-01 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v2 (feedback do cliente)** — Home ✅ · **Página do empreendimento, Quem Somos e Engenharia ✅** · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -27,10 +27,10 @@
 - ✅ 3.1 Rota dinâmica `/empreendimentos/[slug]` (generateStaticParams + 404) — FR3
 - ✅ 3.2 Galeria de imagens (categorias, teclado, next/image) — FR4
 - ✅ 3.3 Características, descrição e status — FR4
-- ✅ 3.4 Localização via Google Maps (embed/link, sem API key) — FR7
+- ✅ 3.4 Localização via Google Maps (embed/link, sem API key; a revisão v2 acrescentou o caminho opcional com chave + pin da marca) — FR7
 - ✅ 3.5 CTA contextualizado (WhatsApp com nome do empreendimento) — FR6
 - ✅ 3.6 Metadata de SEO por empreendimento — FR14
-- ✅ 3.7 Template validado **[Gate B aprovada]** — hero full-bleed, sub-nav âncora, visão geral, galeria com abas, accordion de diferenciais; 11 páginas via SSG
+- ✅ 3.7 Template validado **[Gate B aprovada]** — hero full-bleed, sub-nav âncora, visão geral, galeria, accordion de diferenciais; **12** páginas via SSG (template reorganizado na revisão v2)
 
 ## Epic 4 — Evolução das Obras  ✅ 3/3
 - ✅ 4.1 Modelo `ConstructionProgress` + helpers (sortedStages/clamp/formatDate)
@@ -53,6 +53,72 @@
 - ✅ 7.2 Performance: RSC padrão, `next/image` em todo lugar, tudo estático/SSG — NFR1 (validar Lighthouse local; comprimir fontes de img)
 - ✅ 7.3 Responsividade & Acessibilidade: skip-link, landmarks, labels, alt obrigatório, foco/teclado — NFR2/3
 - ✅ 7.4 Motion global: `prefers-reduced-motion` neutraliza transições/scroll — NFR4
+
+## Revisão v2 — Parte 2: empreendimento, Quem Somos, Engenharia ✅ (2026-10-01)
+
+Continuação da Home v2, com o feedback do cliente sobre a página do empreendimento.
+
+**Página do empreendimento** — nova ordem: descrição → galeria → o que oferece →
+localização → estágio de obra → CTA → MCMV → explore empreendimentos.
+
+- **Três formas, uma só página.** O status diz quais seções fazem sentido (obra
+  só em "em construção") e o dado presente diz quais aparecem. Resultado: Follow
+  Savassi completo; os 6 com material, reduzido; os 5 lançamentos sem imagem,
+  um painel `DevelopmentComingSoon` no lugar de uma sequência de "em breve".
+  Não há três templates — há uma composição condicional em `page.tsx`.
+- **Galeria reescrita** (`Gallery.tsx`): palco + régua de miniaturas que sempre
+  cabe (a ativa cresce, as outras encolhem), contador `3 / 12`, setas sobre o
+  palco, clique abre o lightbox existente. Saiu o `FeaturedImage` com hover-zoom.
+  Piso de `min-w-6` nas miniaturas por causa do alvo de 24×24 (WCAG 2.5.8) — a
+  referência usa lascas de ~10 px. Reaproveitada em `/engenharia`.
+- **Categorias de imagem simplificadas**: `externa`+`apartamento` → `imagens`;
+  ficam `imagens · planta · obra`. 52/5/5 das 62 imagens. Ordem das abas vem de
+  `DEVELOPMENT_IMAGE_KINDS`, não da ordem de aparição no dado.
+- **Descrição ao lado da imagem**, sem checks (`DevelopmentOverview`), e o
+  `<h2>` passou a ser o nome do empreendimento, não "Cidade, Estado".
+  `DevelopmentDetails` foi apagado: a descrição subiu para a visão geral e as
+  "Características" viraram o primeiro grupo do accordion.
+- **"O que o X oferece"**: accordion com ícone lucide por categoria + foto ao
+  lado, primeiro grupo aberto. Os emojis do texto de origem viraram ícones.
+- **Localização**: painel navy com endereço, texto de entorno e botões Google
+  Maps + **Waze** (`buildWazeLink`, novo em `lib/maps.ts`), com o mapa sangrado
+  abaixo. **Era a primeira vez que o mapa renderizava** — nenhum empreendimento
+  tinha endereço até agora.
+- **`DevelopmentMap`** (novo): sem chave usa o embed público do Google (caminho
+  atual); com `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` + `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`
+  carrega a JS API e põe um `AdvancedMarkerElement` com o pin da Natus. O embed
+  público **não aceita marcador customizado** — daí os dois caminhos.
+- **Pin e favicon**: `public/brand/pin-natus.png` compõe o símbolo oficial
+  (`img/LOGOS/Favicon`) sobre moldura navy; `app/icon.png` dá ao site o favicon
+  que ele não tinha. Ambos gerados por `npm run optimize:images brand`.
+- **Estágio de obra** em duas colunas: etapas oficiais à esquerda, galeria do
+  canteiro à direita. 🔔 O Follow Savassi **não tem foto de obra** — cai no
+  painel de "em breve" (ver CONTENT-GAPS).
+- **CTA compacto**: uma faixa com "Quer saber mais?" + Nome/Telefone/E-mail +
+  "Quero saber mais!". O campo "Empreendimento" saiu da tela e virou contexto do
+  `LeadForm` (segue no e-mail do lead).
+- **`ExploreDevelopments`** (novo): carrossel de saída, sem o empreendimento
+  aberto. Deliberadamente mais simples que o `FeaturedDevelopments` da Home —
+  mexer naquele arriscaria regredir uma home já aprovada.
+- **Sub-nav âncora** passou a receber as seções por prop e lista só as que a
+  página renderizou; antes era fixa e apontava para âncoras inexistentes.
+- **MCMV por enquadramento**: novo campo `mcmv`, hoje em Solar Manilha, Sunset
+  Ville e Royal Ville. A marca federal não aparece em alto luxo nem na Savassi.
+
+**Quem Somos**: seção "Nossa história" removida (era o único TODO visível).
+
+**Engenharia**: cada obra passou a ter a galeria da página do empreendimento, no
+lugar do grid de imagens. 3 fotos que estavam em `img/` sem nunca chegar ao site
+entraram no pipeline (galerias: 7 · 2 · 3). O hero deixou de repetir a capa da
+primeira obra.
+
+**Limpeza de modelo**: saíram `highlights` (virou a `description` do Residenziale,
+que era o único a usá-lo) e `presentationUrl` (inalcançável a partir de
+`fromSeed`). `Accordion` ganhou `defaultOpen` e título como `ReactNode`.
+
+**Gate:** 343 testes · cobertura 95,7% stmts · 92,9% branches · build 26 páginas.
+
+---
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 - ⬜ 8.1 Inicializar Supabase local — NFR5
@@ -82,17 +148,17 @@
 - ✅ Rebuild da seção do empreendimento (Overview/Details): remove duplicação status+localização; características em grid de cards; placeholder discreto p/ descrição TODO
 - ✅ Progresso → **Radix Progress** (somente leitura): geral em card destaque + etapas em grid; fill em gradiente de marca (sliders descartados; referência usa barras)
 - ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
-- ✅ Galeria — **imagem em destaque + hover-zoom (zoom-and-pan seguindo o cursor, estilo 21st.dev)** + grade das demais + lightbox (gated por `prefers-reduced-motion`/pointer)
+- ✅ Galeria — imagem em destaque + hover-zoom + grade das demais + lightbox — **substituída na revisão v2** por palco + régua de miniaturas (ver o bloco da Parte 2)
 - ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
 - ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
 - ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB. 🔔 Faltam 5 lançamentos sem foto (assets da empresa); Denver com assets fracos
 - ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
-- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras — inspirado no site atual). `DevelopmentImageKind` recategorizado; imagens re-tagueadas + fotos de **obra** (Viver Mais) e interiores extras (Follow Savassi)
+- ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras). **Simplificada na revisão v2** para `imagens · planta · obra` — Externa e Apartamento viravam duas abas quase idênticas
 - ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
 - ✅ **Conteúdo institucional (Fase C2)** — Quem Somos + Engenharia reconstruídas com copy verbatim do site atual + material da empresa; 11 imagens institucionais otimizadas (`public/quem-somos/*`, `public/engenharia/*`, keyword `institucional` no pipeline); Home `InstitutionalIntro` grounded. Lacunas restantes rotuladas TODO (ver `docs/CONTENT-GAPS.md §3`)
 - ✅ Verificação: 232 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
-- 🔔 `interface-review` — execução formal continua **manual** (`/interface-review`; skill com `disable-model-invocation`). Auto-revisão aplicada; os `better-*` de domínio não estão instalados
+- ✅ `interface-review` — skills `better-*` de domínio **instaladas** (ver `skills-lock.json`) e a revisão formal foi executada na Home v2 e na revisão v2 (ver blocos abaixo)
 
 ---
 

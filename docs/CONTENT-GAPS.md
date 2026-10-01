@@ -33,6 +33,35 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 
 > **12º empreendimento** confirmado pelo cliente (portfólio do site atual: natusgrupo.com.br/portfolio-item/residenziale-colonnello-figueiredo). Metadata factual cadastrada; **imagens** (pasta `img/Residenziale Colonnello Figueiredo …`, inclui fachadas, coberturas e `PLANTA-3-QUARTOS`) a otimizar/wire na replicação. Se a obra estiver entregue, migrar status → "Pronto".
 
+### Conteúdo da página do empreendimento (Parte 2 — 2026-10-01)
+
+A página passou a ter 3 formas, decididas pelo dado presente (ver `CLAUDE.md`).
+Hoje **só o Follow Savassi** chega ao layout completo. O que falta para os demais:
+
+- [ ] **Descrição** — 10 dos 12 seguem em `TODO: CONTENT REQUIRED`. Têm a sua:
+  Follow Savassi (enviada pelo cliente em 2026-10-01) e Residenziale (os três
+  itens que antes viviam em `highlights`). Sem descrição, a seção de visão geral
+  mostra o resumo factual no lugar.
+- [ ] **Diferenciais agrupados** (`amenities`, o accordion "O que o X oferece") —
+  só o Follow Savassi tem. Nos demais a seção simplesmente não aparece.
+- [ ] **Endereço** — só o Follow Savassi tem (Av. Getúlio Vargas, 1.676 — Savassi,
+  com lat/lng extraídas do link enviado). **Sem endereço o mapa não renderiza**
+  em nenhum dos outros 11; a seção degrada para cidade/UF + botões de rota.
+- [ ] **Texto de entorno/bairro** (`location.note`) — o do Follow saiu da frase
+  que o próprio cliente escreveu sobre a Savassi. Os outros 11 não têm fonte.
+- [ ] 🔔 **Fotos de obra do Follow Savassi** — **não existe nenhuma**. As 14
+  imagens de origem são todas renders (fachadas, rooftop, apartamentos, hall,
+  academia). A galeria ao lado do Estágio de Obra nasce vazia justamente na
+  página que serve de vitrine. Quem tem foto de canteiro é o **Viver Mais**
+  (4 fotos), que está como "Pronto". Enviar o registro do canteiro.
+- [ ] **Chaves do Google Maps** — `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` e
+  `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` (o Map ID é exigência do marcador avançado),
+  com restrição por domínio. Sem elas o mapa usa o embed público, que **não
+  aceita pin personalizado** — ele desenha o pin vermelho do Google. Com elas,
+  entra o marcador com o "N" da Natus (`public/brand/pin-natus.png`, composto a
+  partir do símbolo oficial em `img/LOGOS/Favicon/`). Você gera as chaves; eu
+  edito o `.env` sem exibir valor.
+
 ### Tipologia (faceta de busca da Home)
 
 A busca da Home filtra por **Status · Cidade · Tipo de imóvel**. O tipo foi preenchido **só onde há evidência no próprio material** (tipologia declarada, plantas ou alt das imagens). Faltam 4 — cada um é uma resposta de uma palavra:
@@ -59,12 +88,14 @@ Enquanto não confirmados, esses 4 **não aparecem** quando o filtro de tipo est
 - [x] **Home**: seção `AboutNatus` com a copy institucional **fornecida pelo cliente** (2026-09-30) — "Nascemos em 2016…" + "É assim que a essência do novo morar sai do papel" — mantendo a menção a ALIATTO/OASI.
 - [x] **Números institucionais confirmados pelo cliente** (2026-09-30): **10 anos** de experiência, **100 mil m²** de área construída, **+1.500 unidades** entregues. Exibidos na Home (`features/home/AboutNatus.tsx`) e em `/quem-somos` — **manter os dois em sincronia**. O "10" é literal, não calculado: revisar em 2027.
 - [x] **Ano de fundação (2016) confirmado pelo cliente** na copy enviada.
-- [ ] **TODO Quem Somos**: descrição individual de cada empresa (site só as nomeia); **história/trajetória completa** (a copy da Home dá o parágrafo de abertura, mas a página pede mais).
+- [x] **Seção "Nossa história" removida** de `/quem-somos` (2026-10-01, a pedido do cliente): era o único `TODO: CONTENT REQUIRED` visível da página. A narrativa de abertura continua na Home (`AboutNatus`, "Nascemos em 2016…"). Se a trajetória completa chegar, a seção volta com conteúdo.
+- [ ] **TODO Quem Somos**: descrição individual de cada empresa (o site só as nomeia).
 - [ ] **TODO Engenharia**: copy descritiva de cada obra (site só tem o título "Obra por administração"); **capacidade técnica** (equipe/certificações/números).
 - [ ] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): confirmar escopo/validade do certificado com o cliente antes de destacar como vigente.
 
 ## 4. Conversão (Epic 5)
 - [ ] **Frase da seção MCMV**: "o sonho de conquistar o seu próprio **Natus** fica mais próximo" (texto enviado por você) não fecha gramaticalmente — "conquistar um Natus" não se diz — e repete a construção "o seu próprio Novolar" da referência. Sugestão: "o seu próprio lar". Não alterei por ser copy sua.
+- [ ] **Enquadramento MCMV por empreendimento** (novo campo `mcmv`): marcados **Solar Manilha**, **Sunset Ville** e **Royal Ville** — a evidência é a palavra "MCMV" no próprio destaque de cada um, **não um documento**. A seção do programa só aparece nas páginas desses três; Follow Savassi e Gutierrez ficam de fora de propósito. Confirmar a lista.
 - [ ] **Marca Minha Casa Minha Vida**: confirmar o **direito de uso** da marca federal no site e **quais empreendimentos estão de fato enquadrados** no programa. A seção da Home exibe a marca e um claim sobre taxas — ambos sugerem credenciamento. **Os rótulos dos 3 benefícios foram reescritos** (os originais eram idênticos aos da referência Novolar): o claim do cliente "As menores taxas de juros" virou "As menores taxas do mercado **para quem se enquadra** no Minha Casa, Minha Vida", que qualifica a afirmação em vez de deixá-la absoluta. Confirmar a redação com a empresa.
 - [ ] **Imagens do Solar Manilha**: é o maior empreendimento MCMV do portfólio (368 un.) e **não tem nenhuma imagem**, por isso ficou fora do carrossel de destaques da Home (entrou o Torres da Lagoa). Com os renders, volta trocando 1 linha em `FEATURED_SLUGS` (`content/developments/index.ts`).
 - [ ] **Negocie seu Terreno**: confirmar os **campos exatos** do formulário (além de nome/contato/localização/área/tipo/observações).
@@ -79,7 +110,10 @@ Enquanto não confirmados, esses 4 **não aparecem** quando o filtro de tipo est
 - [x] **Home v2**: `public/home/familia-mcmv.webp` (3,1 MB → 555 KB, lado maior 2560) e `public/home/minha-casa-minha-vida-logo.png` (logo oficial do programa, fornecido pelo cliente). Originais versionados em `img/home/`.
 - [x] **Hero da Home**: fachada noturna do Follow Savassi (render retrato 3071×3840 num hero em paisagem). O enquadramento vem do `object-position: center 75%` em `features/home/Hero.tsx`, que fixa a faixa visível na entrada; centralizado mostraria só parede. Trocar a imagem = 1 linha em `SINGLES` (`scripts/optimize-images.mjs`).
 - [ ] **Vídeo/GIF para o hero**: o cliente pediu "imagem/gif em destaque" e **não há nenhum asset animado no repo** (zero `.mp4/.webm/.gif`). Enviar um MP4/WebM de 6–10 s (mudo, em loop) e o hero passa a `<video>` com `poster` — o layout já está pronto para isso.
-- [ ] Vídeos/panorâmicas, se houver.
+- [x] **Engenharia**: 3 fotos que estavam em `img/` sem nunca chegar ao site entraram no pipeline (2 da casa de alto padrão, 1 do interior do galpão). As galerias por obra passaram a 7 · 2 · 3.
+- [ ] **Galpão/condomínio**: 2 e 3 fotos é pouco para uma galeria — enviar mais se houver.
+- [ ] **Favicon**: o site não tinha nenhum. Agora usa o símbolo oficial (`app/icon.png`, gerado de `img/LOGOS/Favicon/favicon-natus-beige.png` sobre o navy da marca).
+- [ ] Vídeos/panorâmicas, se houver. A galeria já prevê uma aba de vídeo — falta o arquivo.
 
 ## 6. Navegação — Header/Footer (B5)
 - [ ] **Redes sociais** do Grupo Natus (Instagram / Facebook / LinkedIn / YouTube): handles e URLs — **NÃO constam** no site atual.
