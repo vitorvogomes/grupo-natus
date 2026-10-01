@@ -33,6 +33,17 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 
 > **12º empreendimento** confirmado pelo cliente (portfólio do site atual: natusgrupo.com.br/portfolio-item/residenziale-colonnello-figueiredo). Metadata factual cadastrada; **imagens** (pasta `img/Residenziale Colonnello Figueiredo …`, inclui fachadas, coberturas e `PLANTA-3-QUARTOS`) a otimizar/wire na replicação. Se a obra estiver entregue, migrar status → "Pronto".
 
+### Tipologia (faceta de busca da Home)
+
+A busca da Home filtra por **Status · Cidade · Tipo de imóvel**. O tipo foi preenchido **só onde há evidência no próprio material** (tipologia declarada, plantas ou alt das imagens). Faltam 4 — cada um é uma resposta de uma palavra:
+
+- [ ] **Viver Mais** (Itaboraí/RJ) — só há perspectivas e fotos de obra. Apartamento?
+- [ ] **Gutierrez** (BH/MG) — "20 un. alto luxo" não diz o produto. Apartamento?
+- [ ] **Solar Manilha** (Itaboraí/RJ) — "368 un. MCMV". Apartamento ou casa?
+- [ ] **Sunset Ville Residence** (BH/MG) — "72 un. MCMV". Apartamento ou casa?
+
+Enquanto não confirmados, esses 4 **não aparecem** quando o filtro de tipo está ativo (melhor sumir do que aparecer como palpite). Confirmados: Residenziale, Torres da Lagoa, Follow Savassi, Golden Ville e Denver = apartamento; One Studios = studio; Vista do Lago = lote; Royal Ville = casa.
+
 ## 2. Progresso das obras (Epic 4)
 - [x] **Follow Savassi**: progresso real do site oficial (Terraplanagem 100%, demais 0%, Total Construído 0% — obra recém-iniciada). Sem data no site (`updatedAt` omitido).
 - [ ] **Golden Ville**: o site **não** expõe andamento — % geral/etapas/data pendentes da empresa.
@@ -45,12 +56,17 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 
 - [x] **Quem Somos** (`/quem-somos`): posicionamento (holding · segmento médio econômico e alto luxo · transparência/ética/lealdade — copy verbatim do site), empresas do grupo (**ALIATTO Incorporadora** + **OASI Engenharia**), valores, **selo ISO 9001:2015** (imagem `public/quem-somos/iso-9001.webp`), hero (parede da recepção).
 - [x] **Serviços de Engenharia** (`/engenharia`): OASI Engenharia · **obras por administração** (3 categorias reais do site: **Casa de alto padrão (Alphaville)**, **Condomínio (Avenida)**, **Galpão comercial**) com fotos reais otimizadas em `public/engenharia/`.
-- [x] **Home**: `InstitutionalIntro` com o posicionamento real (holding + ALIATTO/OASI).
-- [ ] **TODO Quem Somos**: descrição individual de cada empresa (site só as nomeia); **história/trajetória** (site não tem — registros públicos citam Aliatto Emp. Imob. Ltda, CNPJ 24.353.357/0001-11, fundada 2016, **não confirmar como oficial sem o cliente**); **números** (anos de mercado, nº de empreendimentos/unidades) — permanecem `TODO: CONTENT REQUIRED`.
+- [x] **Home**: seção `AboutNatus` com a copy institucional **fornecida pelo cliente** (2026-09-30) — "Nascemos em 2016…" + "É assim que a essência do novo morar sai do papel" — mantendo a menção a ALIATTO/OASI.
+- [x] **Números institucionais confirmados pelo cliente** (2026-09-30): **10 anos** de experiência, **100 mil m²** de área construída, **+1.500 unidades** entregues. Exibidos na Home (`features/home/AboutNatus.tsx`) e em `/quem-somos` — **manter os dois em sincronia**. O "10" é literal, não calculado: revisar em 2027.
+- [x] **Ano de fundação (2016) confirmado pelo cliente** na copy enviada.
+- [ ] **TODO Quem Somos**: descrição individual de cada empresa (site só as nomeia); **história/trajetória completa** (a copy da Home dá o parágrafo de abertura, mas a página pede mais).
 - [ ] **TODO Engenharia**: copy descritiva de cada obra (site só tem o título "Obra por administração"); **capacidade técnica** (equipe/certificações/números).
 - [ ] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): confirmar escopo/validade do certificado com o cliente antes de destacar como vigente.
 
 ## 4. Conversão (Epic 5)
+- [ ] **Frase da seção MCMV**: "o sonho de conquistar o seu próprio **Natus** fica mais próximo" (texto enviado por você) não fecha gramaticalmente — "conquistar um Natus" não se diz — e repete a construção "o seu próprio Novolar" da referência. Sugestão: "o seu próprio lar". Não alterei por ser copy sua.
+- [ ] **Marca Minha Casa Minha Vida**: confirmar o **direito de uso** da marca federal no site e **quais empreendimentos estão de fato enquadrados** no programa. A seção da Home exibe a marca e um claim sobre taxas — ambos sugerem credenciamento. **Os rótulos dos 3 benefícios foram reescritos** (os originais eram idênticos aos da referência Novolar): o claim do cliente "As menores taxas de juros" virou "As menores taxas do mercado **para quem se enquadra** no Minha Casa, Minha Vida", que qualifica a afirmação em vez de deixá-la absoluta. Confirmar a redação com a empresa.
+- [ ] **Imagens do Solar Manilha**: é o maior empreendimento MCMV do portfólio (368 un.) e **não tem nenhuma imagem**, por isso ficou fora do carrossel de destaques da Home (entrou o Torres da Lagoa). Com os renders, volta trocando 1 linha em `FEATURED_SLUGS` (`content/developments/index.ts`).
 - [ ] **Negocie seu Terreno**: confirmar os **campos exatos** do formulário (além de nome/contato/localização/área/tipo/observações).
 - [ ] **Envio de e-mail**: definir **provedor** (ex.: Resend) e para **qual caixa** os leads/contatos vão. O valor do secret será fornecido por você e eu edito `.env` sem exibi-lo.
 
@@ -60,6 +76,9 @@ Para **cada** um dos empreendimentos abaixo preciso de:
 - [x] Replicação concluída: **7 empreendimentos com imagens reais** otimizadas (Follow Savassi, Torres da Lagoa, Viver Mais, Residencial Denver, Gutierrez, Golden Ville, Residenziale) — total `public/empreendimentos/` ~15 MB (53 `.webp`). Mapeamento no `JOBS` de `scripts/optimize-images.mjs`. Identidade do Residenziale **confirmada pelo cliente** (12º empreendimento).
 - [ ] **Sem foto ainda** (5 lançamentos): One Studios, Royal Ville, Solar Manilha, Sunset Ville, Vista do Lago — pendem assets da empresa.
 - [ ] Revisar qualidade dos assets do **Residencial Denver** (massings simples/baixa resolução na origem) — substituir por renders/fotos melhores se a empresa fornecer.
+- [x] **Home v2**: `public/home/familia-mcmv.webp` (3,1 MB → 555 KB, lado maior 2560) e `public/home/minha-casa-minha-vida-logo.png` (logo oficial do programa, fornecido pelo cliente). Originais versionados em `img/home/`.
+- [x] **Hero da Home**: fachada noturna do Follow Savassi (render retrato 3071×3840 num hero em paisagem). O enquadramento vem do `object-position: center 75%` em `features/home/Hero.tsx`, que fixa a faixa visível na entrada; centralizado mostraria só parede. Trocar a imagem = 1 linha em `SINGLES` (`scripts/optimize-images.mjs`).
+- [ ] **Vídeo/GIF para o hero**: o cliente pediu "imagem/gif em destaque" e **não há nenhum asset animado no repo** (zero `.mp4/.webm/.gif`). Enviar um MP4/WebM de 6–10 s (mudo, em loop) e o hero passa a `<video>` com `poster` — o layout já está pronto para isso.
 - [ ] Vídeos/panorâmicas, se houver.
 
 ## 6. Navegação — Header/Footer (B5)
