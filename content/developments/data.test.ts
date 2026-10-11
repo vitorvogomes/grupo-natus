@@ -5,14 +5,11 @@ import {
   DEVELOPMENT_STATUSES,
 } from "@/types/development";
 
-const COM_DESCRICAO = new Set([
-  "follow-savassi",
-  "residenziale-colonnello-figueiredo",
-]);
 
 describe("Seed dos empreendimentos", () => {
-  it("cadastra os 12 empreendimentos ativos", () => {
-    expect(developments).toHaveLength(12);
+  it("cadastra os 11 empreendimentos do portfólio (Vista do Lago saiu)", () => {
+    expect(developments).toHaveLength(11);
+    expect(developments.map((d) => d.slug)).not.toContain("vista-do-lago");
   });
 
   it("cada empreendimento tem nome, slug kebab-case, cidade/UF e status válido", () => {
@@ -25,17 +22,62 @@ describe("Seed dos empreendimentos", () => {
     }
   });
 
-  it("marca descrição sem fonte confiável como TODO: CONTENT REQUIRED", () => {
+  it("só o breve lançamento fica sem descrição (TODO rotulado, nunca inventado)", () => {
     for (const dev of developments) {
-      // Copy de marketing não é inventada: fica TODO até a empresa fornecer.
-      // Dois já têm a sua: o Follow (enviada pelo cliente) e o Residenziale
-      // (os três itens que antes viviam em `highlights`).
-      if (!COM_DESCRICAO.has(dev.slug)) {
+      if (dev.status === "breve_lancamento") {
         expect(dev.description).toMatch(/TODO: CONTENT REQUIRED/);
+      } else {
+        expect(dev.description).not.toMatch(/TODO/);
       }
       // Resumo é sempre preenchido (factual ou placeholder rotulado).
       expect(dev.summary.length).toBeGreaterThan(0);
     }
+  });
+
+  it("breve lançamento não tem imagem própria (seção mínima com a foto padrão)", () => {
+    for (const dev of developments.filter((d) => d.status === "breve_lancamento")) {
+      expect(dev.images).toEqual([]);
+    }
+  });
+
+  it("100% vendido só existe sobre 'pronto para morar' — e todos os prontos estão vendidos", () => {
+    for (const dev of developments) {
+      if (dev.soldOut) expect(dev.status).toBe("pronto");
+      if (dev.status === "pronto") expect(dev.soldOut).toBe(true);
+    }
+  });
+
+  it("todo empreendimento com página completa ou reduzida tem coordenadas para o mapa", () => {
+    for (const dev of developments.filter((d) => d.status !== "breve_lancamento")) {
+      expect(dev.location.lat).toBeTypeOf("number");
+      expect(dev.location.lng).toBeTypeOf("number");
+      expect(dev.location.googleMapsUrl).toMatch(/^https:\/\//);
+    }
+  });
+
+  it("progresso de obra só em lançamento/em construção", () => {
+    for (const dev of developments) {
+      if (!dev.progress) continue;
+      expect(["lancamento", "em_construcao"]).toContain(dev.status);
+    }
+  });
+
+  it("usa os percentuais informados pelo cliente", () => {
+    const pct = (slug: string) => developments.find((d) => d.slug === slug)!.progress!;
+    for (const slug of ["follow-savassi", "solar-manilha"]) {
+      expect(pct(slug).overallPercentage).toBe(70);
+      expect(Object.fromEntries(pct(slug).stages.map((s) => [s.name, s.percentage]))).toEqual({
+        Fundação: 99,
+        Estrutura: 100,
+        Alvenaria: 90,
+        "Acabamento interno": 60,
+        "Acabamento externo": 50,
+      });
+    }
+    expect(pct("golden-ville-residence")).toEqual({
+      overallPercentage: 7,
+      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+    });
   });
 
   it("só classifica imagens nas três categorias da galeria", () => {
@@ -71,17 +113,56 @@ describe("Seed dos empreendimentos", () => {
     ]);
   });
 
-  it("só marca MCMV onde o próprio material declara o programa", () => {
+  it("só marca MCMV onde o cliente declara o programa", () => {
     const mcmv = developments.filter((d) => d.mcmv).map((d) => d.slug);
-    expect(mcmv).toEqual([
-      "solar-manilha",
-      "sunset-ville-residence",
-      "royal-ville-residence",
-    ]);
+    expect(mcmv.sort()).toEqual(
+      [
+        "golden-ville-residence",
+        "royal-ville-residence",
+        "solar-manilha",
+        "sunset-ville-residence",
+        "torres-da-lagoa",
+        "viver-mais",
+      ].sort(),
+    );
     // Alto luxo e Savassi ficam de fora: exibir a marca federal neles sugeriria
     // um credenciamento que não existe.
     const fs = developments.find((d) => d.slug === "follow-savassi")!;
     expect(fs.mcmv).toBeUndefined();
+  });
+
+  it("Solar Manilha tem a página completa do lançamento", () => {
+    const sm = developments.find((d) => d.slug === "solar-manilha")!;
+    expect(sm.status).toBe("lancamento");
+    expect(sm.location.neighborhood).toBe("Manilha");
+    expect(sm.images.length).toBeGreaterThan(20);
+    expect(sm.images.some((i) => i.kind === "planta")).toBe(true);
+    // Capa escolhida pelo cliente: a implantação (render aéreo, não planta).
+    expect(sm.images[0]).toMatchObject({
+      src: "/empreendimentos/solar-manilha/implantacao.webp",
+      kind: "imagens",
+    });
+    expect(sm.amenities?.map((a) => a.category)).toEqual([
+      "Características",
+      "Área de lazer",
+      "Comodidades",
+      "Segurança",
+    ]);
+  });
+
+  it("a imagem do 'O que oferece', quando escolhida, é uma das imagens do empreendimento", () => {
+    for (const dev of developments.filter((d) => d.amenitiesImage)) {
+      expect(dev.images.map((i) => i.src)).toContain(dev.amenitiesImage);
+    }
+  });
+
+  it("toda imagem do seed tem dimensões do manifesto (rode o optimize:images ao trocar imagens)", () => {
+    for (const dev of developments) {
+      for (const img of dev.images) {
+        expect(img.width, img.src).toBeGreaterThan(0);
+        expect(img.height, img.src).toBeGreaterThan(0);
+      }
+    }
   });
 
   it("inclui os empreendimentos-chave conhecidos", () => {

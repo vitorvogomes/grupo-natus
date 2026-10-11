@@ -59,11 +59,13 @@
   --color-border: var(--color-stone-200);
 
   /* ---- Status de empreendimento (DevelopmentStatus) ---- */
-  --color-status-lancamento: var(--color-navy-500);
-  --color-status-em-construcao: #976b30; /* âmbar quente; escurecido p/ 4,71:1 com texto branco (AA) */
+  /* Selos de status são neutros (components/ui/Badge); estes dois tokens
+   * servem o botão do WhatsApp e a faixa "100% vendido". */
   --color-status-pronto: #4f7a52; /* verde sóbrio */
-  /* Erro de formulário — vermelho acessível (≈6.3:1 em branco); NÃO reusar o
-   * âmbar de "em construção" (âmbar lê como aviso e reprova contraste). */
+  /* Faixa "100% vendido" (não é status: marca sobre "pronto"). */
+  --color-status-vendido: var(--color-navy-700);
+  /* Erro de formulário — vermelho acessível (≈6.3:1 em branco); não usar âmbar
+   * (lê como aviso e reprova contraste com texto branco). */
   --color-status-error: #b3261e;
 
   /* ---- Ponte semântica shadcn/ui — mapeada 100% na marca (sem dark mode).

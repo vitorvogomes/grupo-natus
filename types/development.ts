@@ -3,10 +3,16 @@
  * Shape canônico: PRD §4. Fonte de verdade estática em content/developments.
  */
 
+/**
+ * Status do portfólio. A ordem é a prioridade de exibição: lançamentos são os
+ * destaques (página completa), "breve lançamento" é a fase embrionária (seção
+ * mínima). "100% vendido" não é status — é a marca `soldOut` sobre "pronto".
+ */
 export const DEVELOPMENT_STATUSES = [
   "lancamento",
   "em_construcao",
   "pronto",
+  "breve_lancamento",
 ] as const;
 
 export type DevelopmentStatus = (typeof DEVELOPMENT_STATUSES)[number];
@@ -34,22 +40,20 @@ export const PROPERTY_TYPE_LABELS: Record<PropertyType, string> = {
 
 type StatusMeta = {
   readonly label: string;
-  /** Classe Tailwind de fundo derivada dos tokens de status (AD-7). */
-  readonly badgeClassName: string;
 };
 
 export const STATUS_META: Record<DevelopmentStatus, StatusMeta> = {
   lancamento: {
     label: "Lançamento",
-    badgeClassName: "bg-status-lancamento text-white",
   },
   em_construcao: {
     label: "Em construção",
-    badgeClassName: "bg-status-em-construcao text-white",
   },
   pronto: {
     label: "Pronto para morar",
-    badgeClassName: "bg-status-pronto text-white",
+  },
+  breve_lancamento: {
+    label: "Breve lançamento",
   },
 };
 
@@ -77,6 +81,9 @@ export type DevelopmentImage = {
   src: string;
   alt: string;
   kind?: DevelopmentImageKind;
+  /** Dimensões do arquivo (manifesto do pipeline) — usadas no `sizes`. */
+  width?: number;
+  height?: number;
 };
 
 export type DevelopmentFeature = {
@@ -87,6 +94,8 @@ export type DevelopmentFeature = {
 export type DevelopmentLocation = {
   city: string;
   state: string;
+  /** Bairro — compõe o título do resumo ("Bairro - Cidade"). */
+  neighborhood?: string;
   address?: string;
   lat?: number;
   lng?: number;
@@ -129,6 +138,11 @@ export type Development = {
    * sugere credenciamento que não existe.
    */
   mcmv?: boolean;
+  /**
+   * 100% vendido. Só faz sentido em "pronto" (o teste de conteúdo garante):
+   * vira uma faixa no card (`SoldOutBand`), não um badge a mais.
+   */
+  soldOut?: boolean;
   /** Tipologia curta para o hero (ex.: "2 e 3 quartos"). */
   tagline?: string;
   summary: string;
@@ -137,6 +151,11 @@ export type Development = {
   features: DevelopmentFeature[];
   /** Diferenciais agrupados por categoria (accordion). */
   amenities?: DevelopmentAmenityGroup[];
+  /**
+   * `src` da imagem ao lado do accordion (uma de `images`). Ausente = a
+   * terceira imagem, para nenhuma foto repetir na rolagem.
+   */
+  amenitiesImage?: string;
   /** URL de vídeo de apresentação ("assista ao vídeo"). */
   videoUrl?: string;
   progress?: ConstructionProgress;

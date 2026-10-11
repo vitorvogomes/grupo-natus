@@ -7,11 +7,12 @@ import {
 } from "./development";
 
 describe("DevelopmentStatus", () => {
-  it("lista os três status na ordem do funil", () => {
+  it("lista os quatro status na ordem de prioridade do portfólio", () => {
     expect(DEVELOPMENT_STATUSES).toEqual([
       "lancamento",
       "em_construcao",
       "pronto",
+      "breve_lancamento",
     ]);
   });
 
@@ -19,6 +20,7 @@ describe("DevelopmentStatus", () => {
     expect(STATUS_META.lancamento.label).toBe("Lançamento");
     expect(STATUS_META.em_construcao.label).toBe("Em construção");
     expect(STATUS_META.pronto.label).toBe("Pronto para morar");
+    expect(STATUS_META.breve_lancamento.label).toBe("Breve lançamento");
   });
 });
 

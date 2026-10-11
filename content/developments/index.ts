@@ -1,5 +1,5 @@
-import type { Development, DevelopmentStatus } from "@/types/development";
-import { DEVELOPMENT_STATUSES, STATUS_META } from "@/types/development";
+import type { Development } from "@/types/development";
+import { DEVELOPMENT_STATUSES } from "@/types/development";
 import { developments } from "./data";
 
 /** Garante unicidade de slug (identificador do empreendimento — AD-2). */
@@ -21,11 +21,26 @@ export function findBySlug(
   return list.find((dev) => dev.slug === slug);
 }
 
+/**
+ * Ordena pela prioridade do status (`DEVELOPMENT_STATUSES`): lançamentos são
+ * os destaques e abrem toda vitrine; breve lançamento fecha. A ordenação é
+ * estável — dentro de um status vale a ordem do seed.
+ */
+export function sortByStatusPriority(
+  list: readonly Development[],
+): Development[] {
+  const rank = (dev: Development) => DEVELOPMENT_STATUSES.indexOf(dev.status);
+  return [...list].sort((a, b) => rank(a) - rank(b));
+}
+
 // Valida na carga do módulo: slug duplicado é erro de conteúdo.
 assertUniqueSlugs(developments);
 
+const ordered = sortByStatusPriority(developments);
+
+/** Catálogo inteiro, na ordem de prioridade (Home, catálogo, "explore"). */
 export function getAllDevelopments(): readonly Development[] {
-  return developments;
+  return ordered;
 }
 
 export function getDevelopmentBySlug(slug: string): Development | undefined {
@@ -33,51 +48,11 @@ export function getDevelopmentBySlug(slug: string): Development | undefined {
 }
 
 /**
- * Curadoria editorial da Home: estes abrem o carrossel, nesta ordem.
- * Critério: empreendimentos com imagens próprias cadastradas — quem abre a
- * Home não entra com placeholder. Solar Manilha entra quando os renders
- * chegarem (ver docs/CONTENT-GAPS.md).
+ * Entregues ("pronto para morar") × em desenvolvimento (os demais status).
+ * Alimenta o texto de Quem Somos, que antes fixava os números à mão.
  */
-export const FEATURED_SLUGS = [
-  "follow-savassi",
-  "golden-ville-residence",
-  "torres-da-lagoa",
-] as const;
-
-/**
- * Catálogo inteiro na ordem da Home: destaques primeiro, depois o restante
- * na ordem de `data.ts`. O carrossel mostra todos — a curadoria define quem
- * aparece primeiro, não quem aparece. Slug de destaque sem correspondência é
- * ignorado: um erro de curadoria custa a posição, nunca um empreendimento.
- */
-export function getHomeDevelopments(): readonly Development[] {
-  const featured = FEATURED_SLUGS.flatMap(
-    (slug) => getDevelopmentBySlug(slug) ?? [],
-  );
-  const featuredSlugs = new Set(featured.map((dev) => dev.slug));
-  return [
-    ...featured,
-    ...getAllDevelopments().filter((dev) => !featuredSlugs.has(dev.slug)),
-  ];
-}
-
-export type StatusNavGroup = {
-  status: DevelopmentStatus;
-  label: string;
-  items: { name: string; slug: string }[];
-};
-
-/**
- * Empreendimentos agrupados por status (mega-menu do header). Só grupos com
- * itens; ordem canônica de `DEVELOPMENT_STATUSES`.
- */
-export function getDevelopmentsGroupedByStatus(): StatusNavGroup[] {
+export function getPortfolioCounts(): { delivered: number; inDevelopment: number } {
   const all = getAllDevelopments();
-  return DEVELOPMENT_STATUSES.map((status) => ({
-    status,
-    label: STATUS_META[status].label,
-    items: all
-      .filter((dev) => dev.status === status)
-      .map((dev) => ({ name: dev.name, slug: dev.slug })),
-  })).filter((group) => group.items.length > 0);
+  const delivered = all.filter((dev) => dev.status === "pronto").length;
+  return { delivered, inDevelopment: all.length - delivered };
 }

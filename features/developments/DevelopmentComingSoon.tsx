@@ -1,16 +1,16 @@
 import { BellRing, Images } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { STATUS_META, type Development } from "@/types/development";
+import { DevelopmentBadges } from "./DevelopmentBadges";
 
 type DevelopmentComingSoonProps = {
   development: Development;
 };
 
 /**
- * Página de empreendimento sem material (5 dos 12 lançamentos hoje).
+ * Seção mínima do breve lançamento — a fase embrionária, sem material.
  *
  * O que existe de verdade — status, praça e tipologia — vira o conteúdo, em
  * vez de a página inteira ser uma sequência de seções dizendo "em breve". A
@@ -35,7 +35,7 @@ export function DevelopmentComingSoon({
     <section className="rounded-2xl border border-border bg-surface-muted p-8 sm:p-10 lg:p-12">
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center">
         <div>
-          <Badge status={status} />
+          <DevelopmentBadges development={development} />
           <h2 className="mt-4 text-balance text-3xl font-semibold text-ink md:text-4xl">
             {name}
           </h2>
