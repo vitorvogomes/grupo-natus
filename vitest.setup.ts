@@ -3,7 +3,7 @@ import { cleanup } from "@testing-library/react";
 import { afterEach } from "vitest";
 
 // Polyfills p/ primitivas Radix (Dialog/Accordion/Tabs) sob jsdom, que não
-// implementa pointer capture, ResizeObserver, scrollIntoView nem matchMedia.
+// implementa pointer capture, ResizeObserver, scrollIntoView/scrollTo nem matchMedia.
 if (!("ResizeObserver" in globalThis)) {
   globalThis.ResizeObserver = class {
     observe() {}
@@ -18,6 +18,9 @@ if (!Element.prototype.hasPointerCapture) {
 }
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
+}
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = () => {};
 }
 if (!("IntersectionObserver" in globalThis)) {
   // No-op observer que reporta o alvo como visível — assim `whileInView`

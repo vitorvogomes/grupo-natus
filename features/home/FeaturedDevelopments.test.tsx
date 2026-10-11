@@ -32,9 +32,7 @@ const list: Development[] = [
 ];
 
 function spyScroll() {
-  return vi
-    .spyOn(Element.prototype, "scrollIntoView")
-    .mockImplementation(() => {});
+  return vi.spyOn(Element.prototype, "scrollTo").mockImplementation(() => {});
 }
 
 beforeEach(() => {
@@ -86,7 +84,7 @@ describe("FeaturedDevelopments (carrossel da home)", () => {
   });
 
   it("avança para o próximo empreendimento com rolagem suave", async () => {
-    const scrollIntoView = spyScroll();
+    const scrollTo = spyScroll();
     const user = userEvent.setup({ pointerEventsCheck: 0 });
     render(<FeaturedDevelopments developments={list} />);
 
@@ -95,7 +93,7 @@ describe("FeaturedDevelopments (carrossel da home)", () => {
     expect(
       screen.getByRole("button", { name: /ir para o empreendimento 2/i }),
     ).toHaveAttribute("aria-current", "true");
-    expect(scrollIntoView).toHaveBeenCalledWith(
+    expect(scrollTo).toHaveBeenCalledWith(
       expect.objectContaining({ behavior: "smooth" }),
     );
   });
@@ -128,13 +126,13 @@ describe("FeaturedDevelopments (carrossel da home)", () => {
 
   it("salta sem animação quando o usuário prefere menos movimento", async () => {
     reduceMotion.value = true;
-    const scrollIntoView = spyScroll();
+    const scrollTo = spyScroll();
     const user = userEvent.setup({ pointerEventsCheck: 0 });
     render(<FeaturedDevelopments developments={list} />);
 
     await user.click(screen.getByRole("button", { name: /próximo/i }));
 
-    expect(scrollIntoView).toHaveBeenCalledWith(
+    expect(scrollTo).toHaveBeenCalledWith(
       expect.objectContaining({ behavior: "auto" }),
     );
   });
@@ -175,5 +173,40 @@ describe("FeaturedDevelopments (carrossel da home)", () => {
     expect(
       screen.getByRole("button", { name: /ir para o empreendimento 2/i }),
     ).toHaveAttribute("aria-current", "true");
+  });
+
+  it("rola só o trilho — nunca a página (sem rolagem horizontal do documento)", async () => {
+    const scrollTo = spyScroll();
+    const intoView = vi.spyOn(Element.prototype, "scrollIntoView");
+    const user = userEvent.setup();
+    const { container } = render(<FeaturedDevelopments developments={list} />);
+    await user.click(screen.getByRole("button", { name: /próximo/i }));
+    expect(scrollTo.mock.contexts.at(-1)).toBe(container.querySelector("ul"));
+    expect(intoView).not.toHaveBeenCalled();
+    // Nenhum card "apagado": com 3 na tela, todos são legíveis.
+    for (const slide of screen.getAllByRole("group")) {
+      expect(slide.className).not.toMatch(/opacity-55|scale-/);
+    }
+  });
+
+  it("no fim do trilho, 'próximo' volta ao primeiro em vez de virar botão morto", async () => {
+    // Com 3 cards visíveis, os últimos nunca chegam à borda esquerda: quando
+    // o trilho já está no fim, avançar o índice não moveria nada.
+    const scrollTo = spyScroll();
+    const user = userEvent.setup();
+    const { container } = render(<FeaturedDevelopments developments={list} />);
+    const track = container.querySelector("ul")!;
+    Object.defineProperty(track, "scrollWidth", { value: 1500, configurable: true });
+    Object.defineProperty(track, "clientWidth", { value: 1000, configurable: true });
+    Object.defineProperty(track, "scrollLeft", { value: 500, configurable: true });
+
+    await user.click(screen.getByRole("button", { name: /próximo/i }));
+
+    expect(
+      screen.getByRole("button", { name: /ir para o empreendimento 1/i }),
+    ).toHaveAttribute("aria-current", "true");
+    expect(scrollTo).toHaveBeenLastCalledWith(
+      expect.objectContaining({ left: 0 }),
+    );
   });
 });

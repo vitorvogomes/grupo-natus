@@ -5,6 +5,13 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { DevelopmentCard } from "./DevelopmentCard";
+import {
+  CAROUSEL_SLIDE_CLASS,
+  CAROUSEL_TRACK_CLASS,
+  isTrackAtEnd,
+  prevIndex,
+  scrollTrackTo,
+} from "./carouselTrack";
 import { cn } from "@/lib/utils";
 import type { Development } from "@/types/development";
 
@@ -22,12 +29,10 @@ const navButtonClass = cn(
 /**
  * Carrossel de saída da página do empreendimento.
  *
- * Deliberadamente mais simples que o `FeaturedDevelopments` da Home: aqui os
- * cards são todos do mesmo tamanho e as setas andam de um em um, sem modo
- * centralizado nem índice sincronizado à rolagem. Mexer naquele componente
- * para servir aos dois casos arriscaria regredir uma Home já aprovada, e os
- * dois comportamentos não são o mesmo — lá o carrossel é a atração, aqui é
- * uma porta de saída.
+ * Mesma geometria do `FeaturedDevelopments` da Home (3 por vez no desktop),
+ * mas deliberadamente mais simples: sem contador, indicadores nem índice
+ * sincronizado à rolagem. Lá o carrossel é a atração; aqui é uma porta de
+ * saída, e os controles extras só competiriam com o CTA da página.
  */
 export function ExploreDevelopments({
   developments,
@@ -42,19 +47,13 @@ export function ExploreDevelopments({
   function goTo(next: number) {
     const target = (next + total) % total;
     setIndex(target);
-    const slide = trackRef.current?.children[target] as HTMLElement | undefined;
-    slide?.scrollIntoView({
-      behavior: reduce ? "auto" : "smooth",
-      inline: "start",
-      block: "nearest",
-    });
+    scrollTrackTo(trackRef.current, target, !reduce);
   }
 
   return (
     <section
       aria-roledescription="carrossel"
       aria-label="Outros empreendimentos do Grupo Natus"
-      className="overflow-hidden"
     >
       <div className="mx-auto max-w-[var(--container-max)] px-4 sm:px-6 lg:px-8">
         <h2 className="text-balance text-3xl font-semibold text-ink md:text-4xl">
@@ -66,22 +65,23 @@ export function ExploreDevelopments({
         </p>
       </div>
 
-      <ul
-        ref={trackRef}
-        className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto px-4 pb-4 sm:px-6 lg:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {developments.map((development, i) => (
-          <li
-            key={development.slug}
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${i + 1} de ${total}`}
-            className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[31%]"
-          >
-            <DevelopmentCard development={development} />
-          </li>
-        ))}
-      </ul>
+      {/* Dentro do container, como na Home: de ponta a ponta, 31% de uma
+          tela larga dava cards enormes e colava o primeiro na borda. */}
+      <div className="mx-auto mt-10 max-w-[var(--container-max)] px-4 sm:px-6 lg:px-8">
+        <ul ref={trackRef} className={cn(CAROUSEL_TRACK_CLASS, "pb-4")}>
+          {developments.map((development, i) => (
+            <li
+              key={development.slug}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} de ${total}`}
+              className={CAROUSEL_SLIDE_CLASS}
+            >
+              <DevelopmentCard development={development} />
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="mx-auto mt-8 flex max-w-[var(--container-max)] flex-wrap items-center justify-center gap-3 px-4 sm:px-6 lg:px-8">
         {total > 1 ? (
@@ -91,7 +91,7 @@ export function ExploreDevelopments({
             <button
               type="button"
               aria-label="Empreendimento anterior"
-              onClick={() => goTo(index - 1)}
+              onClick={() => goTo(prevIndex(trackRef.current, index, total))}
               className={navButtonClass}
             >
               <ChevronLeft aria-hidden="true" className="size-5" />
@@ -99,7 +99,9 @@ export function ExploreDevelopments({
             <button
               type="button"
               aria-label="Próximo empreendimento"
-              onClick={() => goTo(index + 1)}
+              onClick={() =>
+                goTo(isTrackAtEnd(trackRef.current) ? 0 : index + 1)
+              }
               className={navButtonClass}
             >
               <ChevronRight aria-hidden="true" className="size-5" />
