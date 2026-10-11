@@ -33,23 +33,13 @@ export type Contact = {
 export const CONTACT: Contact = {
   whatsapp: "5531984663280",
   whatsappDisplay: "(31) 98466-3280",
-  phone: "+5531983374122",
-  phoneDisplay: "(31) 98337-4122",
-  email: "administrativo@natusgrupo.com.br",
+  phone: "+5531984663280",
+  phoneDisplay: "(31) 98466-3280",
+  email: "contato@natusgrupo.com.br",
   address: "Av. Getúlio Vargas, 1621 — Savassi, Belo Horizonte/MG",
   hours: "Seg–Sex, 09:00–19:00",
   mapsUrl: "https://www.google.com/maps?cid=2292552258238749315",
 } as const;
-
-/** Plataformas sociais suportadas (ícone lucide correspondente no Footer). */
-export type SocialPlatform = "instagram" | "facebook" | "linkedin" | "youtube";
-
-/**
- * Redes sociais do Grupo Natus. TODO: CONTENT REQUIRED — URLs a confirmar
- * (ver docs/CONTENT-GAPS.md §6). Vazio: o Footer não renderiza a seção
- * (nada é inventado).
- */
-export const SOCIAL: Readonly<Partial<Record<SocialPlatform, string>>> = {};
 
 /**
  * Dados legais do rodapé. TODO: CONTENT REQUIRED — CNPJ/CRECI a confirmar.

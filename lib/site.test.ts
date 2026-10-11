@@ -21,8 +21,8 @@ describe("Configuração do site", () => {
   it("expõe os contatos institucionais", () => {
     expect(CONTACT.whatsapp).toMatch(/^55\d{10,11}$/);
     expect(CONTACT.whatsappDisplay).toContain("98466-3280");
-    expect(CONTACT.phoneDisplay).toContain("98337-4122");
-    expect(CONTACT.email).toBe("administrativo@natusgrupo.com.br");
+    expect(CONTACT.phoneDisplay).toContain("98466-3280");
+    expect(CONTACT.email).toBe("contato@natusgrupo.com.br");
     expect(CONTACT.address).toMatch(/Savassi/);
     expect(CONTACT.hours).toMatch(/Seg/);
     expect(CONTACT.mapsUrl).toMatch(/^https:\/\/www\.google\.com\/maps/);

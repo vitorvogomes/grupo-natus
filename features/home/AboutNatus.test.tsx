@@ -12,17 +12,16 @@ describe("Seção sobre o Grupo Natus", () => {
     ).toBeInTheDocument();
   });
 
-  it("cita as empresas do grupo", () => {
+  it("não repete a apresentação da holding (fica em Quem Somos)", () => {
     render(<AboutNatus />);
-    expect(screen.getByText(/ALIATTO/)).toBeInTheDocument();
-    expect(screen.getByText(/OASI/)).toBeInTheDocument();
+    expect(screen.queryByText(/holding à frente/i)).toBeNull();
   });
 
   it("mostra os números reais da operação", () => {
     render(<AboutNatus />);
     expect(screen.getByText("10")).toBeInTheDocument();
     expect(screen.getByText("100 mil")).toBeInTheDocument();
-    expect(screen.getByText("+1.500")).toBeInTheDocument();
+    expect(screen.getByText("+500")).toBeInTheDocument();
     // Nenhum número ficou pendente de conteúdo.
     expect(screen.queryByText(/TODO: CONTENT REQUIRED/)).toBeNull();
   });

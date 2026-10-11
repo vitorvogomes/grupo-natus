@@ -14,9 +14,13 @@ describe("Footer", () => {
     expect(
       screen.getByRole("link", { name: new RegExp(CONTACT.email, "i") }),
     ).toHaveAttribute("href", `mailto:${CONTACT.email}`);
-    expect(
-      screen.getByRole("link", { name: /98337-4122/ }),
-    ).toHaveAttribute("href", expect.stringContaining("tel:"));
+    // WhatsApp e telefone hoje são o mesmo número, então o texto não
+    // distingue os dois links — o href tel: distingue.
+    const tel = screen
+      .getAllByRole("link")
+      .find((link) => link.getAttribute("href")?.startsWith("tel:"));
+    expect(tel).toHaveAttribute("href", `tel:${CONTACT.phone}`);
+    expect(tel).toHaveTextContent(CONTACT.phoneDisplay);
   });
 
   it("exibe endereço e horário de atendimento", () => {

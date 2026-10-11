@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Award, Building2, KeyRound } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { buttonVariants } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { OPERATION_STATS } from "@/features/institutional/content";
 
 /**
  * O modelo de conteúdo de <dl> admite `div > dt + dd`, mas não um segundo div
@@ -14,27 +14,6 @@ const STAT_CARD = cn(
   "rounded-lg border border-border bg-surface-muted shadow-sm",
   "grid grid-cols-[auto_1fr] items-center gap-x-5 p-6 sm:p-7",
 );
-
-/**
- * Números fornecidos pela empresa (2026-09-30). O "10" é literal, não
- * calculado a partir de 2016: data no render traria divergência
- * servidor/cliente e teste não determinístico. Revisar em 2027.
- */
-const STATS: readonly {
-  icon: LucideIcon;
-  value: string;
-  unit?: string;
-  label: string;
-}[] = [
-  { icon: Award, value: "10", unit: "anos", label: "de experiência" },
-  {
-    icon: Building2,
-    value: "100 mil",
-    unit: "m²",
-    label: "de área construída",
-  },
-  { icon: KeyRound, value: "+1.500", label: "unidades entregues" },
-];
 
 export function AboutNatus() {
   return (
@@ -56,9 +35,6 @@ export function AboutNatus() {
           <p className="mt-4 font-medium text-ink">
             É assim que a essência do novo morar sai do papel.
           </p>
-          <p className="mt-4 text-sm text-ink-soft">
-            Uma holding à frente da ALIATTO Incorporadora e da OASI Engenharia.
-          </p>
 
           <Link
             href="/quem-somos"
@@ -74,7 +50,7 @@ export function AboutNatus() {
             <dl> mantém o par rótulo↔valor associado para leitores de tela, como
             em /quem-somos; o grid inverte a ordem visual sem mexer no DOM. */}
         <dl className="grid gap-4">
-          {STATS.map(({ icon: Icon, value, unit, label }, i) => (
+          {OPERATION_STATS.map(({ icon: Icon, value, unit, label }, i) => (
             <Reveal key={label} delay={i * 0.09} className={STAT_CARD}>
               <span className="col-start-1 row-span-2 flex size-14 items-center justify-center rounded-full bg-navy-600 text-white shadow-sm">
                 <Icon

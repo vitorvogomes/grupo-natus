@@ -12,14 +12,38 @@ describe("Página /quem-somos (FR13)", () => {
       screen.getByRole("heading", { name: /empresas do grupo/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /valores/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Certificações" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /números/i })).toBeInTheDocument();
   });
 
-  it("apresenta o posicionamento e as empresas reais do grupo", () => {
+  it("usa o texto institucional da revisão v3", () => {
     render(<QuemSomosPage />);
     expect(
-      screen.getByText(/segmento médio econômico e alto luxo/i),
+      screen.getByText(
+        "Do Minha Casa Minha Vida ao alto luxo, em Minas Gerais e no Rio de Janeiro.",
+      ),
     ).toBeInTheDocument();
+    // Alinhado ao portfólio: 4 prontos para morar e 7 nos demais status.
+    expect(
+      screen.getByText(/4 empreendimentos entregues e 7 em desenvolvimento/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/a Aliatto estrutura o empreendimento, a Oasi executa a obra/),
+    ).toBeInTheDocument();
+  });
+
+  it("troca 'Qualidade certificada' por 'Parceria' (o selo tem bloco próprio)", () => {
+    render(<QuemSomosPage />);
+    expect(screen.getByRole("heading", { name: "Parceria" })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: /qualidade certificada/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("apresenta as empresas reais do grupo", () => {
+    render(<QuemSomosPage />);
     expect(
       screen.getByRole("heading", { name: /aliatto incorporadora/i }),
     ).toBeInTheDocument();
@@ -28,9 +52,15 @@ describe("Página /quem-somos (FR13)", () => {
     ).toBeInTheDocument();
   });
 
-  it("mostra a certificação de qualidade ISO 9001:2015", () => {
+  it("mostra as duas certificações: ISO 9001:2015 e PBQP-H (SiAC Nível A)", () => {
     render(<QuemSomosPage />);
-    expect(screen.getAllByText(/ISO 9001:2015/i).length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { name: "NBR ISO 9001:2015" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "PBQP-H · SiAC Nível A" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /PBQP-H/ })).toBeInTheDocument();
   });
 
   it("usa o lockup de marca (holding + empresas) e a métrica de área construída", () => {
