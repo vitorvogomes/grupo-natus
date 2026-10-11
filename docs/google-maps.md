@@ -25,11 +25,36 @@ O código do segundo caminho já existe. Para ativá-lo, falta só a configuraç
    Depois reinicie o `npm run dev`. Variáveis `NEXT_PUBLIC_` entram no bundle no build.
 6. **Produção.** Cadastre as mesmas duas variáveis no provedor de hospedagem.
 
-## Segurança
+## Perguntas frequentes
 
-A chave é **pública por natureza**: ela vai para o navegador. A proteção vem das restrições de referenciador e de API do passo 3, não do sigilo. Por isso nada de reaproveitar uma chave pessoal sem restrição, e nada de ativar outras APIs nela.
+### Vou expor minhas chaves em variáveis públicas?
+A **chave** fica visível no código da página, e isso é inerente ao Maps JavaScript API: o mapa roda no navegador do visitante, então a chave viaja com a página. Isso vale para qualquer site com Google Maps, com ou sem o prefixo `NEXT_PUBLIC_`. A proteção vem das **restrições**, não do sigilo:
 
-Opcional: crie um **alerta de orçamento** em *Faturamento → Orçamentos e alertas*.
+| Camada | Onde | Efeito |
+|---|---|---|
+| Restrição de aplicativo: referenciadores HTTP | Credenciais → a chave | Só `localhost` e o domínio do site podem usá-la; copiada para outro site, é recusada |
+| Restrição de API | Credenciais → a chave | Só a Maps JavaScript API; vazada, não serve para Places, Geocoding etc. |
+| Cota diária | APIs e serviços → Maps JavaScript API → Cotas | Limita o pior caso (abuso) a um valor conhecido |
+| Alerta de orçamento | Faturamento → Orçamentos e alertas | Aviso por e-mail antes de qualquer surpresa |
+
+Regras:
+- **Uma chave só para o site**, criada na conta GCP do Grupo Natus. Nunca reaproveite uma chave pessoal sem restrição.
+- **Nunca** coloque em `NEXT_PUBLIC_` uma chave de servidor (Places/Geocoding chamados do backend, chave de e-mail, Supabase service role). Essas ficam em variáveis sem o prefixo, lidas só no servidor (AD-4).
+- Se a chave vazar sem restrição, gere uma nova no console e apague a antiga. Não é preciso mudar código, só o `.env`.
+
+O **Map ID** não é segredo: é só o identificador de um estilo de mapa.
+
+### Preciso de um Map ID para cada empreendimento?
+**Não.** Um Map ID serve o site inteiro. Ele identifica a **configuração de estilo** do mapa (tipo vetorial, cores, quais pontos de interesse aparecem) e é exigido pelo marcador avançado (`AdvancedMarkerElement`). A **posição** de cada empreendimento vem de `lat`/`lng` em `content/developments/data.ts`, e o pin é a imagem da marca (`public/brand/pin-natus.png`), igual para todos.
+
+Um segundo Map ID só faria sentido para um estilo diferente: por exemplo, um mapa escuro numa seção de fundo navy.
+
+### Isso é cobrado?
+- **Maps JavaScript API**: cobra por **carregamento de mapa dinâmico** (cada vez que a página cria o mapa). A Maps Platform oferece uma **cota mensal gratuita por SKU**; um site institucional com tráfego moderado tende a ficar dentro dela. O modelo mudou em 2025 (saiu o crédito mensal único, entraram cotas por SKU), então confirme os números atuais em *Google Maps Platform → Pricing* antes de ativar.
+- **Map ID e marcador avançado**: sem custo próprio além do carregamento do mapa.
+- **Embed público** (o caminho de hoje, sem chave): gratuito e sem limite prático, mas sem pin personalizado.
+- **Faturamento ativo é obrigatório**, mesmo dentro da cota gratuita: sem ele, a API recusa a chave.
+- **Para reduzir carregamentos**: hoje o `DevelopmentMap` carrega a API quando o componente monta. Carregar só quando a seção Localização entrar na tela (IntersectionObserver) evita cobrar a visita de quem não rola até lá. É uma melhoria futura, ainda não implementada.
 
 ## Verificação
 

@@ -30,7 +30,7 @@ Pastas: `app/`, `components/` (+`ui/`, `motion/`, `showcase/`), `features/` (`de
 
 **Institucional**: textos de empresas, valores, certificações (ISO 9001 + PBQP-H) e números da operação vivem em `features/institutional/` (fonte única de Quem Somos, Engenharia e Home). A contagem "entregues × em desenvolvimento" de Quem Somos vem de `getPortfolioCounts()`.
 
-**Pendências 🔔 (`docs/CONTENT-GAPS.md`):** material dos 4 breve lançamentos; data/periodicidade da atualização de obra; chaves do Google Maps; campos do Negocie seu Terreno; provedor de email (Resend `[ASSUMPTION]`) + secret; domínio de produção; redes sociais e CNPJ/CRECI do rodapé.
+**Pendências 🔔 (`docs/CONTENT-GAPS.md`):** material dos 4 breve lançamentos; data/periodicidade da atualização de obra; chaves do Google Maps; campos do Negocie seu Terreno; provedor de email (Resend `[ASSUMPTION]`) + secret; domínio de produção; redes sociais e CNPJ/CRECI do rodapé. **SEO e migração de URLs** (redirects do WordPress, Search Console, perfil no Google): plano em `docs/seo.md`.
 
 Materiais de origem (ainda a base de verdade):
 
