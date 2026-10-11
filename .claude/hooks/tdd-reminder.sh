@@ -24,6 +24,6 @@ esac
 
 base="${f%.*}"; ext="${f##*.}"
 if [ ! -f "${base}.test.${ext}" ] && [ ! -f "${base}.spec.${ext}" ]; then
-  printf '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"TDD sagrado: %s não tem teste irmão (%s.test.%s). Escreva/atualize o teste primeiro (red→green→refactor) e mantenha a cobertura >=90%%."}}\n' "$f" "$base" "$ext"
+  printf '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"TDD sagrado: %s não tem teste irmão (%s.test.%s). Escreva/atualize o teste primeiro (red→green→refactor) e mantenha a cobertura >=85%%."}}\n' "$f" "$base" "$ext"
 fi
 exit 0

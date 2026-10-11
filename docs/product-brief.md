@@ -23,30 +23,30 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 
 ## 5. Escopo (páginas)
 
-1. **Home / Catálogo** — institucional + catálogo dos 12 empreendimentos + conversão.
+1. **Home / Catálogo** — institucional + catálogo dos 11 empreendimentos + conversão.
 2. **Empreendimento `[slug]`** — 12 páginas geradas de um único template a partir de dados.
 3. **Serviços de Engenharia**.
 4. **Negocie seu Terreno** — captação de proprietários/corretores.
 5. **Quem Somos**.
 6. **Fale Conosco** — contato + formulário (envio por email).
 
-## 6. Empreendimentos (dados do site atual — a validar)
+## 6. Empreendimentos (confirmados pelo cliente — revisão v3, 2026-10-11)
 
-| # | Nome | Cidade/UF | Status | Nota |
+| # | Nome | Bairro · Cidade/UF | Status | Nota |
 |---|------|-----------|--------|------|
-| 1 | Viver Mais | Itaboraí/RJ | Pronto | |
-| 2 | Residencial Denver | Belo Horizonte/MG | Pronto | |
-| 3 | Torres da Lagoa | Lagoa Santa/MG | Pronto | |
-| 4 | Follow Savassi | Belo Horizonte/MG | Em construção | |
-| 5 | Golden Ville Residence | São Gonçalo/RJ | Em construção | |
-| 6 | Solar Manilha | Itaboraí/RJ | Lançamento | 368 un. MCMV |
-| 7 | One Studios | Niterói/RJ | Lançamento | 180 studios |
-| 8 | Vista do Lago | Nova Lima/MG | Lançamento | 508 lotes |
-| 9 | Sunset Ville Residence | Belo Horizonte/MG | Lançamento | 72 un. MCMV |
-| 10 | Royal Ville Residence | Vespasiano/MG | Lançamento | 96 casas MCMV |
-| 11 | Gutierrez | Belo Horizonte/MG | Lançamento | 20 un. alto luxo |
+| 1 | Follow Savassi | Savassi · Belo Horizonte/MG | Lançamento | |
+| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | 368 un. · MCMV |
+| 3 | Golden Ville Residence | Maria Paula · Niterói/RJ | Em construção | 104 un. · MCMV |
+| 4 | Viver Mais | Itaboraí/RJ | Pronto para morar · 100% vendido | 256 un. · MCMV |
+| 5 | Residencial Denver | Santa Lúcia · Belo Horizonte/MG | Pronto para morar · 100% vendido | 14 studios |
+| 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar · 100% vendido | 112 aptos · MCMV |
+| 7 | Residenziale Colonnello Figueiredo | Pau Pombo · Nova Lima/MG | Pronto para morar · 100% vendido | 20 un. |
+| 8 | Gutierrez | Belo Horizonte/MG | Breve lançamento | 20 un. alto luxo |
+| 9 | One Studios | Niterói/RJ | Breve lançamento | 180 studios |
+| 10 | Sunset Ville Residence | Belo Horizonte/MG | Breve lançamento | 72 un. · MCMV |
+| 11 | Royal Ville Residence | Vespasiano/MG | Breve lançamento | 96 casas · MCMV |
 
-> Os status e nomes vêm do site atual e devem ser **revalidados com a empresa** antes de tratados como definitivos. Demais campos (descrição, características, imagens, coordenadas, progresso) marcar `TODO: CONTENT REQUIRED` quando ausentes — **não inventar dados**.
+> Vista do Lago saiu do portfólio na revisão v3. O que ainda falta de conteúdo fica em `docs/CONTENT-GAPS.md`; ausências seguem `TODO: CONTENT REQUIRED` — **não inventar dados**.
 
 ## 7. Funcionalidades solicitadas pela empresa
 
@@ -58,7 +58,7 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 
 ## 8. Contatos institucionais (site atual — confirmar)
 
-WhatsApp (31) 98466-3280 · Tel (31) 98337-4122 · administrativo@natusgrupo.com.br · Av. Getúlio Vargas, 1621 — Savassi, Belo Horizonte · Seg–Sex 09:00–19:00.
+WhatsApp (31) 98466-3280 · Tel (31) 98466-3280 · contato@natusgrupo.com.br · Av. Getúlio Vargas, 1621 — Savassi, Belo Horizonte · Seg–Sex 09:00–19:00.
 
 ## 9. Referências
 

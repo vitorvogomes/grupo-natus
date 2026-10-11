@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-10-01 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v2 (feedback do cliente)** — Home ✅ · **Página do empreendimento, Quem Somos e Engenharia ✅** · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-12 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v3 (feedback do cliente) ✅** — status novos, header, página de produto, Quem Somos · Revisão v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -118,6 +118,70 @@ que era o único a usá-lo) e `presentationUrl` (inalcançável a partir de
 
 **Gate:** 343 testes · cobertura 95,7% stmts · 92,9% branches · build 26 páginas.
 
+## Revisão v3 — portfólio, header, página de produto, Quem Somos ✅ (2026-10-11)
+
+Terceira leva de feedback, agora com o conteúdo real dos empreendimentos (ver `docs/CONTENT-GAPS.md` §1–2).
+
+**Ajustes manuais do cliente revisados.** Contato `contato@natusgrupo.com.br` + telefone = WhatsApp, a frase da holding fora da Home e "+500 unidades" estavam certos. Faltavam três coisas: dois testes que quebraram (`Footer`: dois links com o mesmo número, agora identificados pelo `href tel:`; `AboutNatus`: ainda esperava ALIATTO e +1.500), e o script de imagens, que ainda apontava para o `img/em-construcao.png` apagado.
+
+**Portfólio**
+- **4 status + 100% vendido.** `lancamento · em_construcao · pronto · breve_lancamento`. A ordem é a prioridade: `getAllDevelopments()` ordena por ela, então lançamentos abrem a Home, o catálogo e o "explore". `FEATURED_SLUGS` saiu. "100% vendido" é `soldOut` sobre "pronto" (teste de conteúdo), exibido como **faixa horizontal** (`SoldOutBand`), não como badge. Selo MCMV ao lado do status (`DevelopmentBadges`).
+- **Vista do Lago saiu**: 11 empreendimentos. Gutierrez virou breve lançamento e perdeu as maquetes no dado (os arquivos ficam em `public/`).
+- **Conteúdo real**: descrições verbatim, bairros, MCMV em 6, Golden Ville em **Niterói**, Denver como studio. Coordenadas dos 7 com página tiradas dos links do cliente. Solar Manilha completo: 34 imagens (77 MB → 7,7 MB) e accordion em 4 grupos.
+
+**Header**
+- 🐛 **Cliques bloqueados no topo da Home.** A faixa de captura de hover (z-50) ficava sobre o header (z-40) depois de revelá-lo. O alvo do hover passou a ser o invólucro fixo do próprio header. A logo branca do hero agora segue `revealed` e sai também no hover. Verificado no Chromium: `elementFromPoint` cai no link, e o clique navega.
+- **Submenu de Empreendimentos removido**: link direto. `EmpreendimentosMenu`, `getDevelopmentsGroupedByStatus` e `@radix-ui/react-navigation-menu` saíram.
+
+**Home**: card no layout do Novolar (selos sobre a foto, faixa de vendido, nome + selo da UF, "Bairro - Cidade"). O carrossel saiu do modo centralizado e mostra **3 por vez** no desktop (2 no tablet, 1 com espiada no celular), alinhado ao container. No fim do trilho, "próximo" volta ao primeiro.
+
+**Página de produto**
+- **Composição por status**: lançamento completo; em construção e pronto reduzidos; breve lançamento só com o painel mínimo (sem localização, CTA nem sub-nav).
+- **Resumo**: o título vira "UF," / "Bairro - Cidade" no lugar de "O empreendimento"; o pin sai; os itens ganham divisórias.
+- **Sub-nav** (ref. Novolar): Imagens · **Empreendimento** · Localização · Estágio de Obra · Falar com Consultor. "Empreendimento" leva a "O que oferece", ou ao resumo quando não há diferenciais.
+- **Accordion `type="single"`**: um grupo aberto por vez.
+- **Obra**: etapas Fundação · Estrutura · Alvenaria · Acabamento interno · Acabamento externo. As etapas em 0% somem. A seção aparece em lançamento e em construção. 🔔 Todos os % são estimativas `isPreview`, a aprovar.
+- **Mapa com pin da Natus**: o código já existia. Faltam só as chaves, com o passo a passo em `docs/google-maps.md`; o `.env.example` ganhou os dois nomes.
+
+**Quem Somos**: texto v3 completo ("4 entregues e 7 em desenvolvimento", alinhado ao portfólio). "Parceria" entrou no lugar de "Qualidade certificada". Nova seção **Certificações** com ISO 9001:2015 + **PBQP-H · SiAC Nível A** (`public/quem-somos/pbqp-h.webp`).
+
+**Gate:** 379 testes · cobertura 96,0% stmts · 93,2% branches · lint, typecheck e build ok (25 páginas) · inspeção visual no Chromium (header, carrossel, Torres, Follow, Gutierrez, Quem Somos).
+
+### Ajustes pós-v3 (2026-10-11)
+- 🐛 **Rolagem horizontal na Home (crítico)**, com duas causas:
+  1. o `<span class="sr-only">` do selo de UF do card (`absolute`) se ancorava no `Reveal` transformado, fora do trilho, e nos cards fora da tela alargava o documento para ~4600 px. O trilho agora é `relative` e contém os descendentes `absolute`.
+  2. as setas usavam `scrollIntoView`, que rola também os ancestrais (inclusive a página). Agora é `track.scrollTo`.
+  Ambos ficam no helper único `features/developments/carouselTrack.ts`, usado pelos dois carrosséis. Medido no Chromium: largura do documento = viewport em 390, 1440 e 2560 px, inclusive depois de 12 cliques.
+- **"Explore" proporcional**: o trilho foi para dentro do container, com o mesmo tamanho de card da Home (antes, 31% da tela inteira) e respiro lateral. No fim do trilho, volta ao primeiro. Os cards ocupam a altura do slide (CTAs alinhados).
+- **Faixa "100% vendido"** saiu do resumo; fica só nos cards.
+- **Progresso informado pelo cliente**: Follow e Solar com Fundação 99 · Estrutura 100 · Alvenaria 90 · Acab. interno 60 · Acab. externo 50 (total 70); Golden Ville com Fundação 70 (total 7). Saiu o `isPreview`, e com ele o rótulo "ilustrativos".
+- **Resolução do Solar Manilha**: os renders de origem têm 1448–2095 px e sofriam duas compressões (pipeline q86 + `next/image` q75). Agora o job usa `quality` 96 + `smartSubsample`, e o palco da galeria, o lightbox e o hero entregam em q90.
+- **Engenharia** reescrita com o conteúdo de Quem Somos: hero e texto da Oasi, "Como trabalhamos" (Método · Eficiência · Transparência) e o bloco de Certificações. Saiu o TODO visível. Textos e certificações vivem em `features/institutional/` (fonte única das duas páginas).
+- **Accordion de "O que oferece"**: já era `type="single"` em todos (é o mesmo componente). Num servidor recém-iniciado, Follow e Solar ficam com um aberto só. O print com todos abertos era de um bundle anterior ao ajuste.
+
+**Gate:** 386 testes · cobertura 96,1% stmts · 93,0% branches · lint, typecheck e build ok (25 páginas).
+
+### Ajustes pós-v3 — 2ª rodada (2026-10-11)
+- **Selos neutros**: todo status usa o mesmo selo branco do MCMV (`components/ui/Badge`, um estilo só). Saíram o `badgeClassName` do `STATUS_META` e os tokens `status-lancamento/em-construcao/breve-lancamento`, que ficaram sem uso. A faixa "100% vendido" é o único destaque colorido do card.
+- 🐛 **Barras das etapas vazias**: o `whileInView` observava o preenchimento, que nasce em `scaleX(0)`, e uma caixa de largura zero não cruza o limiar do IntersectionObserver de forma confiável. O `ProgressBar` agora observa o trilho (`useInView`) e anima o preenchimento. Verificado com salto instantâneo até a seção: todas enchem.
+- **"O que oferece" do Solar**: novo campo `amenitiesImage` (src de uma das `images`; padrão = 3ª imagem), e o Solar usa a vista do apartamento tipo (`apto tipo 03`). O script aceita `quality`/`sharpen` por imagem (essa vai a q98 com nitidez leve), e o componente entrega em q90.
+- **Capa do Solar = Implantação 2D** (render aéreo humanizado, reclassificado de `planta` para `imagens`; a regra "capa nunca é planta" segue valendo).
+- 🐛 **Imagem do resumo borrada**: o bloco é 4:3 com `object-cover`, mas declarava `sizes=50vw`. Uma panorâmica 2,8:1 (acesso do Solar) chegava em ~750 px de largura e era ampliada ~1,5×. Agora o `sizes` é calculado da proporção real de cada foto (`coverSizes` + manifesto de dimensões), e a entrega é em q90. Só a panorâmica pede mais largura. Medido em 1440 px: sem ampliação em DPR 1; 1,18× em DPR 2, que é o limite da fonte de 750 px de altura.
+
+### Code review + limpeza (2026-10-12)
+`/code-review high` sobre o diff da v3: 10 achados, 6 corrigidos.
+- 🐛 **Carrosséis**: a seta "anterior" no fim do trilho dava cliques que não moviam nada, e o contador não chegava ao último. Helpers `visibleIndex`/`prevIndex` em `carouselTrack.ts`, usados pela Home e pelo "explore".
+- 🐛 **Obra só com o total** (sem etapas) sumia da página. `hasProgressToShow` (total ou etapa > 0); o `ProgressTimeline` omite a lista vazia.
+- **`sizes` por proporção**: um valor fixo inflado (para servir uma panorâmica) pesava todas as páginas. O pipeline grava `content/developments/image-dimensions.json`, o seed anexa largura/altura e `coverSizes` calcula o fator. Teste de conteúdo acusa imagem fora do manifesto.
+- **Contagem de Quem Somos** derivada do portfólio (`getPortfolioCounts`), não fixa no texto.
+- **Números da operação** (`OPERATION_STATS`) em `features/institutional/content.ts`, fonte única de Home e Quem Somos.
+- Não aplicados, por decisão do cliente: obra em lançamento, progresso informado, faixa de vendido fora do resumo e "Itaboraí" sem complemento. Os comentários que ainda diziam "card e resumo" foram corrigidos.
+- Na verificação no Chromium, o fim do trilho passou a ser "último card na tela, com até meio gap de folga": o snap para alguns px antes do scroll máximo.
+- **Limpeza**: comentários-lápide reescritos no presente; código morto removido (`SOCIAL`, que o Footer nunca lia; `ConstructionStageName`); `.claude/` alinhado ao piso de 85%; `CLAUDE.md` reescrito como estado atual (sem crônica); brief e PRD com o portfólio v3; pasta vazia do Vista do Lago removida.
+
+**Gate:** 399 testes · cobertura 96,2% stmts · 93,2% branches · lint, typecheck e build ok (25 páginas) · carrossel e rolagem horizontal reverificados no Chromium.
+
+
 ---
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
@@ -183,7 +247,7 @@ Retorno do cliente sobre a v1: tipografia de título serifada, hero com ruído e
 - ✅ **Nova faceta `propertyType`** em `types/development.ts` (apartamento/casa/lote/studio), preenchida **só com evidência no material** — 8 dos 12 confirmados, 4 pendentes e invisíveis ao filtro de tipo (ver CONTENT-GAPS §1).
 - ✅ **Carrossel do catálogo** (`FeaturedDevelopments`) — **modo centralizado**: o slide ativo fica no meio em tamanho cheio e os vizinhos espiam reduzidos dos dois lados (margens percentuais nas pontas, porque padding em container de scroll é inconsistente entre browsers). Mostra **todos os 12**; `FEATURED_SLUGS` passou a definir só quem abre (Follow Savassi · Golden Ville · **Torres da Lagoa**, no lugar do Solar Manilha, que não tem imagem) via `getHomeDevelopments()`. O índice **acompanha a rolagem**, para que o swipe mude o destaque, com trava durante a rolagem programática — sem ela, os eventos da própria animação reescreviam o índice e cliques rápidos avançavam um slide só. Scroll-snap nativo + wrap, **sem embla/shadcn**: o `carousel.tsx` do shadcn cairia dentro do `coverage.include` (≈250 linhas a cobrir) e o embla mede layout, que o jsdom não faz — os botões renderizariam `disabled` e o teste de "avançar slide" seria impossível sem mockar a lib.
 - ✅ **Seção Minha Casa Minha Vida** — logo oficial do programa (arquivo do cliente, sem recolorir/distorcer), copy fornecida, "Simule agora" via `buildWhatsAppUrl` (AD-3) e 3 cards de benefício. **Redesenhada para não espelhar a referência**: painel único (conteúdo e foto encostados numa só peça, em vez de dois blocos soltos) e benefícios como **faixa separada por fios**, não três caixas — cada um com título próprio e linha de apoio, no lugar dos rótulos soltos. Fundo no **navy-600 do rodapé** (era navy-800, destoava do resto do site). Nitidez da foto: **`sizes` tem de descrever a largura RENDERIZADA, não a do box**. Com `object-cover` num box mais alto que a proporção da foto (637×520 contra 16:9), o browser desenha a imagem a ~930 px e corta as laterais; declarar os 640 px do box o fazia baixar a variante de 640 e ampliá-la 1,46×. Corrigido para `950px` (medido no browser: fator 1,46 → 0,86) e o original subiu para 2560, para que a variante de 1920 das telas 2× venha de um arquivo maior. **Reconferir esse valor sempre que o painel mudar de altura** — já quebrou duas vezes por mudança de layout.
-- ✅ **Seção Grupo Natus** (`AboutNatus`, substitui `InstitutionalIntro`) — copy real do cliente e os 3 números agora reais (10 anos · 100 mil m² · +1.500), empilhados à direita, com selo de ícone em navy, número em destaque e rótulo abaixo (referência: Pro Domo). Os mesmos números preencheram o `STATS` de `/quem-somos`, que estava em `TODO: CONTENT REQUIRED`.
+- ✅ **Seção Grupo Natus** (`AboutNatus`, substitui `InstitutionalIntro`) — copy real do cliente e os 3 números agora reais (10 anos · 100 mil m² · +1.500, revisto para +500 na v3), empilhados à direita, com selo de ícone em navy, número em destaque e rótulo abaixo (referência: Pro Domo). Os mesmos números preencheram o `STATS` de `/quem-somos`, que estava em `TODO: CONTENT REQUIRED`.
 - 🔔 Pendente do cliente: vídeo/GIF do hero; tipologia de 4 empreendimentos; imagens do Solar Manilha; direito de uso da marca MCMV.
 
 - ✅ **Motion nas seções da Home** — `Reveal` ganhou `as?: "div" | "li"` para escalonar itens sem meter um `div` entre a lista e seus itens (quebraria a semântica para leitores de tela). Benefícios do MCMV e cards de números entram em cascata (delay de 90 ms por item); as duas seções perderam o `Reveal` externo em `app/page.tsx`, que duplicaria o movimento. Verificado no browser: opacidade 0 → 0,98/0,90/0,66 a 300 ms → 1 ao final, e item fora da viewport não antecipa.

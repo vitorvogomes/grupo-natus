@@ -5,7 +5,7 @@
 ## 1. Objetivos e métricas
 
 **Objetivos de produto**
-1. Apresentar os 12 empreendimentos de forma rica, visual e navegável.
+1. Apresentar os 11 empreendimentos de forma rica, visual e navegável.
 2. Maximizar conversão para contato (WhatsApp/formulário) com CTA clara em cada etapa.
 3. Transmitir a marca Grupo Natus (profissional, sólida, sofisticada) sem cara de template.
 4. Permitir acompanhamento da evolução das obras.
@@ -15,8 +15,8 @@
 
 ## 2. Requisitos funcionais (FR)
 
-- **FR1** — Home exibe apresentação institucional + catálogo dos 12 empreendimentos com card (nome, localização, status, imagem, características-chave, CTA, link).
-- **FR2** — Catálogo permite filtrar por **status** (Lançamento / Em construção / Pronto para morar) e por **localização** (cidade/UF).
+- **FR1** — Home exibe apresentação institucional + catálogo dos 11 empreendimentos com card (nome, localização, status, imagem, características-chave, CTA, link).
+- **FR2** — Catálogo permite filtrar por **status** (Lançamento / Em construção / Pronto para morar / Breve lançamento) e por **localização** (cidade/UF).
 - **FR3** — Cada empreendimento tem página própria em `/empreendimentos/[slug]`, gerada de um template único a partir de dados estruturados.
 - **FR4** — Página de empreendimento apresenta: galeria de imagens, características/features, localização (mapa), status, descrição, progresso da obra (quando houver) e CTA de contato contextualizado.
 - **FR5** — Progresso da obra exibe percentual geral + etapas (nome, %, ordem) e data da última atualização; começa como dado estático, modelado para migrar a Supabase.
@@ -45,7 +45,8 @@
 ## 4. Modelo de dados (conceitual)
 
 ```ts
-type DevelopmentStatus = 'lancamento' | 'em_construcao' | 'pronto'
+type DevelopmentStatus = 'lancamento' | 'em_construcao' | 'pronto' | 'breve_lancamento'
+// + soldOut?: boolean ("100% vendido", só sobre 'pronto'); mcmv?: boolean
 
 type Development = {
   slug: string
@@ -100,8 +101,7 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 
 ## 8. Riscos e questões abertas
 
-- Conteúdo real dos empreendimentos (descrições, features, coordenadas, progresso, imagens por empreendimento) — hoje só há assets de render/planta genéricos em `img/`. **Bloqueante para conteúdo**, não para estrutura.
-- Confirmar status/nomes dos 12 empreendimentos com a empresa.
-- Google Maps: avaliar embed vs. API key (custo) antes de acoplar.
+- Conteúdo dos 4 breve lançamentos e a data/periodicidade da atualização de obra (ver `docs/CONTENT-GAPS.md`). Os 7 com página completa ou reduzida já têm conteúdo do cliente.
+- Google Maps: embed público por padrão; o pin da marca entra com a chave + Map ID (`docs/google-maps.md`).
 - Estratégia de envio de email (provedor) e anti-spam a definir.
 - Necessidade real de admin/persistência — decidir no Gate C.

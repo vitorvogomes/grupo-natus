@@ -19,7 +19,7 @@ This document provides the complete epic and story breakdown for Website Grupo N
 ### Functional Requirements
 
 FR1: A Home exibe apresentação institucional + catálogo dos 11 empreendimentos, cada card com nome, localização, status, imagem, características-chave, CTA e link.
-FR2: O catálogo permite filtrar por status (Lançamento / Em construção / Pronto para morar) e por localização (cidade/UF).
+FR2: O catálogo permite filtrar por status (Lançamento / Em construção / Pronto para morar / Breve lançamento — revisão v3) e por localização (cidade/UF).
 FR3: Cada empreendimento tem página própria em `/empreendimentos/[slug]`, gerada de um template único a partir de dados estruturados.
 FR4: A página de empreendimento apresenta galeria de imagens, características/features, localização (mapa), status, descrição, progresso da obra (quando houver) e CTA de contato contextualizado.
 FR5: O progresso da obra exibe percentual geral + etapas (nome, %, ordem) e data da última atualização; começa como dado estático, modelado para migrar a Supabase.

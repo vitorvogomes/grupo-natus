@@ -9,6 +9,6 @@ Aplique TDD estrito para: **$ARGUMENTS**
 2. 🟢 **GREEN** — implemente o mínimo para passar. Nada além disso.
 3. ♻️ **REFACTOR** — melhore o design mantendo os testes verdes.
 4. Cubra casos de borda e estados (erro, vazio, loading, acessibilidade).
-5. Rode `npm run test:coverage` e garanta **≥90%** nas linhas tocadas.
+5. Rode `npm run test:coverage` e garanta **≥85%** (piso do projeto — docs/adr/0001-coverage-85.md) nas linhas tocadas.
 
 Regras: não inventar dados, não tocar RLS/env/secrets, seguir tokens do design system. Use a skill `vitest-testing` como referência.
