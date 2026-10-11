@@ -17,10 +17,10 @@ export function contextualMessage(development: Development): string {
 /**
  * Conversão da página do empreendimento.
  *
- * Uma faixa só: antes eram dois blocos lado a lado (painel de WhatsApp +
- * formulário) competindo com dois `<h2>` concorrentes na mesma linha. Agora a
- * chamada é única e o WhatsApp vira a alternativa de quem não quer preencher
- * nada — continua sendo a abstração do projeto (AD-3), não um link solto.
+ * Uma faixa só, com uma chamada: o formulário é o caminho principal e o
+ * WhatsApp é a alternativa de quem não quer preencher nada — pela abstração
+ * do projeto (AD-3), não um link solto. Dois blocos lado a lado competiriam
+ * com dois `<h2>` na mesma linha.
  */
 export function DevelopmentCta({ development }: DevelopmentCtaProps) {
   const whatsappHref = buildWhatsAppUrl({

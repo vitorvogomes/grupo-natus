@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ProgressTimeline } from "./ProgressTimeline";
-import { CONSTRUCTION_STAGES } from "./progress";
 import type {
   ConstructionProgress,
   DevelopmentImage,
@@ -11,8 +10,8 @@ const progress: ConstructionProgress = {
   overallPercentage: 55,
   updatedAt: "2026-08-01T00:00:00.000Z",
   stages: [
-    { name: "Terraplanagem", percentage: 100, order: 1 },
-    { name: "Estrutura", percentage: 40, order: 4 },
+    { name: "Fundação", percentage: 100, order: 1 },
+    { name: "Estrutura", percentage: 40, order: 2 },
   ],
 };
 
@@ -36,16 +35,16 @@ describe("ProgressTimeline", () => {
     expect(screen.getByText(/01\/08\/2026/)).toBeInTheDocument();
   });
 
-  it("mostra sempre as 7 etapas oficiais da Natus, na ordem", () => {
+  it("mostra só as etapas com avanço, na ordem oficial", () => {
     render(<ProgressTimeline progress={progress} />);
-    expect(rotulos()).toEqual(["Total Construído", ...CONSTRUCTION_STAGES]);
+    expect(rotulos()).toEqual(["Total Construído", "Fundação", "Estrutura"]);
   });
 
-  it("etapa sem dado aparece como 0%, não some", () => {
+  it("etapa em 0% não aparece", () => {
     render(<ProgressTimeline progress={progress} />);
     expect(
-      screen.getByRole("progressbar", { name: "Acabamentos" }),
-    ).toHaveAttribute("aria-valuenow", "0");
+      screen.queryByRole("progressbar", { name: "Alvenaria" }),
+    ).not.toBeInTheDocument();
   });
 
   it("rotula percentuais ilustrativos como tais", () => {
@@ -66,5 +65,11 @@ describe("ProgressTimeline", () => {
     expect(
       screen.queryByRole("button", { name: /ampliar imagem/i }),
     ).not.toBeInTheDocument();
+  });
+
+  it("só com o total (sem etapas), mostra o total e omite a lista vazia", () => {
+    render(<ProgressTimeline progress={{ overallPercentage: 15, stages: [] }} />);
+    expect(rotulos()).toEqual(["Total Construído"]);
+    expect(screen.queryByText(/etapas da obra/i)).not.toBeInTheDocument();
   });
 });

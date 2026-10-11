@@ -46,6 +46,19 @@ describe("DevelopmentAmenities", () => {
     expect(screen.getByText("Área gourmet")).toBeInTheDocument();
   });
 
+  it("só um grupo aberto por vez: abrir outro fecha o anterior", async () => {
+    const user = userEvent.setup();
+    render(<DevelopmentAmenities name="Follow Savassi" groups={groups} />);
+    await user.click(screen.getByRole("button", { name: /área de lazer/i }));
+    expect(
+      screen.queryByText("Apartamentos de 1 a 3 suítes"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /características/i })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
   it("cada categoria conhecida ganha um ícone (nenhum emoji)", () => {
     const { container } = render(
       <DevelopmentAmenities name="X" groups={groups} />,

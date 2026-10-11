@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ProgressBar } from "./ProgressBar";
 
 describe("ProgressBar (acessível, não só cor)", () => {
@@ -29,5 +29,15 @@ describe("ProgressBar (acessível, não só cor)", () => {
     const bar = screen.getByRole("progressbar", { name: /progresso geral/i });
     expect(bar).toHaveAttribute("aria-valuenow", "62");
     expect(screen.getByText("62%")).toBeInTheDocument();
+  });
+
+  it("observa o trilho (tamanho real), não o preenchimento que nasce em scaleX(0)", () => {
+    // Regressão: observar o indicador fazia o IntersectionObserver medir uma
+    // caixa de largura zero, e as barras das etapas às vezes nunca enchiam.
+    const observe = vi.spyOn(globalThis.IntersectionObserver.prototype, "observe");
+    render(<ProgressBar value={60} label="Alvenaria" />);
+    const observed = observe.mock.calls.map(([el]) => el);
+    expect(observed).toContain(screen.getByRole("progressbar"));
+    observe.mockRestore();
   });
 });
