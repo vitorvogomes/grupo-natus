@@ -74,16 +74,42 @@ describe("Header na Home (revela na rolagem)", () => {
   });
 
   it("revela o header quando o ponteiro chega ao topo", async () => {
-    const user = userEvent.setup({ pointerEventsCheck: 0 });
+    const user = userEvent.setup();
     render(<Header />);
-    expect(screen.getByRole("banner")).toHaveAttribute("data-revealed", "false");
+    const banner = screen.getByRole("banner");
+    expect(banner).toHaveAttribute("data-revealed", "false");
 
     // Sem isto, quem usa mouse precisaria rolar para alcançar a navegação —
     // o teclado já tinha o `focus-within`.
-    await user.hover(screen.getByTestId("header-hover-zone"));
-    expect(screen.getByRole("banner")).toHaveAttribute("data-revealed", "true");
+    await user.hover(banner);
+    expect(banner).toHaveAttribute("data-revealed", "true");
 
-    await user.unhover(screen.getByTestId("header-hover-zone"));
-    expect(screen.getByRole("banner")).toHaveAttribute("data-revealed", "false");
+    await user.unhover(banner);
+    expect(banner).toHaveAttribute("data-revealed", "false");
+  });
+
+  it("nenhuma camada fica por cima do header revelado pelo hover", async () => {
+    // Regressão: uma faixa de captura (z-50) sobre o header (z-40) revelava a
+    // navegação mas engolia todos os cliques. O alvo do hover agora é o
+    // invólucro do próprio header — não existe camada irmã sobre ele.
+    const user = userEvent.setup();
+    render(<Header />);
+    expect(screen.queryByTestId("header-hover-zone")).toBeNull();
+
+    const banner = screen.getByRole("banner");
+    await user.hover(banner);
+    const link = screen.getByRole("link", { name: "Empreendimentos" });
+    expect(banner).toContainElement(link);
+    expect(banner).toHaveAttribute("data-revealed", "true");
+  });
+
+  it("a logo branca sai quando o hover revela o header (não fica atrás dele)", async () => {
+    const user = userEvent.setup();
+    render(<Header />);
+    await user.hover(screen.getByRole("banner"));
+    expect(screen.getByTestId("hero-brand")).toHaveAttribute(
+      "data-visible",
+      "false",
+    );
   });
 });

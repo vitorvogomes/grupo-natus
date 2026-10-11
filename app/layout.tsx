@@ -6,7 +6,6 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { JsonLd, organizationSchema } from "@/features/seo/jsonLd";
 import { SITE_URL } from "@/lib/site";
-import { getDevelopmentsGroupedByStatus } from "@/content/developments";
 
 // Inter (corpo) + Outfit (títulos/display, sans geométrica) — a geometria
 // circular da Outfit ecoa o logotipo NATUS. Ambas variáveis: um arquivo por
@@ -57,7 +56,7 @@ export default function RootLayout({
         >
           Pular para o conteúdo
         </a>
-        <Header empreendimentosMenu={getDevelopmentsGroupedByStatus()} />
+        <Header />
         <div id="conteudo" className="flex-1">
           {children}
         </div>
