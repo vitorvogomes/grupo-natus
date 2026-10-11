@@ -4,40 +4,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-**Epics 1–7 concluídas (32/35 stories).** App Next.js 16.3.5 (App Router) + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 85%, ver docs/adr/0001-coverage-85.md). Entregue: design system + theme-showcase (**Gate A ✅**); Home/catálogo + filtros; template de empreendimento `[slug]` (hero, sub-nav âncora, galeria, detalhes, mapa, progresso, CTA/interesse) validado (**Gate B ✅**) gerando as páginas por dados (**12 empreendimentos** — 11 + Residenziale Colonnello Figueiredo/Nova Lima, do site atual); evolução das obras; formulários (Fale Conosco, Interesse, Negocie seu Terreno) + `/api/leads` (honeypot + rate-limit + email atrás de secret); institucionais; SEO site-wide (sitemap/robots/JSON-LD), a11y (skip-link) e motion (`prefers-reduced-motion`).
+**Epics 1–7 concluídas (32/35 stories) + revisões de cliente v2 e v3.** Gates A ✅ e B ✅; Epic 8 (Supabase/Admin, Gate C) é condicional e fora do plano. Histórico e números correntes (testes, cobertura, build) no fim de `docs/PROGRESS.md`; decisões no `.memlog.md` da spine.
 
-**Iniciativa de Modernização de Frontend concluída (impl.; ver `docs/PROGRESS.md`).** Tipografia Outfit+Inter (`next/font`; os títulos saíram da serifa Fraunces na Home v2); ícones lucide (zero emojis); primitivos shadcn/**Radix** (Dialog, Accordion, Tabs, **Progress**, **Select**, NavigationMenu); motion via `motion` (framer-motion); **forms com react-hook-form + zod** (schema dinâmico no `LeadForm`; honeypot/rate-limit/`/api/leads` preservados; `<select>` nativo mantido no lead form por robustez); **Radix Select** só nos filtros do catálogo (`SelectField`). Revisão de design aplicada (contraste AA: `muted-foreground` escurecido + cor de erro dedicada `--color-status-error`). Estágio de obra com as etapas oficiais da Natus. Fase C (piloto): pipeline `sharp` (`scripts/optimize-images.mjs`) otimizou o Follow Savassi (72 MB→~6 MB, WEBP). Fase C (piloto) concluída. *(Contagens de build/testes desta iniciativa ficaram desatualizadas e saíram daqui — o número corrente está no fim de `docs/PROGRESS.md`.)*
+Stack: Next.js 16.3.5 (App Router) + React 19 + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 85%, `docs/adr/0001-coverage-85.md`). Tipografia Outfit (títulos) + Inter (`next/font`); ícones lucide (zero emoji); primitivos Radix (Dialog, Accordion, Tabs, Progress, Select); motion via `motion`; forms com react-hook-form + zod (`LeadForm` → `/api/leads`, honeypot + rate-limit, email atrás de secret).
 
-Pastas: `app/`, `components/` (+`ui/`, `showcase/`), `features/` (`developments`, `contact`, `home`, `land-submission` via páginas, `seo`), `content/developments/`, `lib/`, `types/`, `styles/`, `public/`.
+Pastas: `app/`, `components/` (+`ui/`, `motion/`, `showcase/`), `features/` (`developments`, `home`, `institutional`, `mcmv`, `contact`, `seo`), `content/developments/`, `lib/`, `types/`, `styles/`, `scripts/`, `public/`.
 
-**Home v2 concluída (2026-09-30; feedback do cliente sobre a v1 — ver `docs/PROGRESS.md`).** Ordem da home: **hero só com imagem (84svh, fachada noturna enquadrada na entrada, logo branca sobreposta até a rolagem) → busca → carrossel centralizado com os 12 → Minha Casa Minha Vida → Grupo Natus**; o catálogo dos 12 vive só em `/empreendimentos`. Títulos migraram de Fraunces (serifa) para **Outfit** (sans geométrica, ecoa o logotipo). Header fica oculto na Home até a rolagem (`fixed` + `data-revealed`; `sticky` nas demais rotas). Busca por **Status · Cidade · Tipo de imóvel** navega para `/empreendimentos?status=&cidade=&tipo=` — daí `/empreendimentos` virou **dinâmica (SSR)**. Novo campo `propertyType` em `types/development.ts`, preenchido só com evidência no material (4 dos 12 pendentes). Carrossel é **implementação própria** (scroll-snap + wrap + índice sincronizado à rolagem), não embla/shadcn — ver a justificativa no PROGRESS. `FEATURED_SLUGS` define só quem abre o carrossel; `getHomeDevelopments()` devolve o catálogo inteiro nessa ordem.
+**Portfólio (`content/developments/data.ts`, 11 empreendimentos — fonte estática, AD-2).**
+- **Status** `lancamento · em_construcao · pronto · breve_lancamento`. A ordem de `DEVELOPMENT_STATUSES` é a prioridade de exibição: `getAllDevelopments()` ordena por ela (Home, catálogo e "explore" abrem pelos lançamentos). **100% vendido** = `soldOut`, só sobre `pronto` (teste de conteúdo), exibido como faixa (`SoldOutBand`) **só no card**. Selos (`DevelopmentBadges`: status + MCMV) são neutros, sem cor por status.
+- **`mcmv`** só nos 6 confirmados pelo cliente. Marca federal fora do programa sugere credenciamento inexistente.
+- **`propertyType`** só com evidência no material (3 pendentes). **`location.neighborhood`** compõe o título do resumo ("UF," / "Bairro - Cidade" ou só a cidade — `formatLocality`).
+- **Imagens**: categorias `imagens · planta · obra` (ordem das abas = `DEVELOPMENT_IMAGE_KINDS`); a 1ª é a capa e nunca é planta/obra. Largura/altura vêm do manifesto `content/developments/image-dimensions.json`, e o `sizes` de fotos com `object-cover` é calculado da proporção (`coverSizes`). `amenitiesImage` escolhe a foto do "O que oferece".
+- **Pipeline** `npm run optimize:images [slug|singles|institucional|brand|manifest]` (`scripts/optimize-images.mjs`, sharp → WEBP): originais em `img/<pasta>/`, saída em `public/`; `quality`/`sharpen` por job ou imagem para fontes pequenas; o manifesto é regerado em toda execução (um teste acusa imagem fora dele).
 
-**Página do empreendimento v2 concluída (2026-10-01; parte 2 do mesmo feedback).** Ordem: **descrição ao lado da imagem → galeria → o que oferece → localização → estágio de obra → CTA → MCMV → explore empreendimentos**.
+**Página do empreendimento (`app/empreendimentos/[slug]/page.tsx`) — uma página, composição por status.** Ordem: resumo → galeria → o que oferece → localização → estágio de obra → CTA → MCMV → explore. Lançamento = completa; em construção/pronto = reduzida (só o que tem dado); `breve_lancamento` = seção mínima (`DevelopmentComingSoon`, sem localização/CTA/sub-nav). Obra só em lançamento e em construção, quando `hasProgressToShow` (total ou etapa > 0); etapas oficiais Fundação · Estrutura · Alvenaria · Acabamento interno · Acabamento externo, e `canonicalStages` omite as em 0%.
+- **Sub-nav** recebe as seções renderizadas: Imagens · Empreendimento (→ "O que oferece", ou o resumo sem diferenciais) · Localização · Estágio de Obra · Consultor.
+- **Galeria** (`Gallery.tsx`, reaproveitada em `/engenharia`) + lightbox; imagens grandes entregues em q90 (`next.config` permite 75 e 90). **Accordion** de "O que oferece" com `type="single"`.
+- **Mapa** (`DevelopmentMap`): sem chave, embed público (não aceita marcador próprio); com `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` + `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`, JS API com o pin da Natus. Passo a passo em `docs/google-maps.md`.
 
-- **Uma página, três formas.** O **status** diz quais seções fazem sentido (obra só em `em_construcao`) e o **dado presente** diz quais aparecem. Hoje: Follow Savassi completo; 6 reduzidos; 5 lançamentos sem material caem no `DevelopmentComingSoon`. Não existem três templates — a composição condicional está em `app/empreendimentos/[slug]/page.tsx`.
-- **Galeria** (`features/developments/Gallery.tsx`): palco + régua de miniaturas que sempre cabe (a ativa cresce, as outras encolhem), contador, setas no palco, clique abre o `GalleryLightbox`. `min-w-6` nas miniaturas por causa do alvo de 24×24 (WCAG 2.5.8). **Reaproveitada em `/engenharia`**, uma galeria por obra — aceita imagens sem `kind` e aí não renderiza abas.
-- **Categorias de imagem**: `imagens · planta · obra` (`externa`+`apartamento` fundiram em `imagens`). A ordem das abas vem de `DEVELOPMENT_IMAGE_KINDS`, nunca da ordem no dado.
-- **Mapa** (`DevelopmentMap`): sem chave usa o embed público (caminho atual, sem custo); com `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` + `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` carrega a JS API com o pin da Natus (`public/brand/pin-natus.png`). **O embed público não aceita marcador customizado** — é a razão dos dois caminhos. Até esta fatia nenhum empreendimento tinha endereço e o mapa nunca renderizava.
-- **`mcmv`** (novo campo): a seção do programa só aparece onde há evidência no material (Solar Manilha, Sunset Ville, Royal Ville). Marca federal fora do programa sugere credenciamento inexistente.
-- **Sub-nav âncora** recebe as seções por prop e lista só as renderizadas.
-- Saíram do modelo: `highlights` (virou a `description` do Residenziale) e `presentationUrl` (inalcançável a partir de `fromSeed`). `Accordion` aceita `title: ReactNode` e `defaultOpen`.
-- `/quem-somos` perdeu a seção "Nossa história" (único TODO visível). `npm run optimize:images brand` gera o pin e o `app/icon.png`.
+**Home**: hero só imagem (logo branca sobreposta até o header entrar) → busca (Status · Cidade · Tipo → `/empreendimentos?…`, rota dinâmica) → carrossel (3 por vez no desktop) → MCMV → Grupo Natus. **Header** oculto no topo da Home até rolagem ou hover; o alvo do hover é o invólucro do próprio header — nunca empilhar camada de captura por cima. Sem submenu de empreendimentos.
 
-**Pendências 🔔 (`docs/CONTENT-GAPS.md`):** conteúdo real dos 12 empreendimentos + institucionais; %-reais de obra; campos do Negocie seu Terreno; provedor de email (Resend `[ASSUMPTION]`) + secret; domínio de produção; compressão dos fontes de imagem. **Epic 8** (Supabase/Admin, Gate C) é condicional e fora do plano atual.
+**Invariantes de UI que já custaram bug:**
+- Carrosséis rolam só o trilho (`features/developments/carouselTrack.ts`): `scrollTo`, nunca `scrollIntoView`; trilho `relative` (contém `sr-only`/absolutes dos cards). Senão a página ganha rolagem horizontal.
+- `ProgressBar` observa o trilho, não o preenchimento em `scaleX(0)` (o IntersectionObserver falha em caixa de largura zero).
+
+**Institucional**: textos de empresas, valores, certificações (ISO 9001 + PBQP-H) e números da operação vivem em `features/institutional/` (fonte única de Quem Somos, Engenharia e Home). A contagem "entregues × em desenvolvimento" de Quem Somos vem de `getPortfolioCounts()`.
+
+**Pendências 🔔 (`docs/CONTENT-GAPS.md`):** material dos 4 breve lançamentos; data/periodicidade da atualização de obra; chaves do Google Maps; campos do Negocie seu Terreno; provedor de email (Resend `[ASSUMPTION]`) + secret; domínio de produção; redes sociais e CNPJ/CRECI do rodapé. **SEO e migração de URLs** (redirects do WordPress, Search Console, perfil no Google): plano em `docs/seo.md`.
 
 Materiais de origem (ainda a base de verdade):
 
-- `README` — the master brief / master prompt (Portuguese). This is the authoritative spec: read it in full before doing anything. It defines the product, design principles, page scope, data model sketches, development rules, and the 13-phase workflow (Discovery → Brief → UX → Design System → theme-showcase → Architecture → Foundation → Home → Development template → remaining developments → institutional pages → dynamic features → validation).
+- `README` — the master brief / master prompt (Portuguese). This is the authoritative spec: read it in full before doing anything. It defines the product, design principles, page scope, data model sketches, development rules, and the 13-phase workflow.
 - `NOTAS` — condensed notes from the client (Portuguese): references, page list, functional requests.
 - `img/` — local visual assets (see below). These are real project materials, not placeholders.
 - `supabase/` — only Supabase CLI scratch dirs (`.branches/`, `.temp/`) exist; **no `config.toml`, no migrations, no schema.** Supabase is *not* initialized in this working tree yet, though the brief states a Supabase project already exists remotely.
 
-Ainda não há repositório git. Os comandos abaixo já valem (scaffold criado no E1.1).
-
 **Planning artifacts (BMAD, in `docs/`) — read before implementing:**
-- `docs/product-brief.md` — vision, audience, scope, the 11 real developments (grounded from the live site), constraints.
+- `docs/product-brief.md` — vision, audience, scope, the 11 developments (confirmed by the client in the v3 review), constraints.
 - `docs/prd.md` — FRs/NFRs, conceptual data model (`Development`, `ConstructionProgress`), epic overview, gates, open risks.
-- **`_bmad-output/planning-artifacts/epics.md`** — **canonical backlog** (BMAD): Requirements Inventory (FR/NFR/UX-DR), FR Coverage Map, **8 epics · 35 stories** in Given/When/Then. `docs/epics.md` is now just a pointer to it. Gates: A (theme-showcase approval, end of Epic 1); B (validate one development page before generating all 11, Epic 3); C (persistence/admin only on concrete need, Epic 8).
+- **`_bmad-output/planning-artifacts/epics.md`** — **canonical backlog** (BMAD): Requirements Inventory (FR/NFR/UX-DR), FR Coverage Map, **8 epics · 35 stories** in Given/When/Then. `docs/epics.md` is now just a pointer to it. Gates: A (theme-showcase approval, end of Epic 1); B (validate one development page before generating the rest, Epic 3); C (persistence/admin only on concrete need, Epic 8).
 - **`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`** — **architecture spine** (BMAD): the binding invariants (AD-1…AD-8), design paradigm, conventions, verified stack (Next.js 16.3.5 / React 19 / Tailwind 4.3 / Vitest 5.0.1), source tree, and Capability→Architecture map. `[ASSUMPTION]` tags mark unconfirmed picks (supabase-js/@supabase/ssr, Resend, create-next-app starter). The `.memlog.md` beside it is the decision log.
 
 ## Workflow, skills & the sacred TDD gate (`.claude/`)
@@ -50,7 +55,7 @@ Ainda não há repositório git. Os comandos abaixo já valem (scaffold criado n
 **Slash commands** (`.claude/commands/`): `/story <ID|desc>` — implement an epic story via strict TDD + the DoD (coverage ≥85%, lint, typecheck); `/tdd <unit>` — a single red-green-refactor loop; `/coverage` — run the gate manually and report gaps. Do **not** lower the 85% threshold further to "pass" — cover for real (o abaixamento 90→85 é decisão documentada, não atalho).
 
 **Installed skills** (`.claude/skills/`): use them when relevant —
-- `nextjs-app-router-patterns` (App Router/RSC), `tailwind-design-system` (Epic 1 design system), `framer-motion-animator` (Epic 8 motion), `nextjs-seo` (Epic 9), `vitest-testing` (TDD), `supabase` + `supabase-postgres-best-practices` (**load before any Postgres/RLS/migration work** — critical given the do-not-touch-RLS rule).
+- `nextjs-app-router-patterns` (App Router/RSC), `tailwind-design-system` (tokens/design system), `framer-motion-animator` / `animate` (motion), `nextjs-seo` (SEO), `vitest-testing` (TDD), `better-*` / `emil-design-eng` (UI, a11y e revisão de interface), `supabase` + `supabase-postgres-best-practices` (**load before any Postgres/RLS/migration work** — critical given the do-not-touch-RLS rule).
 - `find-skills` — discover/install more skills via `npx skills find <query>` / `npx skills add <owner/repo@skill> -a claude-code -y`.
 - **BMAD** (`bmad-*`, module in `_bmad/`, config in Portuguese): `bmad-prd`, `bmad-create-epics-and-stories`, `bmad-architecture`, `bmad-sprint-planning`, `bmad-qa-generate-e2e-tests`, `bmad-review`, `bmad-help`. Use to refine planning artifacts; BMAD output folder is `_bmad-output/`.
 
@@ -91,15 +96,15 @@ Reference site for *structure/UX/interaction* (never for visual copying): novola
 
 ## Local assets (`img/`)
 
-72 files. Notable:
-- `img/LOGO-.../LOGO/{JPG,PDF}/` — official Grupo Natus logos: `GRUPO_NATUS_PRINCIPAL`, `_NEGATIVA` (negative), `_PRETA` (black), and `_ASSINATURA` (with signature/tagline) variants. Use these; derive brand colors from them.
-- `img/Final/`, `img/Imagens 3D (Prévia)/`, `img/01.3.10. Perspectivas 3D/` (with `APTOS`, `EXTERNA`, `PLANTAS HUMANIZADAS`, `Maquete`) — 3D renders, humanized floor plans, and maquete images for development(s). Analyze these before making visual decisions; use `next/image`.
+Originais versionados; o site serve só o que o pipeline gera em `public/`.
+- `img/LOGOS/LOGO/JPG/` — logos oficiais (`GRUPO_NATUS_PRINCIPAL`, `_NEGATIVA`, `_PRETA`, `_ASSINATURA`); `img/LOGOS/Favicon/` — símbolo (pin do mapa e `app/icon.png`). As cores da marca derivam deles (`styles/theme.css`).
+- `img/<Empreendimento - Cidade UF>/` — renders, plantas e fotos por empreendimento; o mapeamento arquivo → saída é explícito no `JOBS` de `scripts/optimize-images.mjs`. `img/(sem foto) …` marca quem ainda não tem material.
+- `img/Quem Somos/`, `img/Servico - */`, `img/home/`, `img/breve-lancamento.png` (foto padrão do breve lançamento).
 
 ## Tooling notes
 
-- **Skills** referenced in the brief and expected to be used: `find-skills`, `theme-factory`, `ui-ux-pro-max`. Check what's installed before starting design work.
-- **BMAD method** (github.com/bmad-code-org/bmad-method) is *not* installed (no `_bmad`). The brief asks to verify (`ls -la _bmad`, `npx bmad-method --version`) and propose installation before structuring the plan — used lightly for clarity, not bureaucracy.
-- A **`theme-showcase.pdf`** is an expected deliverable that must be reviewed and approved before building all pages — don't consider the design system closed before that gate.
+- **BMAD** está instalado (`_bmad/`, saída em `_bmad-output/`); use-o com leveza, para clareza, não burocracia.
+- O theme-showcase (`/theme-showcase`) foi aprovado no Gate A; mudanças de token passam por `styles/theme.css` (AD-7: cor só em CSS).
 
 ## Commands
 

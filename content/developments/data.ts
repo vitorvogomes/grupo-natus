@@ -4,16 +4,17 @@ import type {
   DevelopmentFeature,
   DevelopmentImage,
 } from "@/types/development";
+import dimensions from "./image-dimensions.json";
 
 /**
- * Seed dos 12 empreendimentos ativos do Grupo Natus.
+ * Seed dos 11 empreendimentos do portfólio do Grupo Natus.
  * Fonte de verdade estática — AD-2.
  *
- * CONFIRMADO (site atual + product-brief): name, slug, cidade/UF, status e o
- * destaque de tipologia quando informado. Imagens do Follow Savassi vêm de
- * `img/Final - Follow Savassi/` (pasta atribuída ao empreendimento).
- * TODO: CONTENT REQUIRED — descrição, imagens dos demais, coordenadas, progresso.
- * **Nomes/status a validar com a empresa.**
+ * CONFIRMADO pelo cliente (revisão v3, 2026-10-11): status, bairro/cidade,
+ * descrições, localização e o programa MCMV. Os breve lançamentos seguem só
+ * com o que o site atual informava (cidade e tipologia).
+ * TODO: CONTENT REQUIRED — data de atualização da obra e o material dos
+ * breve lançamentos.
  */
 
 const TODO = "TODO: CONTENT REQUIRED";
@@ -23,6 +24,8 @@ type Seed = {
   name: string;
   status: Development["status"];
   city: string;
+  /** Bairro — título do resumo. Ausente = só a cidade. */
+  neighborhood?: string;
   state: string;
   highlight?: string; // destaque confirmado (tipologia)
   /**
@@ -35,7 +38,9 @@ type Seed = {
   images?: DevelopmentImage[]; // imagens reais atribuídas
   extraFeatures?: DevelopmentFeature[]; // features visíveis nos assets reais
   amenities?: Development["amenities"];
-  progress?: ConstructionProgress; // mock rotulado (isPreview) até dado real
+  /** Imagem ao lado do accordion (src de uma das `images`). */
+  amenitiesImage?: string;
+  progress?: ConstructionProgress; // isPreview = mock rotulado; omitido quando o % vem do cliente
   /** Descrição real. Sem ela, fromSeed mantém o placeholder rotulado. */
   description?: string;
   /** Localização precisa — sem ela o mapa degrada para link (lib/maps). */
@@ -46,112 +51,35 @@ type Seed = {
   locationNote?: string;
   /** Enquadrado no MCMV — só com evidência no material. */
   mcmv?: boolean;
+  /** 100% vendido — só em "pronto". */
+  soldOut?: boolean;
 };
 
+/** Atalho do seed: `slug` + nome curto do arquivo → caminho público. */
+const img = (slug: string, file: string) => `/empreendimentos/${slug}/${file}.webp`;
+
+/**
+ * Ordem = prioridade do portfólio (lançamento → em construção → pronto →
+ * breve lançamento). `index.ts` reordena por status de qualquer forma; manter
+ * o seed na mesma ordem só deixa o arquivo legível de cima para baixo.
+ *
+ * Conteúdo da revisão v3 (cliente, 2026-10-11): descrições verbatim — cada
+ * linha vira um item do resumo —, localização pelos links de mapa enviados
+ * (coordenadas lidas do place; os dois links `share.google` foram resolvidos
+ * pela busca do Maps até o endereço) e status novos.
+ */
 const SEEDS: readonly Seed[] = [
-  {
-    slug: "residenziale-colonnello-figueiredo",
-    name: "Residenziale Colonnello Figueiredo",
-    status: "pronto",
-    city: "Nova Lima",
-    state: "MG",
-    // Evidência: feature "Apartamentos: 2 e 3 quartos" + plantas de 2 e 3 quartos.
-    propertyType: "apartamento",
-    summary:
-      "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
-    // Fatos do portfólio do site atual. A seção de visão geral mostra descrição
-    // em texto corrido, não bullets com check — uma linha vira um parágrafo.
-    description: [
-      "20 unidades: apartamentos de 2 e 3 quartos e coberturas lineares.",
-      "Varandas em todas as unidades.",
-      "A 10 minutos do BH Shopping, próximo ao Supermercado BH.",
-    ].join("\n"),
-    extraFeatures: [
-      { label: "Apartamentos", value: "2 e 3 quartos (69 e 79 m²)" },
-      { label: "Coberturas", value: "lineares de 138 e 158 m²" },
-      { label: "Vagas", value: "1 a 2 por unidade" },
-    ],
-    images: [
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada-rua.webp", alt: "Fachada vista da rua", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura-fachada.webp", alt: "Cobertura — vista da fachada", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/cobertura.webp", alt: "Cobertura", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar.webp", alt: "Sala de estar (perspectiva)", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/sala-de-estar-2.webp", alt: "Sala de estar (perspectiva)", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/fachada.webp", alt: "Fachada do Residenziale Colonnello Figueiredo", kind: "imagens" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-3-quartos.webp", alt: "Planta — apartamento de 3 quartos", kind: "planta" },
-      { src: "/empreendimentos/residenziale-colonnello-figueiredo/planta-2-quartos.webp", alt: "Planta — apartamento de 2 quartos", kind: "planta" },
-    ],
-  },
-  {
-    slug: "viver-mais",
-    name: "Viver Mais",
-    status: "pronto",
-    city: "Itaboraí",
-    state: "RJ",
-    // TODO: CONTENT REQUIRED — propertyType (só há perspectivas e fotos de obra).
-    images: [
-      { src: "/empreendimentos/viver-mais/lazer.webp", alt: "Área de lazer do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/perspectiva-2.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/perspectiva-3.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/perspectiva-4.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/perspectiva-5.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/perspectiva-6.webp", alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
-      { src: "/empreendimentos/viver-mais/obra-1.webp", alt: "Obra do Residencial Viver Mais", kind: "obra" },
-      { src: "/empreendimentos/viver-mais/obra-2.webp", alt: "Obra do Residencial Viver Mais", kind: "obra" },
-      { src: "/empreendimentos/viver-mais/obra-estrutura-1.webp", alt: "Estrutura em construção", kind: "obra" },
-      { src: "/empreendimentos/viver-mais/obra-3.webp", alt: "Andamento da obra", kind: "obra" },
-    ],
-  },
-  {
-    slug: "residencial-denver",
-    name: "Residencial Denver",
-    status: "pronto",
-    city: "Belo Horizonte",
-    state: "MG",
-    // Evidência: os renders internos mostram sala e cozinha de unidade
-    // residencial (perspectiva-4 e -5); perspectiva-3 é foto de obra.
-    propertyType: "apartamento",
-    images: [
-      { src: "/empreendimentos/residencial-denver/perspectiva-2.webp", alt: "Perspectiva do Residencial Denver", kind: "imagens" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-4.webp", alt: "Perspectiva do Residencial Denver", kind: "imagens" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-5.webp", alt: "Perspectiva do Residencial Denver", kind: "imagens" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-6.webp", alt: "Perspectiva do Residencial Denver", kind: "imagens" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-1.webp", alt: "Perspectiva do Residencial Denver", kind: "imagens" },
-      { src: "/empreendimentos/residencial-denver/perspectiva-3.webp", alt: "Perspectiva do Residencial Denver", kind: "obra" },
-    ],
-  },
-  {
-    slug: "torres-da-lagoa",
-    name: "Torres da Lagoa",
-    status: "pronto",
-    city: "Lagoa Santa",
-    state: "MG",
-    // Evidência: alt "Planta humanizada — apartamento tipo".
-    propertyType: "apartamento",
-    images: [
-      { src: "/empreendimentos/torres-da-lagoa/fachada.webp", alt: "Fachada dos blocos do Torres da Lagoa", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/piscina.webp", alt: "Piscina do Torres da Lagoa", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/espaco-gourmet.webp", alt: "Espaço gourmet", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/guarita.webp", alt: "Guarita e entrada", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/sala.webp", alt: "Sala decorada", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/cozinha.webp", alt: "Cozinha decorada", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/quarto.webp", alt: "Quarto decorado", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/varanda-gourmet.webp", alt: "Varanda gourmet", kind: "imagens" },
-      { src: "/empreendimentos/torres-da-lagoa/planta-tipo.webp", alt: "Planta humanizada — apartamento tipo", kind: "planta" },
-    ],
-  },
   {
     slug: "follow-savassi",
     name: "Follow Savassi",
-    status: "em_construcao",
+    status: "lancamento",
     city: "Belo Horizonte",
+    neighborhood: "Savassi",
     state: "MG",
     // Evidência: alts "Apartamento decorado (unidade 1001/1003/303)".
     propertyType: "apartamento",
     summary:
-      "Empreendimento em construção na Savassi, em Belo Horizonte/MG, com fachada contemporânea e área de lazer no rooftop.",
-    // Descrição e diferenciais fornecidos pelo cliente (2026-10-01), verbatim.
-    // Cada linha vira um parágrafo em DevelopmentOverview.
+      "Lançamento na Savassi, em Belo Horizonte/MG: apartamentos de 1 a 3 suítes, rooftop com piscina de borda infinita e projeto de Estela Netto.",
     description: [
       "Rooftop com piscina de borda infinita, espaço fitness e área gourmet.",
       "Automação residencial, janelas acústicas e fechadura eletrônica em todas as unidades.",
@@ -159,37 +87,31 @@ const SEEDS: readonly Seed[] = [
       "Projeto arquitetônico assinado por Estela Netto.",
     ].join("\n"),
     address: "Av. Getúlio Vargas, 1.676 — Savassi",
-    // Coordenadas do place no link enviado pelo cliente (!3d / !4d).
     lat: -19.9393436,
     lng: -43.9383469,
-    googleMapsUrl:
-      "https://www.google.com/maps/place/Av.+Get%C3%BAlio+Vargas,+1676+-+Funcion%C3%A1rios,+Belo+Horizonte+-+MG,+30112-024/@-19.9393436,-43.9409272,17z",
+    googleMapsUrl: "https://maps.app.goo.gl/dHHGEKMiT7vVRGxT7",
     locationNote:
       "No encontro da Av. do Contorno com a Getúlio Vargas, no coração da Savassi.",
     images: [
-      { src: "/empreendimentos/follow-savassi/fachada-diurna.webp", alt: "Fachada diurna do Follow Savassi", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/fachada-noturna.webp", alt: "Fachada noturna do Follow Savassi", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/voo-do-passaro.webp", alt: "Vista aérea do Follow Savassi", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/rooftop-piscina.webp", alt: "Piscina no rooftop", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/rooftop-gourmet.webp", alt: "Espaço gourmet no rooftop", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/academia.webp", alt: "Academia", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/hall.webp", alt: "Hall de entrada", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/apartamento-1001.webp", alt: "Apartamento decorado (unidade 1001)", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/apartamento-1003.webp", alt: "Apartamento decorado (unidade 1003)", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/apartamento-303.webp", alt: "Apartamento decorado (unidade 303)", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/suite-702.webp", alt: "Suíte decorada (unidade 702)", kind: "imagens" },
-      { src: "/empreendimentos/follow-savassi/rooftop-terraco.webp", alt: "Terraço no rooftop", kind: "imagens" },
+      { src: img("follow-savassi", "fachada-diurna"), alt: "Fachada diurna do Follow Savassi", kind: "imagens" },
+      { src: img("follow-savassi", "fachada-noturna"), alt: "Fachada noturna do Follow Savassi", kind: "imagens" },
+      { src: img("follow-savassi", "voo-do-passaro"), alt: "Vista aérea do Follow Savassi", kind: "imagens" },
+      { src: img("follow-savassi", "rooftop-piscina"), alt: "Piscina no rooftop", kind: "imagens" },
+      { src: img("follow-savassi", "rooftop-gourmet"), alt: "Espaço gourmet no rooftop", kind: "imagens" },
+      { src: img("follow-savassi", "academia"), alt: "Academia", kind: "imagens" },
+      { src: img("follow-savassi", "hall"), alt: "Hall de entrada", kind: "imagens" },
+      { src: img("follow-savassi", "apartamento-1001"), alt: "Apartamento decorado (unidade 1001)", kind: "imagens" },
+      { src: img("follow-savassi", "apartamento-1003"), alt: "Apartamento decorado (unidade 1003)", kind: "imagens" },
+      { src: img("follow-savassi", "apartamento-303"), alt: "Apartamento decorado (unidade 303)", kind: "imagens" },
+      { src: img("follow-savassi", "suite-702"), alt: "Suíte decorada (unidade 702)", kind: "imagens" },
+      { src: img("follow-savassi", "rooftop-terraco"), alt: "Terraço no rooftop", kind: "imagens" },
     ],
-    // Chips do card no catálogo/carrossel (features) — recorte curto do que os
-    // grupos abaixo detalham na página. São superfícies diferentes: 3 chips não
-    // comportam os 11 itens do accordion.
+    // Chips do card — recorte curto do que o accordion detalha na página.
     extraFeatures: [
       { label: "Apartamentos", value: "1 a 3 suítes" },
       { label: "Área", value: "37 a 168 m²" },
       { label: "Lazer", value: "Rooftop com piscina" },
     ],
-    // Grupos oficiais enviados pelo cliente (2026-10-01). Os emojis do texto de
-    // origem viram ícones lucide em DevelopmentAmenities (regra: zero emoji).
     amenities: [
       {
         category: "Características",
@@ -202,78 +124,344 @@ const SEEDS: readonly Seed[] = [
       },
       {
         category: "Área de lazer",
-        items: [
-          "Rooftop com piscina de borda infinita",
-          "Espaço fitness",
-          "Área gourmet",
-        ],
+        items: ["Rooftop com piscina de borda infinita", "Espaço fitness", "Área gourmet"],
       },
       {
         category: "Comodidades",
-        items: [
-          "Automação residencial",
-          "Janelas acústicas",
-          "Fechadura eletrônica",
-        ],
+        items: ["Automação residencial", "Janelas acústicas", "Fechadura eletrônica"],
       },
       { category: "Segurança", items: ["Portaria eletrônica 24h"] },
     ],
-    // Progresso REAL do site oficial (natusgrupo.com.br) — obra recém-iniciada.
-    // O site não informa data (updatedAt omitido). canonicalStages preenche 0%.
+    // Percentuais informados pelo cliente (2026-10-11).
     progress: {
-      overallPercentage: 0,
-      stages: [{ name: "Terraplanagem", percentage: 100, order: 1 }],
+      overallPercentage: 70,
+      stages: [
+        { name: "Fundação", percentage: 99, order: 1 },
+        { name: "Estrutura", percentage: 100, order: 2 },
+        { name: "Alvenaria", percentage: 90, order: 3 },
+        { name: "Acabamento interno", percentage: 60, order: 4 },
+        { name: "Acabamento externo", percentage: 50, order: 5 },
+      ],
     },
   },
   {
+    mcmv: true,
+    slug: "solar-manilha",
+    name: "Solar Manilha",
+    status: "lancamento",
+    city: "Itaboraí",
+    neighborhood: "Manilha",
+    state: "RJ",
+    // Evidência: "Unidades de 2 quartos" + planta "Apartamento Tipo".
+    propertyType: "apartamento",
+    summary:
+      "Lançamento em Manilha, Itaboraí/RJ: 368 unidades de 2 quartos em condomínio fechado com lazer de clube, enquadrado no Minha Casa Minha Vida.",
+    description: [
+      "Lazer completo, para momentos únicos com toda a sua família.",
+      "O sossego e a segurança de um condomínio fechado, rodeado de verde.",
+      "Mais praticidade para a sua rotina.",
+      "Plantas inteligentes, com cada espaço bem aproveitado.",
+    ].join("\n"),
+    lat: -22.767126,
+    lng: -42.918125,
+    googleMapsUrl: "https://maps.app.goo.gl/fRVp7Sj4uppGjxRe8",
+    images: [
+      // Capa (escolha do cliente): a implantação é um render aéreo humanizado,
+      // não uma planta técnica — por isso entra como "imagens".
+      { src: img("solar-manilha", "implantacao"), alt: "Vista aérea da implantação do condomínio Solar Manilha", kind: "imagens" },
+      { src: img("solar-manilha", "acesso-principal"), alt: "Acesso principal do Solar Manilha", kind: "imagens" },
+      { src: img("solar-manilha", "vista-aerea"), alt: "Vista aérea do condomínio Solar Manilha", kind: "imagens" },
+      { src: img("solar-manilha", "portaria"), alt: "Portaria", kind: "imagens" },
+      { src: img("solar-manilha", "piscinas"), alt: "Piscinas adulto e infantil", kind: "imagens" },
+      { src: img("solar-manilha", "quiosques-piscina"), alt: "Quiosques e piscina", kind: "imagens" },
+      { src: img("solar-manilha", "quadras"), alt: "Quadras", kind: "imagens" },
+      { src: img("solar-manilha", "espaco-criancas"), alt: "Espaço kids", kind: "imagens" },
+      { src: img("solar-manilha", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
+      { src: img("solar-manilha", "salao-de-festas-interno"), alt: "Salão de festas — interior", kind: "imagens" },
+      { src: img("solar-manilha", "quiosque-academia"), alt: "Quiosque e academia ao ar livre", kind: "imagens" },
+      { src: img("solar-manilha", "academia-aberta"), alt: "Academia ao ar livre", kind: "imagens" },
+      { src: img("solar-manilha", "bicicletario"), alt: "Bicicletário", kind: "imagens" },
+      { src: img("solar-manilha", "redario"), alt: "Redário", kind: "imagens" },
+      { src: img("solar-manilha", "redario-2"), alt: "Redário", kind: "imagens" },
+      { src: img("solar-manilha", "pet-place"), alt: "Pet place", kind: "imagens" },
+      { src: img("solar-manilha", "sala-de-estar"), alt: "Sala de estar decorada", kind: "imagens" },
+      { src: img("solar-manilha", "sala-de-jantar"), alt: "Sala de jantar decorada", kind: "imagens" },
+      { src: img("solar-manilha", "cozinha-jantar"), alt: "Cozinha integrada à sala de jantar", kind: "imagens" },
+      { src: img("solar-manilha", "cozinha-garden"), alt: "Cozinha com acesso ao garden", kind: "imagens" },
+      { src: img("solar-manilha", "area-de-servico-garden"), alt: "Área de serviço e garden", kind: "imagens" },
+      { src: img("solar-manilha", "garden"), alt: "Garden da unidade", kind: "imagens" },
+      { src: img("solar-manilha", "quarto-casal"), alt: "Quarto de casal decorado", kind: "imagens" },
+      { src: img("solar-manilha", "quarto-casal-2"), alt: "Quarto de casal decorado", kind: "imagens" },
+      { src: img("solar-manilha", "quarto"), alt: "Quarto decorado", kind: "imagens" },
+      { src: img("solar-manilha", "home-office"), alt: "Espaço de home office", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-jantar"), alt: "Apartamento tipo — sala de jantar e cozinha", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-cozinha"), alt: "Apartamento tipo — cozinha e área de serviço", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-vista"), alt: "Apartamento tipo — vista para o condomínio", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-quarto-casal"), alt: "Apartamento tipo — quarto de casal", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-quarto"), alt: "Apartamento tipo — quarto com beliche", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-banheiro"), alt: "Apartamento tipo — banheiro", kind: "imagens" },
+      { src: img("solar-manilha", "planta-apartamento-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+      { src: img("solar-manilha", "planta-garden"), alt: "Planta humanizada — apartamento garden", kind: "planta" },
+    ],
+    // Escolha do cliente: a vista do apartamento tipo, ao lado da lista.
+    amenitiesImage: img("solar-manilha", "apto-tipo-vista"),
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 quartos e opções com garden" },
+      { label: "Unidades", value: "368" },
+      { label: "Lazer", value: "Lazer de clube" },
+    ],
+    amenities: [
+      {
+        category: "Características",
+        items: [
+          "Terreno com área total de 22.572,56 m²",
+          "Unidades de 2 quartos e opções com garden",
+          "23 blocos no total",
+          "Todos os blocos com 4 pavimentos",
+          "368 unidades no total",
+          "Lazer de clube",
+          "275 vagas de carro e 23 vagas de moto",
+          "Enquadrado no Minha Casa Minha Vida",
+        ],
+      },
+      {
+        category: "Área de lazer",
+        items: [
+          "Piscina adulto",
+          "Piscina infantil",
+          "Churrasqueiras",
+          "Redário",
+          "Salão de festas",
+          "Espaço fitness",
+          "Quadra",
+          "Espaço kids",
+        ],
+      },
+      { category: "Comodidades", items: ["Bicicletário", "Pet place", "Car Wash"] },
+      {
+        category: "Segurança",
+        items: [
+          "Guarita 24h",
+          "Condomínio fechado com cancela e portão eletrônico para veículos",
+          "Câmera nos acessos de veículos e pedestres",
+        ],
+      },
+    ],
+    // Percentuais informados pelo cliente (2026-10-11).
+    progress: {
+      overallPercentage: 70,
+      stages: [
+        { name: "Fundação", percentage: 99, order: 1 },
+        { name: "Estrutura", percentage: 100, order: 2 },
+        { name: "Alvenaria", percentage: 90, order: 3 },
+        { name: "Acabamento interno", percentage: 60, order: 4 },
+        { name: "Acabamento externo", percentage: 50, order: 5 },
+      ],
+    },
+  },
+  {
+    mcmv: true,
     slug: "golden-ville-residence",
     name: "Golden Ville Residence",
     status: "em_construcao",
-    city: "São Gonçalo",
+    city: "Niterói",
+    neighborhood: "Maria Paula",
     state: "RJ",
-    // Evidência: alts "Sala do apartamento" e "Planta — apartamento tipo".
     propertyType: "apartamento",
+    summary:
+      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
+    description: [
+      "Apartamentos de 2 quartos com suíte e varanda.",
+      "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",
+      "A 10 minutos dos centros de Niterói e São Gonçalo e a 14 km das praias da Região Oceânica.",
+      "104 unidades em condomínio fechado, com portaria 24h.",
+    ].join("\n"),
+    lat: -22.8750505,
+    lng: -43.0312706,
+    googleMapsUrl: "https://maps.app.goo.gl/EUBUJ4rRtfSnV5Jv9",
     images: [
-      { src: "/empreendimentos/golden-ville-residence/fachada.webp", alt: "Fachada do Golden Ville Residence", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/piscina.webp", alt: "Piscina", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/academia.webp", alt: "Academia", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/salao-de-festas.webp", alt: "Salão de festas", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/churrasqueira.webp", alt: "Espaço churrasqueira", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/sala.webp", alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/quarto.webp", alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/cozinha.webp", alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
-      { src: "/empreendimentos/golden-ville-residence/planta-tipo.webp", alt: "Planta humanizada — apartamento tipo", kind: "planta" },
-      { src: "/empreendimentos/golden-ville-residence/planta-terreo.webp", alt: "Planta humanizada — térreo", kind: "planta" },
+      { src: img("golden-ville-residence", "fachada"), alt: "Fachada do Golden Ville Residence", kind: "imagens" },
+      { src: img("golden-ville-residence", "piscina"), alt: "Piscina", kind: "imagens" },
+      { src: img("golden-ville-residence", "academia"), alt: "Academia", kind: "imagens" },
+      { src: img("golden-ville-residence", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
+      { src: img("golden-ville-residence", "churrasqueira"), alt: "Espaço churrasqueira", kind: "imagens" },
+      { src: img("golden-ville-residence", "sala"), alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "quarto"), alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "cozinha"), alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+      { src: img("golden-ville-residence", "planta-terreo"), alt: "Planta humanizada — térreo", kind: "planta" },
+    ],
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 quartos com suíte" },
+      { label: "Unidades", value: "104" },
+      { label: "Lazer", value: "Piscina e academia" },
+    ],
+    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
+    // fundação aparece.
+    progress: {
+      overallPercentage: 7,
+      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+    },
+  },
+  {
+    mcmv: true,
+    soldOut: true,
+    slug: "viver-mais",
+    name: "Viver Mais",
+    status: "pronto",
+    city: "Itaboraí",
+    state: "RJ",
+    // TODO: CONTENT REQUIRED — propertyType (o texto não diz o tipo da unidade).
+    summary:
+      "Condomínio entregue em Itaboraí/RJ: 256 unidades, 100% concluídas e vendidas, enquadrado no Minha Casa Minha Vida.",
+    description: [
+      "256 unidades entregues, 100% concluídas e vendidas.",
+      "Condomínio implantado em um terreno de 19.000 m².",
+      "Enquadrado no Minha Casa Minha Vida.",
+      "Em uma das regiões que mais se transformam no Leste Fluminense.",
+    ].join("\n"),
+    address: "R. Arlindo Chaves",
+    lat: -22.7449167,
+    lng: -42.8748549,
+    googleMapsUrl: "https://maps.app.goo.gl/eVkGqDbUasgrSRx77",
+    extraFeatures: [
+      { label: "Unidades", value: "256" },
+      { label: "Terreno", value: "19.000 m²" },
+    ],
+    images: [
+      { src: img("viver-mais", "lazer"), alt: "Área de lazer do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "perspectiva-2"), alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "perspectiva-3"), alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "perspectiva-4"), alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "perspectiva-5"), alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "perspectiva-6"), alt: "Perspectiva do Residencial Viver Mais", kind: "imagens" },
+      { src: img("viver-mais", "obra-1"), alt: "Obra do Residencial Viver Mais", kind: "obra" },
+      { src: img("viver-mais", "obra-2"), alt: "Obra do Residencial Viver Mais", kind: "obra" },
+      { src: img("viver-mais", "obra-estrutura-1"), alt: "Estrutura em construção", kind: "obra" },
+      { src: img("viver-mais", "obra-3"), alt: "Andamento da obra", kind: "obra" },
     ],
   },
   {
-    slug: "gutierrez",
-    name: "Gutierrez",
-    status: "lancamento",
+    soldOut: true,
+    slug: "residencial-denver",
+    name: "Residencial Denver",
+    status: "pronto",
     city: "Belo Horizonte",
+    neighborhood: "Santa Lúcia",
     state: "MG",
-    // TODO: CONTENT REQUIRED — propertyType ("20 un. alto luxo" não diz o produto).
-    highlight: "20 un. alto luxo",
+    // Evidência: "14 studios de 35 m²".
+    propertyType: "studio",
+    summary:
+      "Empreendimento entregue no Santa Lúcia, região Centro-Sul de Belo Horizonte/MG: 14 studios de 35 m².",
+    description: [
+      "14 studios de 35 m².",
+      "Empreendimento entregue, na região Centro-Sul de Belo Horizonte.",
+    ].join("\n"),
+    address: "R. Denver, 134 — Santa Lúcia",
+    lat: -19.9708652,
+    lng: -43.9492618,
+    googleMapsUrl: "https://share.google/o1T6FdB69kOFKwHfU",
+    extraFeatures: [{ label: "Studios", value: "14 de 35 m²" }],
     images: [
-      { src: "/empreendimentos/gutierrez/maquete-5.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
-      { src: "/empreendimentos/gutierrez/maquete-6.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
-      { src: "/empreendimentos/gutierrez/maquete-1.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
-      { src: "/empreendimentos/gutierrez/maquete-2.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
-      { src: "/empreendimentos/gutierrez/maquete-3.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
-      { src: "/empreendimentos/gutierrez/maquete-4.webp", alt: "Maquete do empreendimento no Gutierrez", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-2"), alt: "Perspectiva do Residencial Denver", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-4"), alt: "Perspectiva do Residencial Denver", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-5"), alt: "Perspectiva do Residencial Denver", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-6"), alt: "Perspectiva do Residencial Denver", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-1"), alt: "Perspectiva do Residencial Denver", kind: "imagens" },
+      { src: img("residencial-denver", "perspectiva-3"), alt: "Perspectiva do Residencial Denver", kind: "obra" },
     ],
   },
-  // TODO: CONTENT REQUIRED — propertyType ("un. MCMV" não diz se é apto ou casa).
-  { mcmv: true, slug: "solar-manilha", name: "Solar Manilha", status: "lancamento", city: "Itaboraí", state: "RJ", highlight: "368 un. MCMV" },
+  {
+    mcmv: true,
+    soldOut: true,
+    slug: "torres-da-lagoa",
+    name: "Torres da Lagoa",
+    status: "pronto",
+    city: "Lagoa Santa",
+    state: "MG",
+    // Evidência: "112 apartamentos entregues".
+    propertyType: "apartamento",
+    summary:
+      "Empreendimento entregue em Lagoa Santa/MG: 112 apartamentos, todas as unidades comercializadas, enquadrado no Minha Casa Minha Vida.",
+    description: [
+      "112 apartamentos entregues.",
+      "Todas as unidades comercializadas.",
+      "Enquadrado no Minha Casa Minha Vida.",
+      "Realização em parceria com a Escon Engenharia.",
+    ].join("\n"),
+    address: "R. Firmino Gonçalves, 822 — Palmital",
+    lat: -19.5941515,
+    lng: -43.9049008,
+    googleMapsUrl: "https://maps.app.goo.gl/PtHEBjT8E74Qiqyk7",
+    extraFeatures: [{ label: "Apartamentos", value: "112" }],
+    images: [
+      { src: img("torres-da-lagoa", "fachada"), alt: "Fachada dos blocos do Torres da Lagoa", kind: "imagens" },
+      { src: img("torres-da-lagoa", "piscina"), alt: "Piscina do Torres da Lagoa", kind: "imagens" },
+      { src: img("torres-da-lagoa", "espaco-gourmet"), alt: "Espaço gourmet", kind: "imagens" },
+      { src: img("torres-da-lagoa", "guarita"), alt: "Guarita e entrada", kind: "imagens" },
+      { src: img("torres-da-lagoa", "sala"), alt: "Sala decorada", kind: "imagens" },
+      { src: img("torres-da-lagoa", "cozinha"), alt: "Cozinha decorada", kind: "imagens" },
+      { src: img("torres-da-lagoa", "quarto"), alt: "Quarto decorado", kind: "imagens" },
+      { src: img("torres-da-lagoa", "varanda-gourmet"), alt: "Varanda gourmet", kind: "imagens" },
+      { src: img("torres-da-lagoa", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+    ],
+  },
+  {
+    soldOut: true,
+    slug: "residenziale-colonnello-figueiredo",
+    name: "Residenziale Colonnello Figueiredo",
+    status: "pronto",
+    city: "Nova Lima",
+    neighborhood: "Pau Pombo",
+    state: "MG",
+    // Evidência: feature "Apartamentos: 2 e 3 quartos" + plantas de 2 e 3 quartos.
+    propertyType: "apartamento",
+    summary:
+      "Residencial em Nova Lima/MG com 20 unidades — apartamentos de 2 e 3 quartos e coberturas lineares, a 10 minutos do BH Shopping.",
+    description: [
+      "20 unidades: apartamentos de 2 e 3 quartos e coberturas lineares.",
+      "Varandas em todas as unidades.",
+      "A 10 minutos do BH Shopping, próximo ao Supermercado BH.",
+    ].join("\n"),
+    address: "R. Manoel Moreira Silva, 70 — Pau Pombo",
+    lat: -19.9989298,
+    lng: -43.8911786,
+    googleMapsUrl: "https://share.google/75yhAO11Zp8Wl2vsS",
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 e 3 quartos (69 e 79 m²)" },
+      { label: "Coberturas", value: "lineares 138 e 158 m²" },
+    ],
+    images: [
+      { src: img("residenziale-colonnello-figueiredo", "fachada-rua"), alt: "Fachada vista da rua", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "cobertura-fachada"), alt: "Cobertura — vista da fachada", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "cobertura"), alt: "Cobertura", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "sala-de-estar"), alt: "Sala de estar (perspectiva)", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "sala-de-estar-2"), alt: "Sala de estar (perspectiva)", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "fachada"), alt: "Fachada do Residenziale Colonnello Figueiredo", kind: "imagens" },
+      { src: img("residenziale-colonnello-figueiredo", "planta-3-quartos"), alt: "Planta — apartamento de 3 quartos", kind: "planta" },
+      { src: img("residenziale-colonnello-figueiredo", "planta-2-quartos"), alt: "Planta — apartamento de 2 quartos", kind: "planta" },
+    ],
+  },
+  // Breve lançamento: fase embrionária, seção mínima com a foto padrão. As
+  // maquetes do Gutierrez seguem em public/empreendimentos/gutierrez/ para
+  // voltarem quando o lançamento tiver material aprovado.
+  // TODO: CONTENT REQUIRED — propertyType ("20 un. alto luxo" não diz o produto).
+  { slug: "gutierrez", name: "Gutierrez", status: "breve_lancamento", city: "Belo Horizonte", state: "MG", highlight: "20 un. alto luxo" },
   // Evidência: highlight "180 studios".
-  { slug: "one-studios", name: "One Studios", status: "lancamento", city: "Niterói", state: "RJ", highlight: "180 studios", propertyType: "studio" },
-  // Evidência: highlight "508 lotes".
-  { slug: "vista-do-lago", name: "Vista do Lago", status: "lancamento", city: "Nova Lima", state: "MG", highlight: "508 lotes", propertyType: "lote" },
+  { slug: "one-studios", name: "One Studios", status: "breve_lancamento", city: "Niterói", state: "RJ", highlight: "180 studios", propertyType: "studio" },
   // TODO: CONTENT REQUIRED — propertyType ("un. MCMV" não diz se é apto ou casa).
-  { mcmv: true, slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
+  { mcmv: true, slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "breve_lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV" },
   // Evidência: highlight "96 casas MCMV".
-  { mcmv: true, slug: "royal-ville-residence", name: "Royal Ville Residence", status: "lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV", propertyType: "casa" },
+  { mcmv: true, slug: "royal-ville-residence", name: "Royal Ville Residence", status: "breve_lancamento", city: "Vespasiano", state: "MG", highlight: "96 casas MCMV", propertyType: "casa" },
 ];
+
+const DIMENSIONS: Record<string, readonly number[]> = dimensions;
+
+/** Anexa largura/altura do manifesto (scripts/optimize-images.mjs). */
+function withDimensions(image: DevelopmentImage): DevelopmentImage {
+  const size = DIMENSIONS[image.src];
+  return size ? { ...image, width: size[0], height: size[1] } : image;
+}
 
 function fromSeed(seed: Seed): Development {
   const features: DevelopmentFeature[] = [
@@ -287,6 +475,7 @@ function fromSeed(seed: Seed): Development {
     location: {
       city: seed.city,
       state: seed.state,
+      ...(seed.neighborhood ? { neighborhood: seed.neighborhood } : {}),
       ...(seed.address ? { address: seed.address } : {}),
       ...(seed.lat != null ? { lat: seed.lat } : {}),
       ...(seed.lng != null ? { lng: seed.lng } : {}),
@@ -295,11 +484,13 @@ function fromSeed(seed: Seed): Development {
     },
     ...(seed.propertyType ? { propertyType: seed.propertyType } : {}),
     ...(seed.mcmv ? { mcmv: true } : {}),
+    ...(seed.soldOut ? { soldOut: true } : {}),
     summary: seed.summary ?? `${TODO} — resumo de ${seed.name}`,
     description: seed.description ?? `${TODO} — descrição completa de ${seed.name}`,
-    images: seed.images ?? [], // TODO: mapear renders/plantas de img/ por empreendimento
+    images: (seed.images ?? []).map(withDimensions),
     features,
     ...(seed.amenities ? { amenities: seed.amenities } : {}),
+    ...(seed.amenitiesImage ? { amenitiesImage: seed.amenitiesImage } : {}),
     ...(seed.progress ? { progress: seed.progress } : {}),
   };
 }

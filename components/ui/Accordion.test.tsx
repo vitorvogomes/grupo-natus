@@ -37,4 +37,22 @@ describe("Accordion", () => {
     expect(screen.getByText("Resposta A")).toBeInTheDocument();
     expect(screen.getByText("Resposta B")).toBeInTheDocument();
   });
+
+  it("type=single mantém um só aberto: abrir outro fecha o anterior", async () => {
+    const user = userEvent.setup();
+    render(<Accordion items={items} type="single" defaultOpen={["a"]} />);
+    expect(screen.getByText("Resposta A")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Pergunta B" }));
+    expect(screen.getByText("Resposta B")).toBeInTheDocument();
+    expect(screen.queryByText("Resposta A")).not.toBeInTheDocument();
+  });
+
+  it("type=single ainda deixa recolher o item aberto", async () => {
+    const user = userEvent.setup();
+    render(<Accordion items={items} type="single" defaultOpen={["a"]} />);
+    const header = screen.getByRole("button", { name: "Pergunta A" });
+    await user.click(header);
+    expect(header).toHaveAttribute("aria-expanded", "false");
+  });
 });

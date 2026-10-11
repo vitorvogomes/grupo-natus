@@ -5,6 +5,14 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { DevelopmentCard } from "@/features/developments/DevelopmentCard";
+import {
+  CAROUSEL_SLIDE_CLASS,
+  CAROUSEL_TRACK_CLASS,
+  isTrackAtEnd,
+  prevIndex,
+  scrollTrackTo,
+  visibleIndex,
+} from "@/features/developments/carouselTrack";
 import { cn } from "@/lib/utils";
 import type { Development } from "@/types/development";
 
@@ -20,18 +28,14 @@ const navButtonClass = cn(
 );
 
 /**
- * Carrossel do catálogo na Home, em modo centralizado: o slide ativo fica no
- * meio e em tamanho cheio, os vizinhos espiam reduzidos dos dois lados.
+ * Carrossel do catálogo na Home: 3 cards por vez no desktop (2 no tablet, 1
+ * com o vizinho espiando no celular), alinhados pelo início — ref. Novolar.
  *
  * O trilho é scroll nativo com snap — swipe e teclado saem de graça do
- * browser — e o índice acompanha a rolagem em vez de comandá-la sozinho, para
- * que arrastar com o dedo também mude quem está em destaque. Por isso as setas
- * nunca ficam `disabled`: elas circulam, e um limite calculado a partir de um
- * índice que pode estar defasado mentiria para o usuário.
- *
- * As margens percentuais do primeiro e do último slide são o que permite que
- * as pontas cheguem ao centro (padding no container de scroll é tratado de
- * forma inconsistente entre browsers).
+ * browser — e o índice (o card na borda esquerda) acompanha a rolagem em vez
+ * de comandá-la sozinho, para que arrastar com o dedo também conte. Por isso
+ * as setas nunca ficam `disabled`: elas circulam, e um limite calculado a
+ * partir de um índice que pode estar defasado mentiria para o usuário.
  */
 export function FeaturedDevelopments({
   developments,
@@ -45,8 +49,9 @@ export function FeaturedDevelopments({
   const total = developments.length;
   const many = total > 1;
 
-  function slideAt(position: number): HTMLElement | undefined {
-    return trackRef.current?.children[position] as HTMLElement | undefined;
+  /** No fim do trilho, "próximo" volta ao início (ver `isTrackAtEnd`). */
+  function next() {
+    goTo(isTrackAtEnd(trackRef.current) ? 0 : index + 1);
   }
 
   function goTo(next: number) {
@@ -59,43 +64,21 @@ export function FeaturedDevelopments({
     settle.current = setTimeout(() => {
       steering.current = false;
     }, 600);
-    slideAt(target)?.scrollIntoView({
-      behavior: reduce ? "auto" : "smooth",
-      inline: "center",
-      block: "nearest",
-    });
+    scrollTrackTo(trackRef.current, target, !reduce);
   }
 
-  /**
-   * Quem estiver mais perto do centro do trilho é o slide ativo.
-   * As distâncias saem de `getBoundingClientRect`, que mede na viewport: usar
-   * `offsetLeft` daria a posição relativa ao ancestral posicionado e só
-   * coincidiria enquanto o trilho começasse em x=0 — um padding no container
-   * introduziria um viés constante e elegeria o slide errado.
-   */
+  /** O índice acompanha a rolagem (swipe), exceto durante a nossa. */
   function syncIndexToScroll() {
     const track = trackRef.current;
     if (!track || steering.current) return;
-    const trackBox = track.getBoundingClientRect();
-    const center = trackBox.left + trackBox.width / 2;
-    let closest = 0;
-    let shortest = Infinity;
-    for (let i = 0; i < track.children.length; i += 1) {
-      const box = (track.children[i] as HTMLElement).getBoundingClientRect();
-      const distance = Math.abs(box.left + box.width / 2 - center);
-      if (distance < shortest) {
-        shortest = distance;
-        closest = i;
-      }
-    }
-    setIndex(closest);
+    setIndex(visibleIndex(track));
   }
 
   return (
     <section
       aria-roledescription="carrossel"
       aria-label="Empreendimentos do Grupo Natus"
-      className="overflow-hidden py-20"
+      className="py-20"
     >
       <div className="mx-auto mb-10 flex max-w-[var(--container-max)] flex-wrap items-end justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div>
@@ -116,7 +99,7 @@ export function FeaturedDevelopments({
             <button
               type="button"
               aria-label="Empreendimento anterior"
-              onClick={() => goTo(index - 1)}
+              onClick={() => goTo(prevIndex(trackRef.current, index, total))}
               className={navButtonClass}
             >
               <ChevronLeft aria-hidden="true" className="size-5" />
@@ -124,7 +107,7 @@ export function FeaturedDevelopments({
             <button
               type="button"
               aria-label="Próximo empreendimento"
-              onClick={() => goTo(index + 1)}
+              onClick={next}
               className={navButtonClass}
             >
               <ChevronRight aria-hidden="true" className="size-5" />
@@ -133,35 +116,27 @@ export function FeaturedDevelopments({
         ) : null}
       </div>
 
-      <ul
-        ref={trackRef}
-        onScroll={syncIndexToScroll}
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {developments.map((development, i) => (
-          <li
-            key={development.slug}
-            role="group"
-            aria-roledescription="slide"
-            aria-label={`${i + 1} de ${total}`}
-            className={cn(
-              "shrink-0 snap-center",
-              "transition-[transform,opacity] duration-300 ease-out",
-              // Largura < 50% garante vizinhos espiando dos dois lados; a
-              // margem das pontas é metade do espaço restante, para que o
-              // primeiro e o último também consigam centralizar.
-              "w-[82%] first:ml-[9%] last:mr-[9%]",
-              "sm:w-[56%] sm:first:ml-[22%] sm:last:mr-[22%]",
-              "lg:w-[40%] lg:first:ml-[30%] lg:last:mr-[30%]",
-              i === index
-                ? "opacity-100"
-                : "scale-[0.92] opacity-55 hover:opacity-80",
-            )}
-          >
-            <DevelopmentCard development={development} />
-          </li>
-        ))}
-      </ul>
+      {/* O trilho vive dentro do container da página: "3 por vez" é 3 na
+          largura do conteúdo, alinhados ao título — não 3 de ponta a ponta. */}
+      <div className="mx-auto max-w-[var(--container-max)] px-4 sm:px-6 lg:px-8">
+        <ul
+          ref={trackRef}
+          onScroll={syncIndexToScroll}
+          className={cn(CAROUSEL_TRACK_CLASS, "pb-6")}
+        >
+          {developments.map((development, i) => (
+            <li
+              key={development.slug}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} de ${total}`}
+              className={CAROUSEL_SLIDE_CLASS}
+            >
+              <DevelopmentCard development={development} />
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="mx-auto mt-6 flex max-w-[var(--container-max)] flex-wrap items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {many ? (

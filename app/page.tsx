@@ -4,10 +4,7 @@ import { MinhaCasaMinhaVida } from "@/features/mcmv/MinhaCasaMinhaVida";
 import { AboutNatus } from "@/features/home/AboutNatus";
 import { DevelopmentSearchBar } from "@/features/developments/DevelopmentSearchBar";
 import { Reveal } from "@/components/motion/Reveal";
-import {
-  getAllDevelopments,
-  getHomeDevelopments,
-} from "@/content/developments";
+import { getAllDevelopments } from "@/content/developments";
 
 export default function Home() {
   return (
@@ -27,7 +24,7 @@ export default function Home() {
       </section>
 
       <Reveal>
-        <FeaturedDevelopments developments={getHomeDevelopments()} />
+        <FeaturedDevelopments developments={getAllDevelopments()} />
       </Reveal>
       {/* Sem Reveal aqui: estas duas seções animam por dentro (painel e cards
           em cascata), e um fade por cima duplicaria o movimento. */}

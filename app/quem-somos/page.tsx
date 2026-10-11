@@ -1,91 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  BadgeCheck,
-  Building2,
-  Compass,
-  Gauge,
-  Handshake,
-  Scale,
-  ShieldCheck,
-  Workflow,
-} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Image } from "@/components/ui/Image";
 import { Reveal } from "@/components/motion/Reveal";
+import { Certifications } from "@/features/institutional/Certifications";
+import {
+  COMPANIES,
+  COMPANIES_TAGLINE,
+  OPERATION_STATS,
+  VALUES,
+} from "@/features/institutional/content";
+import { getPortfolioCounts } from "@/content/developments";
 
 export const metadata: Metadata = {
   title: "Quem Somos",
   description:
-    "O Grupo Natus é uma holding de incorporação e engenharia — ALIATTO Incorporadora e OASI Engenharia — atuando do médio econômico ao alto luxo em MG e RJ.",
+    "O Grupo Natus é uma holding de incorporação e construção — Aliatto Incorporadora e Oasi Engenharia — atuando do Minha Casa Minha Vida ao alto luxo em MG e RJ.",
 };
 
-// Empresas do grupo (site atual: "Hoje, o grupo está à frente das empresas
-// ALIATTO INCORPORADORA e OASI ENGENHARIA"). Descrição institucional detalhada
-// ainda é TODO — aqui só o papel evidente de cada empresa dentro da holding.
-const COMPANIES = [
-  {
-    name: "ALIATTO Incorporadora",
-    role: "Incorporação imobiliária",
-    icon: Building2,
-    description:
-      "Braço de incorporação do grupo — da concepção do produto ao lançamento dos empreendimentos residenciais.",
-  },
-  {
-    name: "OASI Engenharia",
-    role: "Engenharia e execução de obras",
-    icon: Compass,
-    description:
-      "Braço de engenharia e construção — responsável pelas obras, do canteiro à entrega, sob metodologia e processos estruturados.",
-  },
-] as const;
-
-// Valores/princípios com lastro no site atual: "transparência, ética e lealdade",
-// "metodologia e processos bem estruturados", "alta eficiência" + qualidade
-// certificada (ISO 9001:2015, material da própria empresa).
-const VALUES = [
-  {
-    label: "Transparência",
-    icon: ShieldCheck,
-    description: "Relações comerciais claras, do primeiro contato à entrega.",
-  },
-  {
-    label: "Ética",
-    icon: Scale,
-    description: "Conduta íntegra em cada decisão e cada obra.",
-  },
-  {
-    label: "Lealdade",
-    icon: Handshake,
-    description: "Compromisso de longo prazo com clientes e parceiros.",
-  },
-  {
-    label: "Eficiência",
-    icon: Gauge,
-    description: "Alta eficiência na condução dos projetos e prazos.",
-  },
-  {
-    label: "Método",
-    icon: Workflow,
-    description: "Metodologia e processos bem estruturados em toda a operação.",
-  },
-  {
-    label: "Qualidade certificada",
-    icon: BadgeCheck,
-    description: "Gestão da qualidade certificada NBR ISO 9001:2015.",
-  },
-] as const;
-
-// Números da operação, fornecidos pela empresa (2026-09-30). Mesmos valores
-// exibidos na Home (features/home/AboutNatus.tsx) — manter em sincronia.
-const STATS = [
-  { value: "10", label: "Anos de experiência" },
-  { value: "100 mil", label: "Área construída (m²)" },
-  { value: "+1.500", label: "Unidades entregues" },
-] as const;
-
 export default function QuemSomosPage() {
+  const { delivered, inDevelopment } = getPortfolioCounts();
   return (
     <main>
       {/* Hero — parede da recepção do grupo (LCP: preload, sem Reveal). */}
@@ -107,25 +42,35 @@ export default function QuemSomosPage() {
             Uma holding de incorporação e engenharia
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-navy-100">
-            Do médio econômico ao alto luxo — em Minas Gerais e no Rio de
+            Do Minha Casa Minha Vida ao alto luxo, em Minas Gerais e no Rio de
             Janeiro.
           </p>
         </div>
       </section>
 
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-16 sm:px-6 lg:px-8">
-        {/* Posicionamento (copy do site atual). */}
+        {/* Posicionamento (texto do cliente, revisão v3). A contagem vem do
+            portfólio: "pronto para morar" = entregue; os demais status = em
+            desenvolvimento. */}
         <Reveal>
           <section className="max-w-3xl">
             <p className="text-lg leading-relaxed text-ink-soft">
-              O Grupo Natus é uma holding criada para desenvolver
-              empreendimentos imobiliários residenciais para o segmento médio
-              econômico e alto luxo.
+              Somos uma holding de incorporação e construção que estrutura e
+              executa empreendimentos residenciais em todo o espectro do
+              mercado, por meio da Aliatto Incorporadora e da Oasi Engenharia.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-ink-soft">
-              Com metodologia e processos bem estruturados, trabalha com alta
-              eficiência, sempre buscando transparência, ética e lealdade em suas
-              relações comerciais.
+              Nossa atuação cobre o ciclo completo do produto imobiliário:
+              prospecção e viabilidade de terrenos, incorporação, aprovação,
+              execução de obra e comercialização. É esse controle de ponta a
+              ponta que nos permite operar em praças e segmentos distintos com o
+              mesmo padrão de governança e de cumprimento de cronograma.
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
+              Hoje são {delivered} empreendimentos entregues e {inDevelopment}{" "}
+              em desenvolvimento, entre Belo Horizonte, região metropolitana e
+              Leste Fluminense. Boa parte deles nasce de parcerias com
+              proprietários de terreno, construtores e investidores.
             </p>
           </section>
         </Reveal>
@@ -136,10 +81,7 @@ export default function QuemSomosPage() {
             <h2 className="text-2xl font-semibold text-ink">
               Empresas do grupo
             </h2>
-            <p className="mt-2 max-w-2xl text-ink-soft">
-              O grupo está à frente de duas empresas que se complementam — da
-              incorporação à execução da obra.
-            </p>
+            <p className="mt-2 max-w-2xl text-ink-soft">{COMPANIES_TAGLINE}</p>
           </Reveal>
           <Reveal delay={0.06}>
             <div className="mt-8 flex justify-center rounded-lg border border-border bg-surface-muted px-6 py-10">
@@ -181,7 +123,7 @@ export default function QuemSomosPage() {
             <h2 className="text-2xl font-semibold text-ink">Valores</h2>
           </Reveal>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {VALUES.map((value, i) => {
+            {Object.values(VALUES).map((value, i) => {
               const Icon = value.icon;
               return (
                 <Reveal key={value.label} delay={i * 0.05}>
@@ -202,27 +144,7 @@ export default function QuemSomosPage() {
           </div>
         </section>
 
-        {/* Selo de qualidade (material da própria empresa). */}
-        <Reveal>
-          <section className="mt-12 flex flex-col items-center gap-5 rounded-lg border border-border bg-surface-muted p-6 sm:flex-row sm:items-center">
-            <Image
-              src="/quem-somos/iso-9001.webp"
-              alt="Selo de Sistema de Gestão da Qualidade certificado NBR ISO 9001:2015"
-              width={220}
-              height={82}
-              className="h-auto w-[200px]"
-            />
-            <div>
-              <h3 className="font-semibold text-ink">
-                Gestão da qualidade certificada
-              </h3>
-              <p className="mt-1 text-sm text-ink-soft">
-                Sistema de Gestão da Qualidade certificado conforme a norma NBR
-                ISO 9001:2015.
-              </p>
-            </div>
-          </section>
-        </Reveal>
+        <Certifications className="mt-16" />
 
         {/* Números confirmados pela empresa. */}
         <section className="mt-16">
@@ -230,12 +152,12 @@ export default function QuemSomosPage() {
             <h2 className="text-2xl font-semibold text-ink">Números</h2>
           </Reveal>
           <dl className="mt-4 grid grid-cols-3 gap-4">
-            {STATS.map((stat) => (
+            {OPERATION_STATS.map((stat) => (
               <div
-                key={stat.label}
+                key={stat.title}
                 className="rounded-lg border border-border p-4 text-center"
               >
-                <dt className="text-xs text-muted-foreground">{stat.label}</dt>
+                <dt className="text-xs text-muted-foreground">{stat.title}</dt>
                 <dd className="mt-1 text-2xl font-semibold text-brand-strong">
                   {stat.value}
                 </dd>

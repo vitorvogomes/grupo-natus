@@ -8,12 +8,13 @@
  *
  * Uso:  node scripts/optimize-images.mjs [slug ...]
  *   sem argumento → processa todos os JOBS; com slugs → só aqueles.
+ *   `manifest` → só regera o manifesto de dimensões (sempre regerado no fim).
  *
  * Mapeamento arquivo→saída é explícito (JOBS). `role: "hero"` usa lado maior
  * maior; webp já otimizado (<300 KB) é copiado sem re-encode (evita 2ª perda).
  */
-import { mkdir, stat, copyFile } from "node:fs/promises";
-import { extname, join } from "node:path";
+import { mkdir, stat, copyFile, readdir, writeFile } from "node:fs/promises";
+import { extname, join, relative } from "node:path";
 import sharp from "sharp";
 
 const ROOT = process.cwd();
@@ -23,7 +24,12 @@ const MAX_SIDE = { hero: 3000, gallery: 2560 };
 const QUALITY = 86;
 const PASSTHROUGH_MAX = 300 * 1024; // webp já pequeno: copia sem re-encode
 
-/** @type {Record<string, { srcDir: string; images: {src:string; out:string; role?: "hero"|"gallery"}[] }>} */
+/**
+ * `quality` por job sobrescreve o QUALITY global. Use em fontes pequenas
+ * (≤ ~2000 px): sem margem para reduzir, cada perda de compressão aparece —
+ * e o next/image ainda re-codifica na entrega.
+ * @type {Record<string, { srcDir: string; quality?: number; images: {src:string; out:string; role?: "hero"|"gallery"; quality?: number; sharpen?: boolean}[] }>}
+ */
 const JOBS = {
   "follow-savassi": {
     srcDir: "img/Follow Savassi - Belo Horizonte MG",
@@ -98,6 +104,51 @@ const JOBS = {
     ],
   },
 
+  "solar-manilha": {
+    srcDir: "img/Solar Manilha - Itaborai RJ",
+    // Renders de 1448–2095 px: chegam no tamanho de exibição, então q86
+    // borrava texturas e bordas. Quase sem perda; o next/image reduz o peso.
+    quality: 96,
+    images: [
+      { src: "Imagens Externas - Condominio/01-Acesso Principal.png", out: "acesso-principal", role: "hero" },
+      { src: "Imagem Aérea.png", out: "vista-aerea", role: "hero" },
+      { src: "Imagens Externas - Condominio/02-Portaria.png", out: "portaria" },
+      { src: "Imagens Externas - Condominio/03-Quadras.png", out: "quadras" },
+      { src: "Imagens Externas - Condominio/04-Espaço Crianças.png", out: "espaco-criancas" },
+      { src: "Imagens Externas - Condominio/05-Salão de Festas.png", out: "salao-de-festas" },
+      { src: "Imagens Externas - Condominio/06 - Salão de festas-Interno.png", out: "salao-de-festas-interno" },
+      { src: "Imagens Externas - Condominio/07-Piscinas.png", out: "piscinas" },
+      { src: "Imagens Externas - Condominio/08 - Quiosque e Academia Aberta.png", out: "quiosque-academia" },
+      { src: "Imagens Externas - Condominio/09-Academia Aberta.png", out: "academia-aberta" },
+      { src: "Imagens Externas - Condominio/10 - Quiosques e Piscina.png", out: "quiosques-piscina" },
+      { src: "Imagens Externas - Condominio/11 - Bicicletário.png", out: "bicicletario" },
+      { src: "Imagens Externas - Condominio/12 - Redário.png", out: "redario" },
+      { src: "Imagens Externas - Condominio/13 - Redário.png", out: "redario-2" },
+      { src: "Imagens Externas - Condominio/14 - Petplace.png", out: "pet-place" },
+      { src: "Imagens Internas/01.png", out: "sala-de-estar" },
+      { src: "Imagens Internas/02.png", out: "sala-de-jantar" },
+      { src: "Imagens Internas/03.png", out: "cozinha-jantar" },
+      { src: "Imagens Internas/04.png", out: "cozinha-garden" },
+      { src: "Imagens Internas/05.png", out: "area-de-servico-garden" },
+      { src: "Imagens Internas/06.png", out: "garden" },
+      { src: "Imagens Internas/07.png", out: "quarto-casal" },
+      { src: "Imagens Internas/08.png", out: "quarto-casal-2" },
+      { src: "Imagens Internas/09.png", out: "quarto" },
+      { src: "Imagens Internas/10.png", out: "home-office" },
+      { src: "Imagens Internas/Apto tipo 01.png", out: "apto-tipo-jantar" },
+      { src: "Imagens Internas/apto tipo 02.png", out: "apto-tipo-cozinha" },
+      // Imagem do "O que oferece": vista em recorte grande, então vai com
+      // qualidade máxima e nitidez leve (fonte de 1536 px).
+      { src: "Imagens Internas/apto tipo 03.png", out: "apto-tipo-vista", quality: 98, sharpen: true },
+      { src: "Imagens Internas/apto tipo 04.png", out: "apto-tipo-quarto-casal" },
+      { src: "Imagens Internas/Apto tipo 05.png", out: "apto-tipo-quarto" },
+      { src: "Imagens Internas/Apto tipo 06.png", out: "apto-tipo-banheiro" },
+      { src: "Plantas Humanizadas/Planta_Apartamento Tipo.png", out: "planta-apartamento-tipo" },
+      { src: "Plantas Humanizadas/Planta_Garden.jpg", out: "planta-garden" },
+      { src: "Implantação 2D.png", out: "implantacao", role: "hero" },
+    ],
+  },
+
   "golden-ville-residence": {
     srcDir: "img/Residencial Golden Ville - Sao Goncalo RJ",
     images: [
@@ -132,9 +183,10 @@ const JOBS = {
 // Assets avulsos (não ligados a um empreendimento). Rode com o slug "singles".
 const SINGLES = [
   {
-    name: "placeholder (em construção)",
-    src: "img/em-construcao.png",
-    out: "public/empreendimentos/em-construcao.webp",
+    // Foto padrão do breve lançamento (card, hero e painel mínimo).
+    name: "placeholder (breve lançamento)",
+    src: "img/breve-lancamento.png",
+    out: "public/empreendimentos/breve-lancamento.webp",
     maxSide: 1600,
   },
   {
@@ -192,6 +244,14 @@ const INSTITUTIONAL = [
     src: "img/Quem Somos/certificado.png",
     out: "public/quem-somos/iso-9001.webp",
     maxSide: 1000,
+  },
+  {
+    // Marca do programa federal: plana com alfa → lossless, como os lockups.
+    name: "quem-somos: selo PBQP-H",
+    src: "img/Quem Somos/logo-PBQPH.png",
+    out: "public/quem-somos/pbqp-h.webp",
+    maxSide: 600,
+    lossless: true,
   },
   // Engenharia — Residência de alto padrão (Alphaville)
   {
@@ -388,9 +448,35 @@ async function optimizeFlat(label, list) {
   }
 }
 
+/**
+ * Manifesto de dimensões das imagens dos empreendimentos
+ * (`content/developments/image-dimensions.json`). O seed anexa largura e
+ * altura a cada imagem, e o `sizes` do next/image é calculado a partir da
+ * proporção (ver features/developments/coverSizes.ts). Regerado ao fim de
+ * toda execução; um teste de conteúdo acusa imagem do seed fora dele.
+ */
+async function writeDimensionsManifest() {
+  const manifest = {};
+  async function walk(dir) {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) await walk(full);
+      else if (entry.name.endsWith(".webp")) {
+        const { width, height } = await sharp(full).metadata();
+        manifest[`/${relative(join(ROOT, "public"), full)}`] = [width, height];
+      }
+    }
+  }
+  await walk(OUT_ROOT);
+  const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)));
+  const out = join(ROOT, "content", "developments", "image-dimensions.json");
+  await writeFile(out, `${JSON.stringify(sorted, null, 2)}\n`);
+  console.log(`\n▸ manifesto: ${Object.keys(sorted).length} imagens → ${relative(ROOT, out)}`);
+}
+
 async function run() {
   const requested = process.argv.slice(2);
-  const KEYWORDS = new Set(["singles", "institucional", "brand"]);
+  const KEYWORDS = new Set(["singles", "institucional", "brand", "manifest"]);
 
   if (!requested.length || requested.includes("singles")) {
     await optimizeFlat("singles", SINGLES);
@@ -434,10 +520,14 @@ async function run() {
         }
 
         const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
-        await sharp(srcPath)
+        let pipeline = sharp(srcPath)
           .rotate()
-          .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true })
-          .webp({ quality: QUALITY, effort: 6 })
+          .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true });
+        // Nitidez leve (sigma baixo) só onde pedido: em render pequeno exibido
+        // grande, devolve a definição das bordas sem criar halo.
+        if (img.sharpen) pipeline = pipeline.sharpen({ sigma: 0.6 });
+        await pipeline
+          .webp({ quality: img.quality ?? job.quality ?? QUALITY, effort: 6, smartSubsample: true })
           .toFile(outPath);
 
         const after = (await stat(outPath)).size;
@@ -449,6 +539,8 @@ async function run() {
       }
     }
   }
+
+  await writeDimensionsManifest();
 }
 
 run().catch((err) => {

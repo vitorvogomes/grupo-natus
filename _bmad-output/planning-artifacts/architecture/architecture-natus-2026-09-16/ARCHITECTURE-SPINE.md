@@ -91,7 +91,7 @@ graph TD
 | Concern | Convention |
 | --- | --- |
 | Naming | Componentes/tipos `PascalCase`; arquivos de rota conforme Next (`page.tsx`, `layout.tsx`, `route.ts`); slugs `kebab-case`; features em `kebab-case`. |
-| Data & formats | Datas em ISO 8601 (`updatedAt`); `status` ∈ `lancamento \| em_construcao \| pronto`; erros de API como `{ error: { code, message } }`; conteúdo faltante = `TODO: CONTENT REQUIRED`. |
+| Data & formats | Datas em ISO 8601 (`updatedAt`); `status` ∈ `lancamento \| em_construcao \| pronto \| breve_lancamento` (ordem = prioridade de exibição; "100% vendido" é `soldOut` sobre `pronto`, não status); erros de API como `{ error: { code, message } }`; conteúdo faltante = `TODO: CONTENT REQUIRED`. |
 | State & cross-cutting | Mutação só server-side (AD-4); config/env via `lib/env` (server-only validado); WhatsApp/Maps/email só via `lib/*` (AD-3); i18n textual em Português. |
 
 ## Stack

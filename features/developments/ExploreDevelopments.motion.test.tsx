@@ -45,16 +45,16 @@ function make(slug: string): Development {
 }
 
 describe("ExploreDevelopments com prefers-reduced-motion", () => {
-  it("rola sem animação — scrollIntoView recebe behavior 'auto'", async () => {
-    const scrollIntoView = vi.fn();
-    vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(
-      scrollIntoView,
+  it("rola sem animação — scrollTo recebe behavior 'auto'", async () => {
+    const scrollTo = vi.fn();
+    vi.spyOn(Element.prototype, "scrollTo").mockImplementation(
+      scrollTo,
     );
     const user = userEvent.setup();
     render(<ExploreDevelopments developments={[make("a"), make("b")]} />);
 
     await user.click(screen.getByRole("button", { name: /próximo/i }));
-    expect(scrollIntoView).toHaveBeenLastCalledWith(
+    expect(scrollTo).toHaveBeenLastCalledWith(
       expect.objectContaining({ behavior: "auto" }),
     );
     vi.restoreAllMocks();

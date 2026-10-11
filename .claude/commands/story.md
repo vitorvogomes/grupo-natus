@@ -1,5 +1,5 @@
 ---
-description: Implementa uma story de docs/epics.md com TDD estrito (red→green→refactor) e gate de cobertura ≥90%.
+description: Implementa uma story de docs/epics.md com TDD estrito (red→green→refactor) e gate de cobertura ≥85%.
 argument-hint: <ID da story, ex. E4.2> ou uma descrição
 ---
 
@@ -19,7 +19,7 @@ Implemente a story **$ARGUMENTS** com **TDD sagrado**. Não pule etapas.
 
 ## Definition of Done
 - Todos os CA da story atendidos.
-- `npm run test:coverage` **verde com cobertura ≥90%** (o Stop hook bloqueia se não estiver).
+- `npm run test:coverage` **verde com cobertura ≥85%** (o Stop hook bloqueia se não estiver).
 - `npm run lint` e `npm run typecheck` sem erros.
 - Sem conteúdo inventado; mocks claramente rotulados.
 - **Atualize o progresso e a coerência das docs:** execute `/progress <ID>` — marque a story em `@docs/PROGRESS.md` e rode o checklist de coerência (epics.md canônico, ARCHITECTURE-SPINE + `.memlog.md`, PRD/brief, CLAUDE.md), atualizando o que a implementação exigir.

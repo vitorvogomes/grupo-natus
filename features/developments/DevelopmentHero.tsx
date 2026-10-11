@@ -18,6 +18,7 @@ export function DevelopmentHero({ development }: DevelopmentHeroProps) {
         fill
         preload
         sizes="100vw"
+        quality={90}
         className="object-cover"
       />
       {hero ? null : (

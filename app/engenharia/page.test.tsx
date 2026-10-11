@@ -9,10 +9,23 @@ describe("Página /engenharia (FR12)", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: /engenharia/i }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /metodologia/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /capacidade técnica/i }),
+      screen.getByRole("heading", { name: "Como trabalhamos" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Certificações" })).toBeInTheDocument();
+  });
+
+  it("usa o texto institucional da Oasi (o mesmo de Quem Somos)", () => {
+    render(<EngenhariaPage />);
+    expect(
+      screen.getByText(/Do canteiro à entrega das chaves: planejamento, execução e controle de obra/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/a Aliatto estrutura o empreendimento, a Oasi executa a obra/),
+    ).toBeInTheDocument();
+    for (const valor of ["Método", "Eficiência", "Transparência"]) {
+      expect(screen.getByRole("heading", { name: valor })).toBeInTheDocument();
+    }
   });
 
   it("lista as obras por administração reais (portfólio)", () => {
@@ -52,14 +65,15 @@ describe("Página /engenharia (FR12)", () => {
     ).toHaveAccessibleName(/piscina/i);
   });
 
-  it("cita a certificação ISO 9001", () => {
+  it("mostra as certificações ISO 9001 e PBQP-H", () => {
     render(<EngenhariaPage />);
-    expect(screen.getAllByText(/ISO 9001/i).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { name: "NBR ISO 9001:2015" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "PBQP-H · SiAC Nível A" })).toBeInTheDocument();
   });
 
-  it("marca conteúdo pendente como TODO e tem CTA", () => {
+  it("não deixa placeholder na tela e tem CTA", () => {
     render(<EngenhariaPage />);
-    expect(screen.getAllByText(/TODO: CONTENT REQUIRED/).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/TODO: CONTENT REQUIRED/)).toBeNull();
     expect(
       screen.getByRole("link", { name: /fale conosco|contato/i }),
     ).toHaveAttribute("href", "/contato");

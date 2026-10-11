@@ -6,13 +6,15 @@ export type DevSection = {
 /**
  * Catálogo de âncoras da página do empreendimento, na ordem em que as seções
  * aparecem. É só o vocabulário: quais entram na barra depende do que a página
- * de fato renderizou — com 5 dos 12 empreendimentos sem imagem e 1 com obra,
- * uma lista fixa levaria a âncoras que não existem no documento.
+ * de fato renderizou — uma lista fixa levaria a âncoras que não existem.
+ *
+ * "Empreendimento" tem dois alvos possíveis (ref. Novolar): a seção "O que
+ * oferece", quando existe, ou o resumo. A página escolhe um — nunca os dois.
  */
 export const DEV_SECTIONS = {
-  empreendimento: { id: "empreendimento", label: "Empreendimento" },
+  resumo: { id: "empreendimento", label: "Empreendimento" },
   imagens: { id: "imagens", label: "Imagens" },
-  oferece: { id: "o-que-oferece", label: "O que oferece" },
+  oferece: { id: "o-que-oferece", label: "Empreendimento" },
   localizacao: { id: "localizacao", label: "Localização" },
   obra: { id: "estagio-de-obra", label: "Estágio de Obra" },
   contato: { id: "falar-com-consultor", label: "Falar com Consultor" },

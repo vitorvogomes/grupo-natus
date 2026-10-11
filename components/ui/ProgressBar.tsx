@@ -1,7 +1,8 @@
 "use client";
 
 import * as Progress from "@radix-ui/react-progress";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 type ProgressBarProps = {
@@ -25,6 +26,11 @@ export function ProgressBar({
   const large = size === "lg";
   const reduce = useReducedMotion();
   const target = pct / 100;
+  // Observa o TRILHO, não o preenchimento: o indicador nasce em scaleX(0), e
+  // uma caixa de largura zero não cruza o limiar do IntersectionObserver de
+  // forma confiável — a barra poderia nunca encher.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(trackRef, { once: true, amount: 0.3 });
 
   return (
     <div className={className}>
@@ -54,6 +60,7 @@ export function ProgressBar({
         </span>
       </div>
       <Progress.Root
+        ref={trackRef}
         aria-label={label}
         value={pct}
         className={cn(
@@ -65,8 +72,7 @@ export function ProgressBar({
           <motion.div
             className="h-full w-full origin-left rounded-full bg-gradient-to-r from-brand to-brand-strong"
             initial={{ scaleX: reduce ? target : 0 }}
-            whileInView={{ scaleX: target }}
-            viewport={{ once: true, amount: 0.3 }}
+            animate={{ scaleX: reduce || inView ? target : 0 }}
             transition={
               reduce
                 ? { duration: 0 }

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { buttonVariants } from "@/components/ui/Button";
 import { Image } from "@/components/ui/Image";
 import { cn } from "@/lib/utils";
+import { DevelopmentBadges, SoldOutBand } from "./DevelopmentBadges";
+import { formatLocality } from "./locality";
 import { PLACEHOLDER_IMAGE, pickHeroImage } from "./pickHeroImage";
 import type { Development } from "@/types/development";
 
@@ -19,7 +20,7 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
   return (
     <Card
       as="article"
-      className="group flex flex-col overflow-hidden transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
+      className="group flex h-full flex-col overflow-hidden transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-md"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-surface-muted">
         <Image
@@ -34,18 +35,30 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
             Imagem em breve
           </span>
         )}
-        <div className="absolute left-3 top-3">
-          <Badge status={development.status} />
-        </div>
+        <DevelopmentBadges
+          development={development}
+          className="absolute inset-x-3 top-3"
+        />
       </div>
 
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-semibold text-ink">{development.name}</h3>
-        <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-          <MapPin aria-hidden="true" className="size-3.5 shrink-0" />
-          {development.location.city}/{development.location.state}
-        </p>
+      {development.soldOut ? <SoldOutBand /> : null}
 
+      <div className="flex flex-1 flex-col p-4">
+        {/* Nome + UF no selo (ref. Novolar): a UF separa as duas praças da
+            Natus num relance, e a linha de baixo fica livre para o bairro. */}
+        <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
+          <h3 className="text-lg font-semibold leading-snug text-ink">
+            {development.name}
+          </h3>
+          <span className="shrink-0 rounded-md border border-ink/30 px-1.5 py-0.5 text-xs font-semibold text-ink">
+            <span className="sr-only">Estado: </span>
+            {development.location.state}
+          </span>
+        </div>
+        <p className="mt-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+          <MapPin aria-hidden="true" className="size-3.5 shrink-0" />
+          {formatLocality(development.location)}
+        </p>
         {development.features.length > 0 ? (
           <ul className="mt-3 flex flex-wrap gap-2">
             {development.features.slice(0, 3).map((f) => (
@@ -59,7 +72,7 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
           </ul>
         ) : null}
 
-        <div className="mt-auto pt-5">
+        <div className="mt-auto pt-4">
           {/* O nome entra no rótulo acessível: numa lista de 11 cards, 11 links
               chamados só "Ver empreendimento" são indistinguíveis para quem
               navega por links. O texto visível segue contido no nome (WCAG 2.5.3). */}

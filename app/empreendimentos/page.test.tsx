@@ -19,20 +19,20 @@ describe("Página de catálogo /empreendimentos", () => {
     ).toBeInTheDocument();
   });
 
-  it("lista os 12 empreendimentos", async () => {
+  it("lista os 11 empreendimentos", async () => {
     await renderPage();
-    expect(countCards()).toBe(12);
+    expect(countCards()).toBe(11);
   });
 
   it("já chega filtrado quando a URL traz uma faceta", async () => {
     await renderPage({ status: "em_construcao" });
     // Sem flash: o HTML servido já reflete a busca feita na home.
-    expect(countCards()).toBeLessThan(12);
+    expect(countCards()).toBeLessThan(11);
     expect(countCards()).toBeGreaterThan(0);
   });
 
   it("ignora faceta inválida na URL em vez de quebrar", async () => {
     await renderPage({ status: "inexistente" });
-    expect(countCards()).toBe(12);
+    expect(countCards()).toBe(11);
   });
 });

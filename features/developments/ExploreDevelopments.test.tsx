@@ -35,20 +35,20 @@ describe("ExploreDevelopments", () => {
   });
 
   it("as setas rolam o trilho e dão a volta no fim", async () => {
-    const scrollIntoView = vi.fn();
-    vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(
-      scrollIntoView,
+    const scrollTo = vi.fn();
+    vi.spyOn(Element.prototype, "scrollTo").mockImplementation(
+      scrollTo,
     );
     const user = userEvent.setup();
     render(<ExploreDevelopments developments={tres} />);
 
     await user.click(screen.getByRole("button", { name: /próximo/i }));
-    expect(scrollIntoView).toHaveBeenLastCalledWith(
-      expect.objectContaining({ behavior: "smooth", inline: "start" }),
+    expect(scrollTo).toHaveBeenLastCalledWith(
+      expect.objectContaining({ behavior: "smooth" }),
     );
     // Do índice 0, "anterior" circula para o último em vez de travar.
     await user.click(screen.getByRole("button", { name: /anterior/i }));
-    expect(scrollIntoView).toHaveBeenCalledTimes(2);
+    expect(scrollTo).toHaveBeenCalledTimes(2);
     vi.restoreAllMocks();
   });
 

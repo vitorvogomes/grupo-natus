@@ -14,14 +14,20 @@ describe("Badge", () => {
     expect(screen.getByText("X")).toHaveClass("extra");
   });
 
-  it.each(DEVELOPMENT_STATUSES)(
-    "variante de status '%s' mostra o rótulo e a cor do token",
-    (status) => {
-      render(<Badge status={status} />);
-      const el = screen.getByText(STATUS_META[status].label);
-      expect(el.className).toContain(
-        STATUS_META[status].badgeClassName.split(" ")[0],
-      );
-    },
-  );
+  it("todos os status usam o mesmo selo branco do MCMV (sem cor por status)", () => {
+    const { container } = render(
+      <>
+        {DEVELOPMENT_STATUSES.map((status) => (
+          <Badge key={status} status={status} />
+        ))}
+        <Badge>Minha Casa Minha Vida</Badge>
+      </>,
+    );
+    const classes = [...container.querySelectorAll("span")].map((el) => el.className);
+    expect(new Set(classes).size).toBe(1);
+    expect(classes[0]).toContain("bg-surface");
+    for (const status of DEVELOPMENT_STATUSES) {
+      expect(screen.getByText(STATUS_META[status].label)).toBeInTheDocument();
+    }
+  });
 });

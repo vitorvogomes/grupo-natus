@@ -1,17 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BadgeCheck, Home, Map, Warehouse, Workflow, Wrench } from "lucide-react";
+import { Home, Map, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Image } from "@/components/ui/Image";
 import { Gallery } from "@/features/developments/Gallery";
 import { Reveal } from "@/components/motion/Reveal";
+import { Certifications } from "@/features/institutional/Certifications";
+import {
+  COMPANIES_TAGLINE,
+  OASI,
+  VALUES,
+} from "@/features/institutional/content";
 
 export const metadata: Metadata = {
   title: "Serviços de Engenharia",
   description:
-    "OASI Engenharia — obras por administração do Grupo Natus: residências de alto padrão, condomínios e galpões comerciais, com gestão da qualidade ISO 9001:2015.",
+    "Oasi Engenharia — planejamento, execução e controle de obra do Grupo Natus, com custo previsível e cronograma cumprido. Certificações ISO 9001:2015 e PBQP-H.",
 };
+
+// Os três valores que descrevem a execução (os outros falam de relação
+// comercial e ficam em Quem Somos). Texto do cliente, sem paráfrase.
+const PRINCIPLES = [VALUES.metodo, VALUES.eficiencia, VALUES.transparencia];
 
 // Portfólio real (site atual: seção "Serviços de Engenharia", três cards
 // "OBRA POR ADMINISTRAÇÃO"). Imagens: material da própria empresa (img/Servico -*).
@@ -106,70 +116,58 @@ export default function EngenhariaPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/60 to-navy-900/25" />
         <div className="relative mx-auto max-w-[var(--container-max)] px-4 py-24 sm:px-6 md:py-28 lg:px-8">
           <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-brand">
-            OASI Engenharia
+            {OASI.name}
           </p>
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
             Serviços de Engenharia
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-navy-100">
-            Obras por administração — do canteiro à entrega, com gestão da
-            qualidade certificada.
+            {OASI.description}
           </p>
         </div>
       </section>
 
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-16 sm:px-6 lg:px-8">
-        {/* Posicionamento. */}
+        {/* Posicionamento: o papel da Oasi no ciclo do grupo. */}
         <Reveal>
           <section className="max-w-3xl">
             <p className="text-lg leading-relaxed text-ink-soft">
-              A engenharia do Grupo Natus executa obras por administração —
-              conduzindo residências de alto padrão, condomínios e galpões
-              comerciais com metodologia e processos bem estruturados e alta
-              eficiência.
+              {COMPANIES_TAGLINE}
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
+              Além dos empreendimentos do grupo, a Oasi executa obras por
+              administração: residências de alto padrão, condomínios e galpões
+              comerciais.
             </p>
           </section>
         </Reveal>
 
-        {/* Como trabalhamos: Metodologia + Capacidade técnica. */}
+        {/* Como trabalhamos: os valores que descrevem a execução. */}
         <section className="mt-14">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Reveal>
-              <Card className="flex h-full flex-col gap-3 p-6">
-                <span className="inline-flex size-11 items-center justify-center rounded-lg bg-surface-muted text-brand-strong">
-                  <Workflow aria-hidden="true" className="size-6" />
-                </span>
-                <h2 className="text-xl font-semibold text-ink">Metodologia</h2>
-                <p className="text-ink-soft">
-                  Metodologia e processos bem estruturados, com alta eficiência
-                  na condução de cada obra — do planejamento à entrega.
-                </p>
-                <p className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-medium text-brand-strong">
-                  <BadgeCheck aria-hidden="true" className="size-4" />
-                  Gestão da qualidade NBR ISO 9001:2015
-                </p>
-              </Card>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <Card className="flex h-full flex-col gap-3 p-6">
-                <span className="inline-flex size-11 items-center justify-center rounded-lg bg-surface-muted text-brand-strong">
-                  <Wrench aria-hidden="true" className="size-6" />
-                </span>
-                <h2 className="text-xl font-semibold text-ink">
-                  Capacidade técnica
-                </h2>
-                <p className="text-ink-soft">
-                  Equipe e experiência em obras residenciais, condomínios e
-                  comerciais.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  TODO: CONTENT REQUIRED — equipe, certificações e números de
-                  capacidade (a validar com a empresa).
-                </p>
-              </Card>
-            </Reveal>
+          <Reveal>
+            <h2 className="text-2xl font-semibold text-ink">Como trabalhamos</h2>
+          </Reveal>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {PRINCIPLES.map((value, i) => {
+              const Icon = value.icon;
+              return (
+                <Reveal key={value.label} delay={i * 0.08}>
+                  <Card className="flex h-full flex-col gap-3 p-6">
+                    <span className="inline-flex size-11 items-center justify-center rounded-lg bg-surface-muted text-brand-strong">
+                      <Icon aria-hidden="true" className="size-6" />
+                    </span>
+                    <h3 className="text-lg font-semibold text-ink">
+                      {value.label}
+                    </h3>
+                    <p className="text-ink-soft">{value.description}</p>
+                  </Card>
+                </Reveal>
+              );
+            })}
           </div>
         </section>
+
+        <Certifications className="mt-16" />
 
         {/* Obras por administração — portfólio real. */}
         <section className="mt-16">

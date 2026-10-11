@@ -1,7 +1,7 @@
 import type { DevelopmentImage } from "@/types/development";
 
 /** Imagem-placeholder p/ empreendimentos ainda sem foto (foto de obra genérica). */
-export const PLACEHOLDER_IMAGE = "/empreendimentos/em-construcao.webp";
+export const PLACEHOLDER_IMAGE = "/empreendimentos/breve-lancamento.webp";
 
 /**
  * Seleciona a imagem de capa: a primeira da categoria "imagens".

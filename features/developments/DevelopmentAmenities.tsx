@@ -83,9 +83,14 @@ export function DevelopmentAmenities({
       </h2>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-start">
-        {/* O primeiro grupo já vem aberto: um accordion inteiramente fechado
-            esconde a seção atrás de um clique que ninguém pediu. */}
-        <Accordion items={items} defaultOpen={[items[0]?.id ?? ""]} />
+        {/* Um grupo aberto por vez, começando pelo primeiro: tudo expandido
+            vira um paredão de listas; tudo fechado esconde a seção atrás de
+            um clique que ninguém pediu. */}
+        <Accordion
+          type="single"
+          items={items}
+          defaultOpen={[items[0]?.id ?? ""]}
+        />
 
         {image ? (
           // O sticky fica no invólucro: `fill` exige pai relative/absolute/fixed,
@@ -97,6 +102,7 @@ export function DevelopmentAmenities({
                 alt={image.alt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 45vw"
+                quality={90}
                 className="object-cover"
               />
             </div>

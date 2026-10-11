@@ -44,18 +44,22 @@ export function ProgressTimeline({
           </p>
         ) : null}
 
-        <div>
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Etapas da obra
-          </h3>
-          <ol className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
-            {stages.map((stage) => (
-              <li key={stage.name} className="px-5 py-4">
-                <ProgressBar value={stage.percentage} label={stage.name} />
-              </li>
-            ))}
-          </ol>
-        </div>
+        {/* Só o total, sem etapas detalhadas, é um estado válido: a lista
+            vazia não entra. */}
+        {stages.length > 0 ? (
+          <div>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Etapas da obra
+            </h3>
+            <ol className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
+              {stages.map((stage) => (
+                <li key={stage.name} className="px-5 py-4">
+                  <ProgressBar value={stage.percentage} label={stage.name} />
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : null}
       </div>
 
       <div>
@@ -70,7 +74,11 @@ export function ProgressTimeline({
           // página. Ver docs/CONTENT-GAPS.md.
           <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-surface-muted px-6 text-center">
             <span className="flex size-12 items-center justify-center rounded-full bg-surface text-brand-strong shadow-sm">
-              <Camera aria-hidden="true" className="size-6" strokeWidth={1.75} />
+              <Camera
+                aria-hidden="true"
+                className="size-6"
+                strokeWidth={1.75}
+              />
             </span>
             <p className="font-medium text-ink">Fotos da obra em breve</p>
             <p className="max-w-xs text-sm text-ink-soft">

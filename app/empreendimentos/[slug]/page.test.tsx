@@ -51,11 +51,20 @@ describe("Rota /empreendimentos/[slug] (FR3)", () => {
   });
 });
 
-describe("Layout completo — em construção com material (Follow Savassi)", () => {
+function rotulosDaNav() {
+  return within(navDoEmpreendimento())
+    .getAllByRole("link")
+    .map((a) => [a.textContent, a.getAttribute("href")]);
+}
+
+describe("Lançamento — página completa (Follow Savassi)", () => {
   it("monta a página inteira, na ordem pedida", async () => {
     await abrir("follow-savassi");
     expect(
       screen.getByRole("heading", { level: 1, name: "Follow Savassi" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "MG, Savassi - Belo Horizonte" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Galeria" })).toBeInTheDocument();
     expect(
@@ -75,7 +84,35 @@ describe("Layout completo — em construção com material (Follow Savassi)", ()
     ).toBeInTheDocument();
   });
 
-  it("mostra o mapa e as rotas, agora que há endereço", async () => {
+  it("sub-nav: Imagens · Empreendimento (o que oferece) · Localização · Obra · Consultor", async () => {
+    await abrir("follow-savassi");
+    expect(rotulosDaNav()).toEqual([
+      ["Imagens", "#imagens"],
+      ["Empreendimento", "#o-que-oferece"],
+      ["Localização", "#localizacao"],
+      ["Estágio de Obra", "#estagio-de-obra"],
+      ["Falar com Consultor", "#falar-com-consultor"],
+    ]);
+  });
+
+  it("o estágio de obra mostra as 5 etapas, na ordem oficial", async () => {
+    await abrir("follow-savassi");
+    const etapas = screen
+      .getAllByRole("progressbar")
+      .map((el) => el.getAttribute("aria-label"));
+    expect(etapas).toEqual([
+      "Total Construído",
+      "Fundação",
+      "Estrutura",
+      "Alvenaria",
+      "Acabamento interno",
+      "Acabamento externo",
+    ]);
+    // Percentuais do cliente: sem o rótulo de "ilustrativos".
+    expect(screen.queryByText(/ilustrativos/i)).toBeNull();
+  });
+
+  it("mostra o mapa e as rotas", async () => {
     await abrir("follow-savassi");
     expect(screen.getByTitle("Mapa de Follow Savassi")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /waze/i })).toBeInTheDocument();
@@ -100,7 +137,58 @@ describe("Layout completo — em construção com material (Follow Savassi)", ()
   });
 });
 
-describe("Layout reduzido — pronto para morar (Torres da Lagoa)", () => {
+describe("Lançamento MCMV — página completa (Solar Manilha)", () => {
+  it("tem galeria, diferenciais, obra e a seção do programa", async () => {
+    await abrir("solar-manilha");
+    expect(screen.getByRole("heading", { name: "Galeria" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /o que o solar manilha oferece/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("progressbar", { name: /total construído/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /simule agora/i }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/TODO: CONTENT REQUIRED/)).toBeNull();
+  });
+});
+
+describe("Imagem do 'O que oferece'", () => {
+  it("usa a imagem escolhida no dado (Solar: vista do apartamento tipo)", async () => {
+    await abrir("solar-manilha");
+    const oferece = document.getElementById("o-que-oferece")!;
+    expect(
+      within(oferece).getByRole("img", { name: /apartamento tipo — vista para o condomínio/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("sem escolha no dado, cai na terceira imagem (Follow)", async () => {
+    await abrir("follow-savassi");
+    const oferece = document.getElementById("o-que-oferece")!;
+    expect(
+      within(oferece).getByRole("img", { name: "Vista aérea do Follow Savassi" }),
+    ).toBeInTheDocument();
+  });
+});
+
+describe("Em construção — página reduzida (Golden Ville)", () => {
+  it("mostra só a fundação no estágio de obra", async () => {
+    await abrir("golden-ville-residence");
+    const etapas = screen
+      .getAllByRole("progressbar")
+      .map((el) => el.getAttribute("aria-label"));
+    expect(etapas).toEqual(["Total Construído", "Fundação"]);
+  });
+
+  it("sem diferenciais, 'Empreendimento' na sub-nav leva ao resumo", async () => {
+    await abrir("golden-ville-residence");
+    expect(rotulosDaNav()[0]).toEqual(["Empreendimento", "#empreendimento"]);
+    expect(rotulosDaNav().map(([label]) => label)).toContain("Estágio de Obra");
+  });
+});
+
+describe("Pronto para morar — página reduzida (Torres da Lagoa)", () => {
   it("tem galeria e localização, mas nenhuma seção de obra", async () => {
     await abrir("torres-da-lagoa");
     expect(screen.getByRole("heading", { name: "Galeria" })).toBeInTheDocument();
@@ -108,44 +196,58 @@ describe("Layout reduzido — pronto para morar (Torres da Lagoa)", () => {
     expect(screen.queryByText(/estágio de obra/i)).not.toBeInTheDocument();
   });
 
+  it("exibe o MCMV; o 100% vendido fica só nos cards", async () => {
+    await abrir("torres-da-lagoa");
+    const resumo = document.getElementById("empreendimento")!;
+    expect(within(resumo).queryByText(/100% vendido/i)).toBeNull();
+    expect(
+      screen.getByRole("link", { name: /simule agora/i }),
+    ).toBeInTheDocument();
+  });
+
   it("a sub-nav não oferece âncora para seção que não existe", async () => {
     await abrir("torres-da-lagoa");
-    const nav = navDoEmpreendimento();
-    expect(
-      within(nav).queryByRole("link", { name: /estágio de obra/i }),
-    ).toBeNull();
-    expect(
-      within(nav).queryByRole("link", { name: /o que oferece/i }),
-    ).toBeNull();
-    expect(
-      within(nav).getByRole("link", { name: "Imagens" }),
-    ).toHaveAttribute("href", "#imagens");
+    expect(rotulosDaNav()).toEqual([
+      ["Empreendimento", "#empreendimento"],
+      ["Imagens", "#imagens"],
+      ["Localização", "#localizacao"],
+      ["Falar com Consultor", "#falar-com-consultor"],
+    ]);
   });
 });
 
-describe("Layout enxuto — lançamento sem material (Solar Manilha)", () => {
-  it("troca as seções vazias por um painel com o que se sabe", async () => {
-    await abrir("solar-manilha");
-    expect(screen.getByText(/368 un. MCMV/)).toBeInTheDocument();
+describe("Breve lançamento — seção mínima (Gutierrez, Sunset Ville)", () => {
+  it("troca as seções por um painel com o que se sabe", async () => {
+    await abrir("gutierrez");
+    expect(screen.getByText(/20 un. alto luxo/)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /quero ser avisado/i }),
     ).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Galeria" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Localização" })).toBeNull();
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: /seções do empreendimento/i }),
+    ).toBeNull();
   });
 
   it("nunca mostra placeholder TODO na tela", async () => {
-    await abrir("solar-manilha");
+    await abrir("gutierrez");
     expect(screen.queryByText(/TODO: CONTENT REQUIRED/)).toBeNull();
   });
 
-  it("exibe a seção Minha Casa Minha Vida por ser enquadrado", async () => {
-    await abrir("solar-manilha");
-    expect(
-      screen.getByRole("img", { name: /minha casa minha vida/i }),
-    ).toBeInTheDocument();
+  it("exibe a seção Minha Casa Minha Vida quando enquadrado", async () => {
+    await abrir("sunset-ville-residence");
     expect(
       screen.getByRole("link", { name: /simule agora/i }),
     ).toBeInTheDocument();
+  });
+});
+
+describe("Portfólio", () => {
+  it("Vista do Lago saiu do portfólio (404)", async () => {
+    await expect(
+      DevelopmentPage({ params: Promise.resolve({ slug: "vista-do-lago" }) }),
+    ).rejects.toThrow(/NEXT_NOT_FOUND/);
   });
 });

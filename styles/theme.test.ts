@@ -29,11 +29,12 @@ describe("Design tokens Natus (@theme)", () => {
     }
   });
 
-  it("expõe tokens de status de empreendimento (lancamento/em_construcao/pronto)", () => {
+  it("expõe os tokens de status ainda em uso (pronto e a faixa de vendido)", () => {
+    // Os selos de status são todos neutros desde a revisão v3; sobram o verde
+    // (botão do WhatsApp) e o navy da faixa "100% vendido".
     for (const token of [
-      "--color-status-lancamento:",
-      "--color-status-em-construcao:",
       "--color-status-pronto:",
+      "--color-status-vendido:",
     ]) {
       expect(themeCss).toContain(token);
     }

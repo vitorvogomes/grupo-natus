@@ -99,6 +99,9 @@ function GalleryStage({
             alt={current.alt}
             fill
             sizes="(max-width: 1024px) 100vw, 1216px"
+            // 90 (e não o 75 padrão): o palco mostra a foto quase no tamanho
+            // da fonte, e renders pequenos não têm margem para mais perda.
+            quality={90}
             className="object-cover"
           />
           <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-navy-900/70 px-3 py-1 text-xs font-medium text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">

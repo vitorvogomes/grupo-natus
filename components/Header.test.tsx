@@ -1,5 +1,4 @@
 import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/navigation", () => ({
@@ -8,7 +7,6 @@ vi.mock("next/navigation", () => ({
 
 import { Header } from "./Header";
 import { NAV_LINKS } from "@/lib/site";
-import type { StatusNavGroup } from "@/content/developments";
 
 describe("Header", () => {
   it("renderiza dentro de um <header> (banner)", () => {
@@ -60,25 +58,13 @@ describe("Header", () => {
     ).not.toHaveAttribute("aria-current");
   });
 
-  it("abre o mega-menu de Empreendimentos por status quando recebe grupos", async () => {
-    const groups: StatusNavGroup[] = [
-      {
-        status: "lancamento",
-        label: "Lançamento",
-        items: [{ name: "Solar Manilha", slug: "solar-manilha" }],
-      },
-      {
-        status: "pronto",
-        label: "Pronto para morar",
-        items: [{ name: "Viver Mais", slug: "viver-mais" }],
-      },
-    ];
-    const user = userEvent.setup({ pointerEventsCheck: 0 });
-    render(<Header empreendimentosMenu={groups} />);
-    await user.click(screen.getByRole("button", { name: /empreendimentos/i }));
+  it("Empreendimentos é um link direto para o catálogo, sem submenu", () => {
+    render(<Header />);
+    const nav = screen.getByRole("navigation", { name: /principal/i });
     expect(
-      await screen.findByRole("link", { name: "Solar Manilha" }),
-    ).toHaveAttribute("href", "/empreendimentos/solar-manilha");
+      within(nav).getByRole("link", { name: "Empreendimentos" }),
+    ).toHaveAttribute("href", "/empreendimentos");
+    expect(within(nav).queryByRole("button", { name: /empreendimentos/i })).toBeNull();
   });
 
   it("não sobrepõe a marca do hero fora da Home", () => {

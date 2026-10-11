@@ -12,21 +12,18 @@ type BadgeProps = {
   className?: string;
 };
 
+/**
+ * Um selo só, branco com contorno: status e MCMV têm o mesmo peso visual. A
+ * faixa "100% vendido" é o único destaque colorido do card; cor por status
+ * competiria com ela e com a foto.
+ */
 const BASE =
-  "inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold";
+  "inline-flex items-center rounded-full bg-surface px-3 py-1 text-xs font-semibold text-ink ring-1 ring-border";
 
 export function Badge({ children, status, className }: BadgeProps) {
-  if (status) {
-    const meta = STATUS_META[status];
-    return (
-      <span className={cn(BASE, meta.badgeClassName, className)}>
-        {meta.label}
-      </span>
-    );
-  }
   return (
-    <span className={cn(BASE, "bg-surface-muted text-ink", className)}>
-      {children}
+    <span className={cn(BASE, className)}>
+      {status ? STATUS_META[status].label : children}
     </span>
   );
 }
