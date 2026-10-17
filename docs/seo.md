@@ -15,7 +15,7 @@ Plano para fazer depois. Cada item diz **onde** mexer (arquivo, painel ou servi�
 | Metadados base | `app/layout.tsx` (`metadataBase`, `title.template = "%s \| Grupo Natus"`, OG `pt_BR`) | Descrição padrão genérica |
 | Metadados por página | `export const metadata` em cada `page.tsx`; `generateMetadata` em `app/empreendimentos/[slug]/page.tsx` | Título = nome; descrição = `summary` |
 | URL canônica | `alternates.canonical` nas páginas de empreendimento | Ok |
-| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (nome, url, areaServed) e `Residence` por empreendimento | Mínimo: sem logo, contato, `sameAs`, `geo` |
+| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (nome, url, areaServed, `sameAs`, `taxID`) e `Residence` por empreendimento (com `postalCode` quando há) | Falta logo, contato e `geo` |
 | Domínio | `SITE_URL` em `lib/site.ts` = `https://www.natusgrupo.com.br` | **A confirmar** (www ou sem www) |
 | Imagens | `next/image`, WEBP via pipeline, alt em todas | Ok |
 | Acessibilidade e semântica | landmarks, um `h1` por página, skip-link | Ok |
@@ -55,7 +55,7 @@ Hoje o Google exibe "Uma empresa mineira que atua em MG e RJ, incorpora e…" em
 1. **Organization**, na home e no layout:
    - `logo` (URL absoluta de `public/brand/…`), `legalName` (quando o CNPJ for confirmado), `address` (Av. Getúlio Vargas, 1621), `telephone`, `email`;
    - `contactPoint`;
-   - `sameAs` com as URLs dos perfis oficiais (Instagram, LinkedIn, perfil no Google). Depende de `docs/CONTENT-GAPS.md` §6;
+   - ✅ `sameAs` com Instagram, Facebook e LinkedIn (`SOCIAL` em `lib/site.ts`); acrescentar o perfil no Google quando existir;
    - `subOrganization` com a Aliatto Incorporadora e a Oasi Engenharia.
    - **Nunca** coloque o nome de um concorrente em `alternateName` (ver §5).
 2. **Empreendimentos**: troque `Residence` por `ApartmentComplex` (ou `Residence` com `containsPlace`). Inclua:
@@ -167,7 +167,7 @@ Use o mesmo nome, endereço e telefone em todo lugar: site (`lib/site.ts` → `C
 - **GA4**: conversões nos cliques de WhatsApp e nos envios de formulário. O evento entra no código quando a decisão for tomada (consentimento LGPD, ver abaixo).
 - **Search Console**: consultas, CTR e posição por página.
 - **Bing Webmaster Tools**: importa a propriedade direto do Search Console.
-- **LGPD**: se entrar GA4 ou pixel, use um banner de consentimento e atualize a política de privacidade (pendente em `docs/CONTENT-GAPS.md` §6).
+- **LGPD**: o banner de consentimento e a `/politica-de-privacidade` já existem (`features/consent/`). Ao entrar GA4 ou pixel, crie a categoria "Análise e marketing" em `lib/consent.ts`, carregue o script só com `useConsent()` e atualize a política.
 
 ---
 

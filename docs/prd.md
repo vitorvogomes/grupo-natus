@@ -27,9 +27,10 @@
 - **FR10** — Formulário **Negocie seu Terreno** (campos definidos neste PRD — ver Epic 7).
 - **FR11** — Envio de formulários por email via Route Handler do Next (após fluxo definido); feedback claro de sucesso/erro; estratégia anti-spam.
 - **FR12** — Página **Serviços de Engenharia** (atuação, metodologia, tipos de projeto, capacidade técnica, obras, diferenciais, CTA).
-- **FR13** — Página **Quem Somos** (história, empresas, atuação, valores, números).
+- **FR13** — Página **Quem Somos** (posicionamento, atuação, valores, certificações, números). A seção de empresas saiu na revisão v4.
 - **FR14** — SEO por página e por empreendimento: metadata, title, description, canonical, Open Graph, sitemap, robots, structured data quando fizer sentido, URLs amigáveis, alt text.
 - **FR15** — (Condicional) Painel `/admin` com Supabase Auth para gerenciar progresso/conteúdo/imagens/leads — **somente se necessidade concreta**.
+- **FR16** — **Privacidade (LGPD)**: página de Política de Privacidade; consentimento de cookies (aceitar todos / só necessários / preferências, revogável pelo rodapé); integrações de terceiros com cookie (Google Maps; futuras ferramentas de análise/anúncio) só carregam após o aceite; formulários com aviso e link para a política. (Revisão v4, 2026-10-17.)
 
 ## 3. Requisitos não-funcionais (NFR)
 
@@ -73,7 +74,7 @@ Camada de conteúdo estática (`content/`) até haver necessidade de administra�
 
 ## 5. Arquitetura-alvo
 
-`Next.js (App Router + TS)` → conteúdo estático + Route Handlers → (quando necessário) Supabase (Postgres + RLS + Auth). Estrutura de pastas proposta: `src/app`, `src/components`, `src/features/{developments,contact,engineering,land-submission}`, `src/content`, `src/lib`, `src/styles`, `src/types`.
+`Next.js (App Router + TS)` → conteúdo estático + Route Handlers → (quando necessário) Supabase (Postgres + RLS + Auth). Estrutura de pastas (sem `src/`): `app`, `components`, `features/{developments,home,institutional,mcmv,contact,consent,seo}`, `content`, `lib`, `styles`, `types`, `scripts`.
 
 > **Arquitetura detalhada (fonte de verdade):** [`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md) — invariantes AD-1…AD-8, stack verificado (Next 16.3.5 / React 19 / Tailwind 4.3 / Vitest 5.0.1) e Capability→Architecture map.
 
@@ -83,7 +84,7 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 
 | Epic | Título | Entrega de valor | FRs |
 |------|--------|------------------|-----|
-| 1 | Fundação & Identidade Navegável | Scaffold Next.js+TS+Vitest(90%), tokens da marca, shell, WhatsApp, theme-showcase (Gate A) | FR6 |
+| 1 | Fundação & Identidade Navegável | Scaffold Next.js+TS+Vitest (gate 85%, ADR 0001), tokens da marca, shell, WhatsApp, theme-showcase (Gate A) | FR6 |
 | 2 | Descoberta (Home / Catálogo) | Modelo `Development`, seed dos 12, Home, grid, filtros | FR1, FR2 |
 | 3 | Página do Empreendimento & Catálogo | Template `[slug]` (galeria, mapa, status, CTA, SEO); Gate B | FR3,4,7,6,14 |
 | 4 | Evolução das Obras | Progresso (percentual+etapas), estático → Supabase | FR5 |

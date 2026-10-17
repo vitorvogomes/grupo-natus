@@ -58,4 +58,4 @@ Um segundo Map ID só faria sentido para um estilo diferente: por exemplo, um ma
 
 ## Verificação
 
-Com as variáveis preenchidas, abra `/empreendimentos/follow-savassi`. O mapa deve carregar com o pin nude/navy da Natus. Se a chave falhar (restrição errada, faturamento inativo), a seção continua de pé com o endereço e os botões Google Maps/Waze, porque o mapa é acessório. O erro aparece no console do navegador.
+Com as variáveis preenchidas, abra `/empreendimentos/follow-savassi` e aceite os mapas no aviso de cookies (sem consentimento, nenhum mapa do Google é criado; ver `features/consent/MapConsentGate.tsx`). O mapa deve carregar com o pin nude/navy da Natus. Se a chave falhar (restrição errada, faturamento inativo), a seção continua de pé com o endereço e os botões Google Maps/Waze, porque o mapa é acessório. O erro aparece no console do navegador.

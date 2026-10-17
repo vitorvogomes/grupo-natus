@@ -8,7 +8,7 @@
 
 ## Estrutura canônica (resumo — 8 epics)
 
-1. **Fundação & Identidade Navegável** — scaffold Next.js+TS+Vitest(90%), tokens da marca, shell, WhatsApp, theme-showcase (Gate A).
+1. **Fundação & Identidade Navegável** — scaffold Next.js+TS+Vitest (gate 85%, ADR 0001), tokens da marca, shell, WhatsApp, theme-showcase (Gate A).
 2. **Descoberta (Home / Catálogo)** — modelo `Development`, seed dos 11, Home, grid, filtros (FR1–2).
 3. **Página do Empreendimento & Catálogo Completo** — template `[slug]`, galeria, mapa, status, CTA, SEO por empreendimento; Gate B (FR3,4,7,6,14).
 4. **Acompanhamento da Evolução das Obras** — `ConstructionProgress`, componentes, integração (FR5).

@@ -60,6 +60,7 @@ graph TD
 - **Binds:** FR6 (WhatsApp), FR7 (Maps), FR11 (email)
 - **Prevents:** número/URL/credencial hardcodados espalhados por componentes.
 - **Rule:** cada integração externa vive em um único módulo em `lib/` (`lib/whatsapp`, `lib/maps`, `lib/email`) e é consumida só por ele. Componentes recebem dados/props, nunca chamam o provedor direto.
+- **Consentimento (LGPD, v4):** integração de terceiros que grava cookies (Google Maps hoje; GA4/Pixel depois) só carrega através de `useConsent()` (`features/consent/`), com a categoria lida do cookie primário `natus_consent` (`lib/consent.ts`). Mapas passam por `MapConsentGate`. Categoria nova entra junto com a ferramenta, nunca vazia.
 
 ### AD-4 — Escrita e secrets só no servidor
 - **Binds:** FR8, FR9, FR10, FR11, FR15
@@ -84,7 +85,7 @@ graph TD
 ### AD-8 — TDD com cobertura mínima
 - **Binds:** `all`, NFR9
 - **Prevents:** código sem teste; regressões.
-- **Rule:** testes colocados (`*.test.tsx`/`*.test.ts`), red→green→refactor; `vitest.config` fixa `coverage.thresholds` = 90% (lines/functions/branches/statements). O Stop hook `.claude/hooks/coverage-gate.sh` reforça. `[ADOPTED]`
+- **Rule:** testes colocados (`*.test.tsx`/`*.test.ts`), red→green→refactor; `vitest.config` fixa `coverage.thresholds` = 85% (lines/functions/branches/statements; baixado de 90% em 2026-09-18, ver `docs/adr/0001-coverage-85.md`). O Stop hook `.claude/hooks/coverage-gate.sh` reforça. `[ADOPTED]`
 
 ## Consistency Conventions
 
@@ -92,7 +93,7 @@ graph TD
 | --- | --- |
 | Naming | Componentes/tipos `PascalCase`; arquivos de rota conforme Next (`page.tsx`, `layout.tsx`, `route.ts`); slugs `kebab-case`; features em `kebab-case`. |
 | Data & formats | Datas em ISO 8601 (`updatedAt`); `status` ∈ `lancamento \| em_construcao \| pronto \| breve_lancamento` (ordem = prioridade de exibição; "100% vendido" é `soldOut` sobre `pronto`, não status); erros de API como `{ error: { code, message } }`; conteúdo faltante = `TODO: CONTENT REQUIRED`. |
-| State & cross-cutting | Mutação só server-side (AD-4); config/env via `lib/env` (server-only validado); WhatsApp/Maps/email só via `lib/*` (AD-3); i18n textual em Português. |
+| State & cross-cutting | Mutação só server-side (AD-4); config/env via `lib/env` (server-only validado); WhatsApp/Maps/email só via `lib/*` (AD-3); terceiros com cookie só após `useConsent()` (AD-3); i18n textual em Português. |
 
 ## Stack
 
@@ -120,16 +121,17 @@ natus-website/
     quem-somos/                # FR13
     negocie-seu-terreno/       # FR10
     contato/                   # FR8
+    politica-de-privacidade/   # FR16 (LGPD)
     api/                       # Route Handlers: leads/contato/email (FR11)
     sitemap.ts  robots.ts      # FR14 site-wide
   features/
-    developments/              # cards, filtros, galeria, progresso (FR1-5)
-    contact/                   # formulários + interesse (FR8, FR9)
-    engineering/               # FR12
-    land-submission/           # FR10
+    developments/              # cards, filtros, galeria, progresso, mapa (FR1-5, FR7)
+    contact/                   # LeadForm: contato, interesse, terreno (FR8-10)
+    consent/                   # banner, preferências, MapConsentGate (FR16)
+    home/  institutional/  mcmv/  seo/
   components/                  # Button, Badge, Card, Image, Modal, WhatsAppButton...
   content/developments/        # 11 empreendimentos (fonte de verdade) — AD-2
-  lib/                         # whatsapp, maps, email, supabase, env — AD-3/4/5
+  lib/                         # whatsapp, maps, email, consent, env — AD-3/4 (supabase só no Gate C)
   types/                       # Development, ConstructionProgress
   styles/                      # tokens Tailwind v4 @theme — AD-7
 ```
@@ -156,7 +158,8 @@ erDiagram
 | Progresso de obra (FR5) | `features/developments`, `types` | AD-2, AD-5 |
 | WhatsApp (FR6) | `lib/whatsapp`, `components/WhatsAppButton` | AD-3 |
 | Localização/Maps (FR7) | `lib/maps` | AD-3 |
-| Formulários + email (FR8-11) | `features/contact`, `features/land-submission`, `app/api`, `lib/email` | AD-4 |
+| Formulários + email (FR8-11) | `features/contact`, `app/api`, `lib/email` | AD-4 |
+| Privacidade + cookies (FR16) | `lib/consent`, `features/consent`, `app/politica-de-privacidade` | AD-3 |
 | Institucionais (FR12, FR13) | `app/engenharia`, `app/quem-somos` | AD-7 |
 | SEO (FR14) | rotas + `sitemap.ts`/`robots.ts` | AD-6 |
 | Admin/persistência (FR15) | `lib/supabase`, `app/admin` (condicional) | AD-4, AD-5 |

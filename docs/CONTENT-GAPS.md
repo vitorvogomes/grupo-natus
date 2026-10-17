@@ -13,9 +13,9 @@ Status novos: **Lançamento** (página completa, destaque) · **Em construção*
 
 | # | Empreendimento | Bairro · Cidade/UF | Status | 100% vendido | MCMV | Material |
 |---|---|---|---|---|---|---|
-| 1 | Follow Savassi | Savassi · BH/MG | Lançamento | — | — | completo |
-| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | — | ✔ | completo (34 imagens; fontes de 1448–2095 px — enviar versões maiores, se houver) |
-| 3 | Golden Ville Residence | Maria Paula · **Niterói**/RJ | Em construção | — | ✔ | descrição + imagens |
+| 1 | Follow Savassi | Savassi · BH/MG | Lançamento | — | — | completo (fotos da obra pendentes) |
+| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | — | ✔ | completo (34 imagens; os originais de 1448–2111 px são os maiores que existem) |
+| 3 | Golden Ville Residence | Maria Paula · **Niterói**/RJ | Em construção | — | ✔ | descrição + imagens (fotos da obra pendentes) |
 | 4 | Viver Mais | Itaboraí/RJ | Pronto para morar | ✔ | ✔ | descrição + imagens |
 | 5 | Residencial Denver | Santa Lúcia · BH/MG | Pronto para morar | ✔ | — | descrição + imagens |
 | 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar | ✔ | ✔ | descrição + imagens |
@@ -26,30 +26,31 @@ Status novos: **Lançamento** (página completa, destaque) · **Em construção*
 | 11 | Royal Ville Residence | Vespasiano/MG | Breve lançamento | — | ✔ | mínimo |
 
 - [x] **Descrições** (resumo da página) dos 7 com página: texto do cliente, verbatim, um item por linha. Corrigido um typo no Solar ("Terreno de com área" → "Terreno com área").
-- [x] **Localização**: os 7 com página têm lat/lng, tirados dos links de mapa enviados. Os dois links `share.google` (Denver e Residenziale) abrem uma busca, não um place; as coordenadas e os endereços (R. Denver, 134; R. Manoel Moreira Silva, 70) vieram dessa busca no Maps. **Conferir os dois pins.** Golden Ville e Solar Manilha não têm endereço de rua: o mapa usa as coordenadas.
+- [x] **Localização**: os 7 com página têm lat/lng, tirados dos links de mapa enviados. Os dois links `share.google` (Denver e Residenziale) abrem uma busca, não um place; as coordenadas e os endereços (R. Denver, 134; R. Manoel Moreira Silva, 70) vieram dessa busca no Maps. **Conferir os dois pins.** Endereços do Golden Ville (R. Frederico Malesherbes Figueredo, Maria Paula) e do Solar Manilha (R. Carlota Maria do Amor Divino, Loteamento Santo Antônio, CEP 24856-500) informados pelo cliente em 2026-10-17. 🔔 Conferir a grafia oficial "Figueredo" × "Figueiredo".
 - [ ] 🔔 **Chaves do Google Maps** (pin da Natus): passo a passo em [`docs/google-maps.md`](google-maps.md). Sem elas, o embed público mostra o pin vermelho do Google.
 - [ ] **Diferenciais agrupados** (accordion): só os dois lançamentos têm. Nas páginas reduzidas a seção não aparece (por desenho).
-- [ ] **Breve lançamentos**: material quando houver (descrição, imagens, localização).
-- [ ] **Tipologia** (faceta de busca) ainda sem evidência: **Viver Mais**, **Gutierrez** e **Sunset Ville**. Solar Manilha = apartamento (planta "Apartamento Tipo"); Denver passou de apartamento para **studio** ("14 studios de 35 m²").
+- [x] **Breve lançamentos**: seção reduzida aprovada para o MVP (2026-10-17). Descrição, imagens e localização entram quando houver material.
+- [x] **Tipologia** (faceta de busca): Viver Mais, Gutierrez e Sunset Ville = apartamento (cliente, 2026-10-17). Os 11 têm tipo.
 
 ## 2. Progresso das obras
 
 Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento interno · Acabamento externo**. Etapas em 0% não aparecem. A seção existe em Lançamento e Em construção.
 
-- [x] **Percentuais informados pelo cliente** (2026-10-11): Follow Savassi e Solar Manilha com Fundação 99% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 70% (total 7%). Sem rótulo de "ilustrativos".
+- [x] **Percentuais informados pelo cliente**: Follow Savassi com Fundação 100% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 70% (total 7%), aprovado. **Solar Manilha sem estágio de obra** (2026-10-17).
+- [ ] **Fotos da obra** do Follow Savassi e do Golden Ville. Sem elas a seção mostra só os percentuais (o painel de canteiro aparece quando houver fotos).
 - [ ] **Data ("última atualização")** e **quem atualiza / periodicidade**.
 
 ## 3. Páginas institucionais (Epic 6)
 
 **Construídas com conteúdo real do site atual + material da empresa** (`img/Quem Somos`, `img/Servico -*`). O que ficou grounded e o que segue TODO:
 
-- [x] **Quem Somos** (`/quem-somos`) — texto do cliente na revisão v3 (2026-10-11): subtítulo, abertura em 3 parágrafos, empresas (Aliatto/Oasi), valores ("Parceria" no lugar de "Qualidade certificada") e **Certificações** (ISO 9001:2015 + **PBQP-H · SiAC Nível A**, logo em `public/quem-somos/pbqp-h.webp`). A abertura diz "**4** empreendimentos entregues e **7** em desenvolvimento" (o texto enviado dizia 3 e 8; ajustado ao portfólio com o cliente). Mudou o portfólio, revise a frase.
+- [x] **Quem Somos** (`/quem-somos`) — texto do cliente na revisão v3 (2026-10-11): subtítulo, abertura em 3 parágrafos, empresas (Aliatto/Oasi), valores ("Parceria" no lugar de "Qualidade certificada") e **Certificações** (ISO 9001:2015 + **PBQP-H · SiAC Nível A**, logo em `public/quem-somos/pbqp-h.webp`). Na v4 (2026-10-17) a contagem saiu (frase fixa do cliente: "Hoje atuamos entre Belo Horizonte, região metropolitana e Leste Fluminense…"), a seção Empresas do grupo foi removida e o CTA ficou só com a logo da Natus.
 - [x] **Serviços de Engenharia** (`/engenharia`): OASI Engenharia · **obras por administração** (3 categorias reais do site: **Casa de alto padrão (Alphaville)**, **Condomínio (Avenida)**, **Galpão comercial**) com fotos reais otimizadas em `public/engenharia/`.
-- [x] **Home**: seção `AboutNatus` com a copy institucional **fornecida pelo cliente** (2026-09-30) — "Nascemos em 2016…" + "É assim que a essência do novo morar sai do papel". A frase "Uma holding à frente da ALIATTO…" saiu na v3; as empresas ficam em Quem Somos.
+- [x] **Home**: seção `AboutNatus` com a copy institucional **fornecida pelo cliente** (2026-09-30) — "Nascemos em 2016…" + "É assim que a essência do novo morar sai do papel". A frase "Uma holding à frente da ALIATTO…" saiu na v3. Desde a v4 o site fala em nome do Grupo Natus: Aliatto/Oasi só aparecem na foto da recepção (Quem Somos).
 - [x] **Números institucionais confirmados pelo cliente** (2026-09-30; unidades revistas em 2026-10-11): **10 anos** de experiência, **100 mil m²** de área construída, **+500 unidades** entregues. Exibidos na Home (`features/home/AboutNatus.tsx`) e em `/quem-somos` — **manter os dois em sincronia**. O "10" é literal, não calculado: revisar em 2027.
 - [x] **Ano de fundação (2016) confirmado pelo cliente** na copy enviada.
 - [x] **Seção "Nossa história" removida** de `/quem-somos` (2026-10-01, a pedido do cliente): era o único `TODO: CONTENT REQUIRED` visível da página. A narrativa de abertura continua na Home (`AboutNatus`, "Nascemos em 2016…"). Se a trajetória completa chegar, a seção volta com conteúdo.
-- [x] **Engenharia** (v3): o texto da Oasi, os valores de execução e as certificações vêm do conteúdo de Quem Somos (`features/institutional/content.ts`). O card "Capacidade técnica" com TODO saiu.
+- [x] **Engenharia** (v3; v4): o resumo (`ENGINEERING_SUMMARY`), os valores de execução e as certificações vêm de `features/institutional/content.ts`. Na v4 o cliente tirou a Oasi da página (eyebrow "Grupo Natus", "executamos obras por administração"); o tagline Aliatto/Oasi saiu.
 - [ ] **Engenharia**: copy descritiva de cada obra (o site só tem o título "Obra por administração").
 - [ ] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): confirmar escopo/validade do certificado com o cliente antes de destacar como vigente.
 
@@ -76,8 +77,10 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [ ] Vídeos/panorâmicas, se houver. A galeria já prevê uma aba de vídeo — falta o arquivo.
 
 ## 6. Navegação — Header/Footer (B5)
-- [ ] **Redes sociais** do Grupo Natus (Instagram / Facebook / LinkedIn / YouTube): handles e URLs — **NÃO constam** no site atual.
-- [ ] **CNPJ** e **CRECI** (registro imobiliário) para o rodapé legal / sub-footer — **não constam** no site; registro público cita CNPJ 24.353.357/0001-11 (Aliatto Emp. Imob. Ltda), **a confirmar com o cliente** antes de publicar.
-- [ ] **Selos/certificações** (se houver) e **links de políticas** (privacidade / termos de uso).
+- [x] **Redes sociais** (2026-10-17): Instagram, Facebook e LinkedIn no rodapé e no `sameAs` do JSON-LD (`SOCIAL` em `lib/site.ts`).
+- [x] **CNPJ** 24.353.357/0001-11 enviado pelo cliente (2026-10-17), no rodapé e na política.
+- [ ] 🔔 **Razão social** do CNPJ: o registro público o associa a "Aliatto Emp. Imob. Ltda". Confirmar qual razão social publicar (rodapé, política e o `legalName` do JSON-LD). Até lá o JSON-LD não publica o CNPJ (`taxID`). CRECI segue sem informação (campo vazio não aparece).
+- [x] **Política de Privacidade** e **consentimento de cookies** (2026-10-17): `/politica-de-privacidade`, banner e preferências no rodapé. Sem aceite, os mapas do Google não carregam.
+- [ ] 🔔 **Revisão jurídica da política**: o texto foi redigido a partir do que o site faz. Faltam razão social, encarregado (DPO), prazo de retenção definido e o nome do provedor de e-mail. Ao adicionar GA4/Pixel/Ads, criar a categoria "Análise e marketing" no consentimento e atualizar a política.
 - [ ] Confirmar o texto do **CTA persistente** do header (ex.: "Falar com consultor"?) e o destino (WhatsApp já configurado).
 > Enquanto não confirmado, cada item entra rotulado como `TODO: CONTENT REQUIRED` (nada inventado).

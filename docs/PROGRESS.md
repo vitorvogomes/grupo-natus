@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-10-12 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v3 (feedback do cliente) ✅** — status novos, header, página de produto, Quem Somos · Revisão v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-17 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v4 (pendências do cliente) ✅** — cookies/LGPD, política de privacidade, Solar, Quem Somos · Revisão v3 ✅ · Revisão v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -183,6 +183,26 @@ Terceira leva de feedback, agora com o conteúdo real dos empreendimentos (ver `
 
 
 ---
+
+## Revisão v4 — pendências do cliente, cookies e privacidade ✅ (2026-10-17)
+- ✅ **Conteúdo**: endereço do Golden Ville (grafia do cliente, "Figueredo") e do Solar Manilha com **CEP** (novo `location.postalCode`, mostrado na Localização e no `PostalAddress` do JSON-LD). `propertyType` = apartamento em Viver Mais, Gutierrez e Sunset Ville: agora os 11 têm tipo. Follow Savassi com Fundação 100%. **Solar sem estágio de obra** (decisão do cliente). Capa do Solar = acesso principal; a implantação passou a 2ª (é a foto do resumo 4:3).
+- ✅ **Estágio de obra sem fotos**: o painel "Fotos da obra em breve" saiu. Sem fotos, total e etapas dividem a largura; a galeria do canteiro só aparece quando há fotos.
+- ✅ **Rodapé**: CNPJ 24.353.357/0001-11, perfis sociais (`SOCIAL` em `lib/site.ts`, ícones SVG inline em `components/SocialLinks.tsx`) e links Política de Privacidade / Preferências de cookies. `organizationSchema` ganhou `sameAs` e `taxID`.
+- ✅ **Quem Somos**: frase fixa no lugar da contagem por status; seção "Empresas do grupo" removida; CTA só com a logo. Saíram `getPortfolioCounts`, `COMPANIES`, `ALIATTO` e os lockups `grupo-natus-assinatura*.webp`.
+- ✅ **Imagens (Solar)**: os originais de `img/` são os maiores que existem. O pipeline passou a escolher a faixa pelo tamanho da fonte: **alta** (≥ alvo, reduz + q86) ou **compacta** (abaixo do alvo, tamanho nativo + q95), com relatório no fim. A **galeria ficou compacta** (1024px) no site todo, e `stageFit` mostra panorâmicas inteiras (`contain`) sobre um fundo desfocado da própria foto, em vez de cortar e ampliar ~1,75×. `coverSizes`/`coverFactor` passaram a valer no card, no hero (proporção própria no celular) e no "O que oferece": a capa panorâmica do Solar chegava ampliada no card.
+- ✅ **Cookies (LGPD)**: cookie primário `natus_consent` (`lib/consent.ts`, 6 meses), `ConsentProvider`/`useConsent` (store externo sobre `document.cookie`, sem divergência de hidratação), `CookieBanner` (Aceitar todos · Só necessários · Preferências) e `MapConsentGate`: sem aceite, nenhum mapa do Google (empreendimento e sede) é criado, e um painel "Carregar mapa" libera a categoria. Formulários e WhatsApp não usam cookies.
+- ✅ **Política de Privacidade** (`/politica-de-privacidade`, no sitemap), redigida a partir do que o site faz. Aviso com link sob o envio do `LeadForm`. 🔔 Rascunho para revisão jurídica (CONTENT-GAPS §6).
+
+Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · lint, typecheck e build (26 páginas) ok · Chromium em 1440 e 390px: consentimento (recusar → painel → carregar → revogar), Solar, Follow, Golden, Quem Somos, política, rodapé, sem rolagem horizontal em 8 rotas.
+
+### Code review v4 (2026-10-17)
+- ✅ **LCP do hero**: o `sizes` do celular pedia ~2,4× a tela (a fonte inteira no LCP com preload). `coverSizes` passou a receber faixas (`upTo`/`vw`/proporção/`maxFactor`): o hero tem celular, tablet (antes caía na regra do desktop e chegava ampliado ~1,5×) e desktop, com teto de 1,5×. A cópia inline do cálculo em "O que oferece" saiu.
+- ✅ **Pipeline**: q95 na faixa compacta só para originais sem perda (PNG/TIFF). JPEGs pequenos (Viver Mais, Denver, Residenziale) voltaram aos arquivos anteriores, que tinham ficado 50–75% maiores sem ganho.
+- ✅ **Galeria do canteiro**: `desktopWidth` (600) no lugar dos 1024px do palco, que faziam baixar ~3× os pixels necessários.
+- ✅ **Consentimento**: revogar os mapas com a JS API carregada recarrega a página (o script não descarrega). O aviso do formulário deixou de dizer "você concorda" (a base legal é o art. 7º, V, não consentimento). O foco volta ao botão "Preferências" ao fechar o diálogo: o aviso fica montado, e o `Modal` passou a devolver o foco a quem o abriu.
+- ✅ **Limpeza**: a guarda duplicada do embed em `GoogleMap` saiu (a URL é montada uma vez). O `taxID` saiu do JSON-LD até a razão social do CNPJ ser confirmada.
+- ✅ **Engenharia** (edição manual do cliente/dev): a página deixou de citar a Oasi. `OASI`, `Company` e `COMPANIES_TAGLINE` deram lugar a `ENGINEERING_SUMMARY`; metadata e teste acompanharam.
+
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 - ⬜ 8.1 Inicializar Supabase local — NFR5
