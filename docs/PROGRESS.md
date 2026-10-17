@@ -290,7 +290,8 @@ Rodadas `/code-review` e `better-interface` com as skills `better-*` (que estava
 Verificação: **306 testes** · cobertura 98,4% stmts / **93,9% branches** / 98,7% funcs / 99% lines · typecheck, lint e build ok · contraste, área de toque, âncora e hierarquia remedidos no browser depois da mudança.
 
 ## Decisões & pendências em aberto
-- Provedor de email (FR11) — `[ASSUMPTION]` Resend, a confirmar.
-- Pins Supabase (`@supabase/ssr`) — a confirmar no Gate C.
-- Google Maps embed vs. API — decidir no Epic 3.
-- Conteúdo real dos 11 empreendimentos e confirmação de status/nomes com a empresa.
+- Provedor de email (FR11) — `[ASSUMPTION]` Resend, a confirmar. Sem ele configurado, o lead não é entregue nem guardado.
+- Pins Supabase (`@supabase/ssr`) — a confirmar no Gate C (ou antes, se os leads passarem a ser gravados).
+- Leads → CRM da Natus: aguardando a reunião com quem gere o CRM e os anúncios.
+- ~~Google Maps embed vs. API~~ — decidido: embed sem chave; JS API com o pin da Natus quando houver chave + Map ID (`docs/google-maps.md`), sempre atrás do consentimento.
+- ~~Conteúdo e status dos 11 empreendimentos~~ — confirmados pelo cliente (v3 e v4); pendências de conteúdo em `docs/CONTENT-GAPS.md`.

@@ -73,7 +73,7 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [ ] **Vídeo/GIF para o hero**: o cliente pediu "imagem/gif em destaque" e **não há nenhum asset animado no repo** (zero `.mp4/.webm/.gif`). Enviar um MP4/WebM de 6–10 s (mudo, em loop) e o hero passa a `<video>` com `poster` — o layout já está pronto para isso.
 - [x] **Engenharia**: 3 fotos que estavam em `img/` sem nunca chegar ao site entraram no pipeline (2 da casa de alto padrão, 1 do interior do galpão). As galerias por obra passaram a 7 · 2 · 3.
 - [ ] **Galpão/condomínio**: 2 e 3 fotos é pouco para uma galeria — enviar mais se houver.
-- [ ] **Favicon**: o site não tinha nenhum. Agora usa o símbolo oficial (`app/icon.png`, gerado de `img/LOGOS/Favicon/favicon-natus-beige.png` sobre o navy da marca).
+- [x] **Favicon**: o site não tinha nenhum. Agora usa o símbolo oficial (`app/icon.png`, gerado de `img/LOGOS/Favicon/favicon-natus-beige.png` sobre o navy da marca).
 - [ ] Vídeos/panorâmicas, se houver. A galeria já prevê uma aba de vídeo — falta o arquivo.
 
 ## 6. Navegação — Header/Footer (B5)
