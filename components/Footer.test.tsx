@@ -38,4 +38,13 @@ describe("Footer", () => {
       ).toBeInTheDocument();
     }
   });
+
+  it("mostra o CNPJ, os perfis sociais e o link da política de privacidade", () => {
+    render(<Footer />);
+    expect(screen.getByText(/CNPJ 24\.353\.357\/0001-11/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /instagram do grupo natus/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /política de privacidade/i }),
+    ).toHaveAttribute("href", "/politica-de-privacidade");
+  });
 });

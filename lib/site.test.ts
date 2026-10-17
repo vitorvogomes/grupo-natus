@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NAV_LINKS, CONTACT } from "./site";
+import { NAV_LINKS, CONTACT, LEGAL, SOCIAL } from "./site";
 
 describe("Configuração do site", () => {
   it("expõe os links principais de navegação na ordem esperada", () => {
@@ -26,5 +26,14 @@ describe("Configuração do site", () => {
     expect(CONTACT.address).toMatch(/Savassi/);
     expect(CONTACT.hours).toMatch(/Seg/);
     expect(CONTACT.mapsUrl).toMatch(/^https:\/\/www\.google\.com\/maps/);
+  });
+
+  it("dados legais e perfis oficiais informados pelo cliente", () => {
+    expect(LEGAL.cnpj).toBe("24.353.357/0001-11");
+    expect(SOCIAL).toEqual({
+      instagram: "https://www.instagram.com/gruponatus/",
+      facebook: "https://www.facebook.com/p/Grupo-Natus-100093927445460/",
+      linkedin: "https://www.linkedin.com/company/grupo-natus/",
+    });
   });
 });

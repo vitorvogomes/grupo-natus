@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, SOCIAL } from "@/lib/site";
 import type { Development } from "@/types/development";
 
 export function organizationSchema() {
@@ -8,7 +8,11 @@ export function organizationSchema() {
     name: "Grupo Natus",
     url: SITE_URL,
     areaServed: ["Minas Gerais", "Rio de Janeiro"],
-  } as const;
+    sameAs: Object.values(SOCIAL),
+    // Sem `taxID` por ora: o CNPJ do rodapé consta em registro público como
+    // de outra razão social. Entra junto com `legalName`, quando confirmada
+    // (docs/CONTENT-GAPS.md §6).
+  };
 }
 
 export function developmentSchema(dev: Development) {
@@ -23,6 +27,7 @@ export function developmentSchema(dev: Development) {
       addressLocality: dev.location.city,
       addressRegion: dev.location.state,
       ...(dev.location.address ? { streetAddress: dev.location.address } : {}),
+      ...(dev.location.postalCode ? { postalCode: dev.location.postalCode } : {}),
     },
   };
 }

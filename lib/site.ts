@@ -42,7 +42,16 @@ export const CONTACT: Contact = {
 } as const;
 
 /**
- * Dados legais do rodapé. TODO: CONTENT REQUIRED — CNPJ/CRECI a confirmar.
+ * Dados legais do rodapé (CNPJ informado pelo cliente em 2026-10-17).
  * Campos vazios não são renderizados.
  */
-export const LEGAL: Readonly<{ cnpj?: string; creci?: string }> = {};
+export const LEGAL: Readonly<{ cnpj?: string; creci?: string }> = {
+  cnpj: "24.353.357/0001-11",
+};
+
+/** Perfis oficiais (rodapé + `sameAs` do JSON-LD). */
+export const SOCIAL = {
+  instagram: "https://www.instagram.com/gruponatus/",
+  facebook: "https://www.facebook.com/p/Grupo-Natus-100093927445460/",
+  linkedin: "https://www.linkedin.com/company/grupo-natus/",
+} as const;
