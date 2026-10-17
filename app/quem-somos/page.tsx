@@ -1,26 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { Image } from "@/components/ui/Image";
+import { Logo } from "@/components/Logo";
 import { Reveal } from "@/components/motion/Reveal";
 import { Certifications } from "@/features/institutional/Certifications";
-import {
-  COMPANIES,
-  COMPANIES_TAGLINE,
-  OPERATION_STATS,
-  VALUES,
-} from "@/features/institutional/content";
-import { getPortfolioCounts } from "@/content/developments";
+import { OPERATION_STATS, VALUES } from "@/features/institutional/content";
 
 export const metadata: Metadata = {
   title: "Quem Somos",
   description:
-    "O Grupo Natus é uma holding de incorporação e construção — Aliatto Incorporadora e Oasi Engenharia — atuando do Minha Casa Minha Vida ao alto luxo em MG e RJ.",
+    "O Grupo Natus é uma holding de incorporação e construção, atuando do Minha Casa Minha Vida ao alto luxo em Minas Gerais e no Rio de Janeiro.",
 };
 
 export default function QuemSomosPage() {
-  const { delivered, inDevelopment } = getPortfolioCounts();
   return (
     <main>
       {/* Hero — parede da recepção do grupo (LCP: preload, sem Reveal). */}
@@ -49,15 +42,13 @@ export default function QuemSomosPage() {
       </section>
 
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-16 sm:px-6 lg:px-8">
-        {/* Posicionamento (texto do cliente, revisão v3). A contagem vem do
-            portfólio: "pronto para morar" = entregue; os demais status = em
-            desenvolvimento. */}
+        {/* Posicionamento (texto do cliente, revisões v3 e v4). */}
         <Reveal>
           <section className="max-w-3xl">
             <p className="text-lg leading-relaxed text-ink-soft">
               Somos uma holding de incorporação e construção que estrutura e
               executa empreendimentos residenciais em todo o espectro do
-              mercado, por meio da Aliatto Incorporadora e da Oasi Engenharia.
+              mercado.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-ink-soft">
               Nossa atuação cobre o ciclo completo do produto imobiliário:
@@ -67,55 +58,13 @@ export default function QuemSomosPage() {
               mesmo padrão de governança e de cumprimento de cronograma.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-ink-soft">
-              Hoje são {delivered} empreendimentos entregues e {inDevelopment}{" "}
-              em desenvolvimento, entre Belo Horizonte, região metropolitana e
-              Leste Fluminense. Boa parte deles nasce de parcerias com
-              proprietários de terreno, construtores e investidores.
+              Hoje atuamos entre Belo Horizonte, região metropolitana e Leste
+              Fluminense. Boa parte dos nossos empreendimentos nascem de
+              parcerias com proprietários de terreno, construtores e
+              investidores.
             </p>
           </section>
         </Reveal>
-
-        {/* Empresas do grupo. */}
-        <section className="mt-16">
-          <Reveal>
-            <h2 className="text-2xl font-semibold text-ink">
-              Empresas do grupo
-            </h2>
-            <p className="mt-2 max-w-2xl text-ink-soft">{COMPANIES_TAGLINE}</p>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <div className="mt-8 flex justify-center rounded-lg border border-border bg-surface-muted px-6 py-10">
-              <Image
-                src="/brand/grupo-natus-assinatura.webp"
-                alt="Grupo Natus — ALIATTO Incorporadora e OASI Engenharia"
-                width={1342}
-                height={579}
-                className="h-auto w-full max-w-[460px]"
-              />
-            </div>
-          </Reveal>
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            {COMPANIES.map((company, i) => {
-              const Icon = company.icon;
-              return (
-                <Reveal key={company.name} delay={i * 0.08}>
-                  <Card className="flex h-full flex-col gap-3 p-6">
-                    <span className="inline-flex size-11 items-center justify-center rounded-lg bg-surface-muted text-brand-strong">
-                      <Icon aria-hidden="true" className="size-6" />
-                    </span>
-                    <h3 className="text-lg font-semibold text-ink">
-                      {company.name}
-                    </h3>
-                    <p className="text-sm font-medium uppercase tracking-wide text-brand-strong">
-                      {company.role}
-                    </p>
-                    <p className="text-ink-soft">{company.description}</p>
-                  </Card>
-                </Reveal>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Valores. */}
         <section className="mt-16">
@@ -169,13 +118,7 @@ export default function QuemSomosPage() {
         {/* CTA. */}
         <Reveal>
           <section className="mt-16 rounded-lg bg-navy-600 p-8 text-navy-50">
-            <Image
-              src="/brand/grupo-natus-assinatura-negativa.webp"
-              alt="Grupo Natus"
-              width={1342}
-              height={579}
-              className="h-auto w-full max-w-[220px]"
-            />
+            <Logo negative className="h-8 w-auto" />
             <h2 className="mt-6 text-2xl font-semibold text-white">
               Vamos conversar sobre seu próximo imóvel?
             </h2>

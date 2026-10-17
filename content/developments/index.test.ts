@@ -4,7 +4,6 @@ import {
   findBySlug,
   getAllDevelopments,
   getDevelopmentBySlug,
-  getPortfolioCounts,
   sortByStatusPriority,
 } from "./index";
 import {
@@ -82,12 +81,5 @@ describe("camada de conteúdo de empreendimentos (AD-2)", () => {
     for (const dev of getAllDevelopments().filter((d) => d.status === "lancamento")) {
       expect(dev.images.length).toBeGreaterThan(0);
     }
-  });
-
-  it("getPortfolioCounts: entregues = pronto para morar; o resto está em desenvolvimento", () => {
-    const all = getAllDevelopments();
-    const { delivered, inDevelopment } = getPortfolioCounts();
-    expect(delivered).toBe(all.filter((d) => d.status === "pronto").length);
-    expect(delivered + inDevelopment).toBe(all.length);
   });
 });
