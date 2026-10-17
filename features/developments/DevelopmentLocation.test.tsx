@@ -24,6 +24,18 @@ describe("DevelopmentLocation", () => {
     expect(screen.getByText(/Av. Getúlio Vargas, 1.676/)).toBeInTheDocument();
   });
 
+  it("mostra o CEP quando informado", () => {
+    render(
+      <DevelopmentLocation
+        name="Solar Manilha"
+        location={{ ...soCidade, address: "R. Carlota Maria do Amor Divino", postalCode: "24856-500" }}
+      />,
+    );
+    expect(
+      screen.getByText(/R. Carlota Maria do Amor Divino, Itaboraí — RJ · CEP 24856-500/),
+    ).toBeInTheDocument();
+  });
+
   it("oferece rota no Google Maps e no Waze", () => {
     render(<DevelopmentLocation name="X" location={completa} />);
     expect(screen.getByRole("link", { name: /google maps/i })).toHaveAttribute(

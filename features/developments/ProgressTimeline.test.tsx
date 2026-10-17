@@ -52,19 +52,30 @@ describe("ProgressTimeline", () => {
     expect(screen.getByText(/ilustrativos/i)).toBeInTheDocument();
   });
 
-  it("mostra a galeria do canteiro quando há fotos", () => {
+  it("com fotos, abre a galeria do canteiro", () => {
     render(<ProgressTimeline progress={progress} photos={fotos} />);
     expect(
       screen.getByRole("button", { name: /ampliar imagem: obra 1/i }),
     ).toBeInTheDocument();
   });
 
-  it("sem foto, mostra o painel de acompanhamento em breve", () => {
+  it("mostra a galeria do canteiro quando há fotos", () => {
+    render(<ProgressTimeline progress={progress} photos={fotos} />);
+    expect(
+      screen.getByRole("heading", { name: /acompanhamento no canteiro/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("sem foto, não reserva espaço para o canteiro (total e etapas lado a lado)", () => {
     render(<ProgressTimeline progress={progress} />);
-    expect(screen.getByText(/fotos da obra em breve/i)).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: /acompanhamento no canteiro/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/fotos da obra em breve/i)).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /ampliar imagem/i }),
     ).not.toBeInTheDocument();
+    expect(rotulos()).toEqual(["Total Construído", "Fundação", "Estrutura"]);
   });
 
   it("só com o total (sem etapas), mostra o total e omite a lista vazia", () => {

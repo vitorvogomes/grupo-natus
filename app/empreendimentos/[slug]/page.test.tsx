@@ -138,15 +138,15 @@ describe("Lançamento — página completa (Follow Savassi)", () => {
 });
 
 describe("Lançamento MCMV — página completa (Solar Manilha)", () => {
-  it("tem galeria, diferenciais, obra e a seção do programa", async () => {
+  it("tem galeria, diferenciais e a seção do programa — sem estágio de obra (decisão do cliente)", async () => {
     await abrir("solar-manilha");
     expect(screen.getByRole("heading", { name: "Galeria" })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /o que o solar manilha oferece/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("progressbar", { name: /total construído/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: /estágio de obra/i }),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /simule agora/i }),
     ).toBeInTheDocument();

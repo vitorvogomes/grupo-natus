@@ -97,6 +97,8 @@ export type DevelopmentLocation = {
   /** Bairro — compõe o título do resumo ("Bairro - Cidade"). */
   neighborhood?: string;
   address?: string;
+  /** CEP (formato 00000-000). */
+  postalCode?: string;
   lat?: number;
   lng?: number;
   googleMapsUrl?: string;
