@@ -5,7 +5,7 @@
 
 ## 0. Validação geral (rápida, mas importante)
 - [x] **Nomes e status** dos 11 empreendimentos confirmados pelo cliente na revisão v3 (2026-10-11). Vista do Lago saiu do portfólio.
-- [ ] Confirmar **contatos institucionais**: WhatsApp (31) 98466-3280 · Tel (31) 98466-3280 · contato@natusgrupo.com.br · Av. Getúlio Vargas, 1621 — Savassi, BH · Seg–Sex 09–19h.
+- [x] **Contatos institucionais** confirmados pelo cliente (2026-10-17): WhatsApp (31) 98466-3280 · Tel (31) 98466-3280 · contato@natusgrupo.com.br · Av. Getúlio Vargas, 1621 — Savassi, BH · Seg–Sex 09–19h.
 
 ## 1. Por empreendimento (11) — revisão v3 (2026-10-11)
 
@@ -26,7 +26,7 @@ Status novos: **Lançamento** (página completa, destaque) · **Em construção*
 | 11 | Royal Ville Residence | Vespasiano/MG | Breve lançamento | — | ✔ | mínimo |
 
 - [x] **Descrições** (resumo da página) dos 7 com página: texto do cliente, verbatim, um item por linha. Corrigido um typo no Solar ("Terreno de com área" → "Terreno com área").
-- [x] **Localização**: os 7 com página têm lat/lng, tirados dos links de mapa enviados. Os dois links `share.google` (Denver e Residenziale) abrem uma busca, não um place; as coordenadas e os endereços (R. Denver, 134; R. Manoel Moreira Silva, 70) vieram dessa busca no Maps. **Conferir os dois pins.** Endereços do Golden Ville (R. Frederico Malesherbes Figueredo, Maria Paula) e do Solar Manilha (R. Carlota Maria do Amor Divino, Loteamento Santo Antônio, CEP 24856-500) informados pelo cliente em 2026-10-17. 🔔 Conferir a grafia oficial "Figueredo" × "Figueiredo".
+- [x] **Localização**: os 7 com página têm lat/lng, tirados dos links de mapa enviados. Os dois links `share.google` (Denver e Residenziale) abrem uma busca, não um place; as coordenadas e os endereços (R. Denver, 134; R. Manoel Moreira Silva, 70) vieram dessa busca no Maps. Pins conferidos pelo cliente (2026-10-17). Endereços do Golden Ville (R. Frederico Malesherbes Figueredo, Maria Paula) e do Solar Manilha (R. Carlota Maria do Amor Divino, Loteamento Santo Antônio, CEP 24856-500) informados pelo cliente em 2026-10-17. Grafia "Figueredo" mantida a pedido do cliente (2026-10-17).
 - [ ] 🔔 **Chaves do Google Maps** (pin da Natus): passo a passo em [`docs/google-maps.md`](google-maps.md). Sem elas, o embed público mostra o pin vermelho do Google.
 - [ ] **Diferenciais agrupados** (accordion): só os dois lançamentos têm. Nas páginas reduzidas a seção não aparece (por desenho).
 - [x] **Breve lançamentos**: seção reduzida aprovada para o MVP (2026-10-17). Descrição, imagens e localização entram quando houver material.
@@ -38,7 +38,7 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 
 - [x] **Percentuais informados pelo cliente**: Follow Savassi com Fundação 100% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 70% (total 7%), aprovado. **Solar Manilha sem estágio de obra** (2026-10-17).
 - [ ] **Fotos da obra** do Follow Savassi e do Golden Ville. Sem elas a seção mostra só os percentuais (o painel de canteiro aparece quando houver fotos).
-- [ ] **Data ("última atualização")** e **quem atualiza / periodicidade**.
+- [x] ~~**Data ("última atualização")** e periodicidade~~ — descartado pelo cliente (2026-10-17). O campo `updatedAt` segue opcional no modelo: sem ele, a data não aparece.
 
 ## 3. Páginas institucionais (Epic 6)
 
@@ -52,18 +52,18 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [x] **Seção "Nossa história" removida** de `/quem-somos` (2026-10-01, a pedido do cliente): era o único `TODO: CONTENT REQUIRED` visível da página. A narrativa de abertura continua na Home (`AboutNatus`, "Nascemos em 2016…"). Se a trajetória completa chegar, a seção volta com conteúdo.
 - [x] **Engenharia** (v3; v4): o resumo (`ENGINEERING_SUMMARY`), os valores de execução e as certificações vêm de `features/institutional/content.ts`. Na v4 o cliente tirou a Oasi da página (eyebrow "Grupo Natus", "executamos obras por administração"); o tagline Aliatto/Oasi saiu.
 - [ ] **Engenharia**: copy descritiva de cada obra (o site só tem o título "Obra por administração").
-- [ ] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): confirmar escopo/validade do certificado com o cliente antes de destacar como vigente.
+- [x] **Selo SAS/ISO 9001** (OCS0018, SAS Certificadora): escopo e validade confirmados pelo cliente (2026-10-17).
 
 ## 4. Conversão (Epic 5)
-- [ ] **Frase da seção MCMV**: "o sonho de conquistar o seu próprio **Natus** fica mais próximo" (texto enviado por você) não fecha gramaticalmente — "conquistar um Natus" não se diz — e repete a construção "o seu próprio Novolar" da referência. Sugestão: "o seu próprio lar". Não alterei por ser copy sua.
+- [x] **Frase da seção MCMV** — mantida a pedido do cliente (2026-10-17): "o sonho de conquistar o seu próprio **Natus** fica mais próximo" (texto enviado por você) não fecha gramaticalmente — "conquistar um Natus" não se diz — e repete a construção "o seu próprio Novolar" da referência. Sugestão: "o seu próprio lar". Não alterei por ser copy sua.
 - [x] **Enquadramento MCMV por empreendimento** (campo `mcmv`), lista do cliente na v3: **Torres da Lagoa, Viver Mais, Golden Ville, Solar Manilha, Sunset Ville e Royal Ville**. A seção do programa aparece entre "Quer saber mais?" e "Explore nossos empreendimentos", e o selo entra junto do status no card e no resumo.
-- [ ] **Marca Minha Casa Minha Vida**: confirmar o **direito de uso** da marca federal no site e **quais empreendimentos estão de fato enquadrados** no programa. A seção da Home exibe a marca e um claim sobre taxas — ambos sugerem credenciamento. **Os rótulos dos 3 benefícios foram reescritos** (os originais eram idênticos aos da referência Novolar): o claim do cliente "As menores taxas de juros" virou "As menores taxas do mercado **para quem se enquadra** no Minha Casa, Minha Vida", que qualifica a afirmação em vez de deixá-la absoluta. Confirmar a redação com a empresa.
+- [x] **Marca Minha Casa Minha Vida** — direito de uso, empreendimentos enquadrados e redação dos benefícios confirmados pelo cliente (2026-10-17). Histórico: confirmar o **direito de uso** da marca federal no site e **quais empreendimentos estão de fato enquadrados** no programa. A seção da Home exibe a marca e um claim sobre taxas — ambos sugerem credenciamento. **Os rótulos dos 3 benefícios foram reescritos** (os originais eram idênticos aos da referência Novolar): o claim do cliente "As menores taxas de juros" virou "As menores taxas do mercado **para quem se enquadra** no Minha Casa, Minha Vida", que qualifica a afirmação em vez de deixá-la absoluta. Confirmar a redação com a empresa.
 - [x] **Imagens do Solar Manilha** chegaram (34 arquivos, 77 MB → 7,7 MB). Com a v3, a ordem da Home vem do status: lançamentos primeiro. `FEATURED_SLUGS` saiu.
-- [ ] **Negocie seu Terreno**: confirmar os **campos exatos** do formulário (além de nome/contato/localização/área/tipo/observações).
-- [ ] **Envio de e-mail**: definir **provedor** (ex.: Resend) e para **qual caixa** os leads/contatos vão. O valor do secret será fornecido por você e eu edito `.env` sem exibi-lo.
+- [x] **Negocie seu Terreno**: campos confirmados pelo cliente (2026-10-17): nome, telefone, e-mail, localização, área, tipo e observações.
+- [ ] 🔔 **Envio de e-mail**: definir **provedor** (ex.: Resend) e para **qual caixa** os leads/contatos vão. **Bloqueia a publicação**: sem isso o lead não é entregue nem guardado. O valor do secret será fornecido por você e eu edito `.env` sem exibi-lo.
 
 ## 5. Mídia
-- [ ] Confirmar direitos de uso das imagens em `img/` e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
+- [x] Direitos de uso das imagens em `img/` confirmados pelo cliente (2026-10-17) e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
 - [x] **Pipeline de otimização** criado: `scripts/optimize-images.mjs` (sharp — resize + WEBP ~80%), `npm run optimize:images [slug]`. Lê os originais em `img/` e grava em `public/empreendimentos/<slug>/`. **Follow Savassi (piloto)** processado: 72 MB → **4 MB** (−90–97%/imagem), servindo `.webp`. TIF de 69 MB fica de fora.
 - [x] Replicação concluída: **7 empreendimentos com imagens reais** otimizadas (Follow Savassi, Torres da Lagoa, Viver Mais, Residencial Denver, Gutierrez, Golden Ville, Residenziale) — total `public/empreendimentos/` ~15 MB (53 `.webp`). Mapeamento no `JOBS` de `scripts/optimize-images.mjs`. Identidade do Residenziale **confirmada pelo cliente** (12º empreendimento).
 - [ ] **Sem foto** (breve lançamento, por desenho usam `public/empreendimentos/breve-lancamento.webp`, gerado de `img/breve-lancamento.png`): One Studios, Royal Ville, Sunset Ville e Gutierrez. Este último tem 6 maquetes guardadas, fora do dado.
@@ -79,8 +79,9 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 ## 6. Navegação — Header/Footer (B5)
 - [x] **Redes sociais** (2026-10-17): Instagram, Facebook e LinkedIn no rodapé e no `sameAs` do JSON-LD (`SOCIAL` em `lib/site.ts`).
 - [x] **CNPJ** 24.353.357/0001-11 enviado pelo cliente (2026-10-17), no rodapé e na política.
-- [ ] 🔔 **Razão social** do CNPJ: o registro público o associa a "Aliatto Emp. Imob. Ltda". Confirmar qual razão social publicar (rodapé, política e o `legalName` do JSON-LD). Até lá o JSON-LD não publica o CNPJ (`taxID`). CRECI segue sem informação (campo vazio não aparece).
+- [ ] 🔔 **Razão social** do CNPJ: o registro público o associa a "Aliatto Emp. Imob. Ltda". Confirmar qual razão social publicar (rodapé, política e o `legalName` do JSON-LD). Até lá o JSON-LD não publica o CNPJ (`taxID`).
+- [x] ~~**CRECI**~~ — descartado pelo cliente (2026-10-17); o campo saiu de `LEGAL`.
 - [x] **Política de Privacidade** e **consentimento de cookies** (2026-10-17): `/politica-de-privacidade`, banner e preferências no rodapé. Sem aceite, os mapas do Google não carregam.
 - [ ] 🔔 **Revisão jurídica da política**: o texto foi redigido a partir do que o site faz. Faltam razão social, encarregado (DPO), prazo de retenção definido e o nome do provedor de e-mail. Ao adicionar GA4/Pixel/Ads, criar a categoria "Análise e marketing" no consentimento e atualizar a política.
-- [ ] Confirmar o texto do **CTA persistente** do header (ex.: "Falar com consultor"?) e o destino (WhatsApp já configurado).
+- [ ] **Botão fixo do header** (canto superior direito, em todas as páginas): hoje diz "Falar com consultor" e abre o WhatsApp (31) 98466-3280. Confirmar com o cliente o texto e o destino (WhatsApp, telefone ou página de contato).
 > Enquanto não confirmado, cada item entra rotulado como `TODO: CONTENT REQUIRED` (nada inventado).

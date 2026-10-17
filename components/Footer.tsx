@@ -12,10 +12,7 @@ import { CONTACT, LEGAL, NAV_LINKS } from "@/lib/site";
 const linkClass = "text-navy-100 transition-colors hover:text-brand";
 
 export function Footer() {
-  const legalBits = [
-    LEGAL.cnpj ? `CNPJ ${LEGAL.cnpj}` : null,
-    LEGAL.creci ? `CRECI ${LEGAL.creci}` : null,
-  ].filter(Boolean);
+  const legalBits = LEGAL.cnpj ? [`CNPJ ${LEGAL.cnpj}`] : [];
   const year = new Date().getFullYear();
 
   return (

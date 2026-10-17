@@ -42,10 +42,10 @@ export const CONTACT: Contact = {
 } as const;
 
 /**
- * Dados legais do rodapé (CNPJ informado pelo cliente em 2026-10-17).
- * Campos vazios não são renderizados.
+ * Dados legais do rodapé (CNPJ informado pelo cliente em 2026-10-17; o CRECI
+ * foi descartado pelo cliente). Campo vazio não é renderizado.
  */
-export const LEGAL: Readonly<{ cnpj?: string; creci?: string }> = {
+export const LEGAL: Readonly<{ cnpj?: string }> = {
   cnpj: "24.353.357/0001-11",
 };
 

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Tem um terreno? Apresente para o Grupo Natus avaliar uma parceria ou compra.",
 };
 
-// TODO: CONTENT REQUIRED — confirmar os campos exatos do formulário com a empresa.
+// Campos confirmados pelo cliente (2026-10-17).
 const FIELDS: LeadField[] = [
   { name: "nome", label: "Nome", required: true },
   { name: "telefone", label: "Telefone", type: "tel", required: true },
