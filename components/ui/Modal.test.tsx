@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { useState } from "react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Modal } from "./Modal";
@@ -38,5 +39,26 @@ describe("Modal", () => {
     await user.keyboard("{Escape}");
     await user.click(screen.getByTestId("modal-overlay"));
     expect(onClose).toHaveBeenCalledTimes(3);
+  });
+
+  it("ao fechar, devolve o foco a quem o abriu (não há Dialog.Trigger)", async () => {
+    const user = userEvent.setup();
+    function Harness() {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <button type="button" onClick={() => setOpen(true)}>
+            Abrir
+          </button>
+          <Modal open={open} onClose={() => setOpen(false)} title="Teste">
+            <p>conteúdo</p>
+          </Modal>
+        </>
+      );
+    }
+    render(<Harness />);
+    await user.click(screen.getByRole("button", { name: "Abrir" }));
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.getByRole("button", { name: "Abrir" })).toHaveFocus());
   });
 });

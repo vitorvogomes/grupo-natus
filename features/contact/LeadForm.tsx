@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -189,6 +190,19 @@ export function LeadForm({
       <Button type="submit" disabled={status === "sending"}>
         {status === "sending" ? "Enviando..." : submitLabel}
       </Button>
+      {/* Aviso, não pedido de aceite: a base legal é procedimento preliminar
+          a contrato (LGPD art. 7º, V), não consentimento — "você concorda"
+          diria o contrário. A política explica uso e direitos. */}
+      <p className="text-xs text-muted-foreground">
+        Os dados enviados são tratados conforme a nossa{" "}
+        <Link
+          href="/politica-de-privacidade"
+          className="font-medium text-brand-strong underline underline-offset-2"
+        >
+          Política de Privacidade
+        </Link>
+        .
+      </p>
     </form>
   );
 }

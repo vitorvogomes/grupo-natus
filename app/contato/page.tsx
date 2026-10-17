@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { LeadForm, type LeadField } from "@/features/contact/LeadForm";
+import { MapConsentGate } from "@/features/consent/MapConsentGate";
 import { CONTACT } from "@/lib/site";
 import { buildMapEmbedUrl } from "@/lib/maps";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -88,13 +89,18 @@ export default function ContatoPage() {
           </p>
 
           {HQ_MAP_EMBED ? (
-            <iframe
-              src={HQ_MAP_EMBED}
-              title="Mapa da sede do Grupo Natus"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+            <MapConsentGate
+              tone="light"
               className="mt-2 aspect-video w-full rounded-lg border border-border"
-            />
+            >
+              <iframe
+                src={HQ_MAP_EMBED}
+                title="Mapa da sede do Grupo Natus"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="mt-2 aspect-video w-full rounded-lg border border-border"
+              />
+            </MapConsentGate>
           ) : null}
         </aside>
       </div>

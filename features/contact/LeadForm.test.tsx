@@ -57,6 +57,16 @@ describe("LeadForm", () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it("avisa, junto do envio, que os dados seguem a política de privacidade", () => {
+    render(<LeadForm leadType="contato" fields={[{ name: "nome", label: "Nome", required: true }]} />);
+    expect(screen.getByText(/os dados enviados são tratados conforme/i)).toBeInTheDocument();
+    // Aviso, não consentimento implícito (a base legal é o art. 7º, V).
+    expect(screen.queryByText(/você concorda/i)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /política de privacidade/i }),
+    ).toHaveAttribute("href", "/politica-de-privacidade");
+  });
+
   it("renderiza campo select do schema", () => {
     render(
       <LeadForm

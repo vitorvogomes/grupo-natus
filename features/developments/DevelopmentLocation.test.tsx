@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DevelopmentLocation } from "./DevelopmentLocation";
+import { ConsentProvider } from "@/features/consent/ConsentProvider";
+import { CONSENT_COOKIE, writeConsent } from "@/lib/consent";
 import type { DevelopmentLocation as Location } from "@/types/development";
 
 const completa: Location = {
@@ -48,9 +50,15 @@ describe("DevelopmentLocation", () => {
     );
   });
 
-  it("renderiza o mapa quando há coordenadas", () => {
-    render(<DevelopmentLocation name="Follow Savassi" location={completa} />);
+  it("renderiza o mapa quando há coordenadas e os mapas foram aceitos", () => {
+    writeConsent({ mapas: true });
+    render(
+      <ConsentProvider>
+        <DevelopmentLocation name="Follow Savassi" location={completa} />
+      </ConsentProvider>,
+    );
     expect(screen.getByTitle("Mapa de Follow Savassi")).toBeInTheDocument();
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; Path=/`;
   });
 
   it("sem endereço, mantém cidade/UF e os links — só o mapa some", () => {

@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { ConsentProvider } from "@/features/consent/ConsentProvider";
+import { CookieBanner } from "@/features/consent/CookieBanner";
 import { JsonLd, organizationSchema } from "@/features/seo/jsonLd";
 import { SITE_URL } from "@/lib/site";
 
@@ -56,12 +58,15 @@ export default function RootLayout({
         >
           Pular para o conteúdo
         </a>
-        <Header />
-        <div id="conteudo" className="flex-1">
-          {children}
-        </div>
-        <Footer />
-        <WhatsAppButton />
+        <ConsentProvider>
+          <Header />
+          <div id="conteudo" className="flex-1">
+            {children}
+          </div>
+          <Footer />
+          <WhatsAppButton />
+          <CookieBanner />
+        </ConsentProvider>
       </body>
     </html>
   );

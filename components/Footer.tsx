@@ -3,6 +3,7 @@ import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { BackToTop } from "./BackToTop";
 import { SocialLinks } from "./SocialLinks";
+import { CookiePreferencesButton } from "@/features/consent/CookiePreferencesButton";
 import { buttonVariants } from "./ui/Button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -116,6 +117,7 @@ export function Footer() {
             <Link href="/politica-de-privacidade" className={linkClass}>
               Política de Privacidade
             </Link>
+            <CookiePreferencesButton className={linkClass} />
             <BackToTop />
           </div>
         </div>

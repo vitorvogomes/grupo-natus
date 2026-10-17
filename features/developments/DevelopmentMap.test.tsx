@@ -1,7 +1,17 @@
-import { render, screen } from "@testing-library/react";
+import { render as rtlRender, screen } from "@testing-library/react";
+import type { ReactElement } from "react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DevelopmentMap } from "./DevelopmentMap";
+import { ConsentProvider } from "@/features/consent/ConsentProvider";
+import { CONSENT_COOKIE, readConsent, writeConsent } from "@/lib/consent";
 import type { DevelopmentLocation } from "@/types/development";
+
+/** Renderiza com a escolha de cookies já feita (padrão: mapas aceitos). */
+function render(ui: ReactElement, { mapas = true }: { mapas?: boolean | null } = {}) {
+  if (mapas !== null) writeConsent({ mapas });
+  return rtlRender(<ConsentProvider>{ui}</ConsentProvider>);
+}
 
 const comCoordenadas: DevelopmentLocation = {
   city: "Belo Horizonte",
@@ -12,6 +22,7 @@ const comCoordenadas: DevelopmentLocation = {
 };
 
 afterEach(() => {
+  document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; Path=/`;
   vi.unstubAllEnvs();
   document.head.querySelectorAll("script[data-google-maps]").forEach((s) => {
     s.remove();
@@ -62,5 +73,31 @@ describe("DevelopmentMap", () => {
     );
     expect(script?.src).toContain("maps.googleapis.com");
     expect(script?.src).toContain("libraries=marker");
+  });
+
+  it("sem consentimento para mapas, não carrega nada do Google e oferece carregar", async () => {
+    const user = userEvent.setup();
+    render(<DevelopmentMap name="Follow Savassi" location={comCoordenadas} />, { mapas: false });
+    expect(screen.queryByTitle(/^Mapa de/)).not.toBeInTheDocument();
+    expect(screen.getByText(/google, que pode gravar cookies/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /política de privacidade/i })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /carregar mapa/i }));
+    expect(screen.getByTitle("Mapa de Follow Savassi").tagName).toBe("IFRAME");
+    expect(readConsent()?.mapas).toBe(true);
+  });
+
+  it("antes de qualquer escolha, o mapa também fica bloqueado", () => {
+    render(<DevelopmentMap name="X" location={comCoordenadas} />, { mapas: null });
+    expect(screen.queryByTitle(/^Mapa de/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /carregar mapa/i })).toBeInTheDocument();
+  });
+
+  it("sem consentimento e sem localização, não deixa painel nenhum", () => {
+    const { container } = render(
+      <DevelopmentMap name="X" location={{ city: "Niterói", state: "RJ" }} />,
+      { mapas: false },
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 });

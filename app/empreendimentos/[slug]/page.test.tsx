@@ -112,9 +112,10 @@ describe("Lançamento — página completa (Follow Savassi)", () => {
     expect(screen.queryByText(/ilustrativos/i)).toBeNull();
   });
 
-  it("mostra o mapa e as rotas", async () => {
+  it("mostra as rotas; o mapa espera o consentimento de cookies", async () => {
     await abrir("follow-savassi");
-    expect(screen.getByTitle("Mapa de Follow Savassi")).toBeInTheDocument();
+    // Fora do ConsentProvider ninguém consentiu: o Google não carrega.
+    expect(screen.queryByTitle("Mapa de Follow Savassi")).toBeNull();
     expect(screen.getByRole("link", { name: /waze/i })).toBeInTheDocument();
   });
 

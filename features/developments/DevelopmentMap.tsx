@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { MapConsentGate } from "@/features/consent/MapConsentGate";
 import { buildMapEmbedUrl } from "@/lib/maps";
 import type { DevelopmentLocation } from "@/types/development";
 
@@ -55,11 +56,12 @@ function loadMapsApi(key: string): Promise<void> {
  * Em qualquer um dos dois, os botões Google Maps/Waze acima do mapa são o
  * caminho real de navegação; o mapa aqui localiza, não roteiriza.
  */
-export function DevelopmentMap({
+function GoogleMap({
   name,
   location,
   className,
-}: DevelopmentMapProps) {
+  embedUrl,
+}: DevelopmentMapProps & { embedUrl: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID;
@@ -125,9 +127,6 @@ export function DevelopmentMap({
     );
   }
 
-  const embedUrl = buildMapEmbedUrl(location);
-  if (!embedUrl) return null;
-
   return (
     <iframe
       title={`Mapa de ${name}`}
@@ -136,5 +135,17 @@ export function DevelopmentMap({
       referrerPolicy="no-referrer-when-downgrade"
       className={className}
     />
+  );
+}
+
+/** O mapa só existe com consentimento (ver `MapConsentGate`). */
+export function DevelopmentMap(props: DevelopmentMapProps) {
+  // Sem coordenada nem endereço não há mapa nenhum (nem o painel do aviso).
+  const embedUrl = buildMapEmbedUrl(props.location);
+  if (!embedUrl) return null;
+  return (
+    <MapConsentGate className={props.className}>
+      <GoogleMap {...props} embedUrl={embedUrl} />
+    </MapConsentGate>
   );
 }
