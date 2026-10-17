@@ -2,9 +2,18 @@
  * Otimização de imagens dos empreendimentos (Fase C).
  *
  * Lê os originais em `img/<pasta>/` (renders 4K, fotos, plantas) e gera versões
- * web enxutas em `public/empreendimentos/<slug>/` — resize + WEBP q86.
- * next/image ainda gera as variantes responsivas em runtime; aqui garantimos
- * que a FONTE não pese dezenas de MB (NFR1 / Core Web Vitals).
+ * web em `public/empreendimentos/<slug>/`. next/image ainda gera as variantes
+ * responsivas em runtime; aqui garantimos que a FONTE não pese dezenas de MB
+ * (NFR1 / Core Web Vitals) sem gastar a definição que ela tem.
+ *
+ * Duas faixas, escolhidas pelo tamanho do original (sem ajuste manual):
+ *   - alta: lado maior ≥ o alvo do papel (Follow, 4K) → reduz ao alvo, q86.
+ *     Sobra resolução, então a compressão não aparece.
+ *   - compacta: original menor que o alvo (Solar, ~2000 px) → tamanho nativo.
+ *     Fonte sem perda (PNG/TIFF) vai em q95: sem margem para reduzir, cada
+ *     perda aparece — e o next/image ainda re-codifica na entrega. Fonte já
+ *     comprimida (JPEG/WEBP pequenos) fica no q86: um q95 só guardaria os
+ *     artefatos dela com 50–75% mais bytes. O relatório lista as compactas.
  *
  * Uso:  node scripts/optimize-images.mjs [slug ...]
  *   sem argumento → processa todos os JOBS; com slugs → só aqueles.
@@ -21,14 +30,14 @@ const ROOT = process.cwd();
 const OUT_ROOT = join(ROOT, "public", "empreendimentos");
 
 const MAX_SIDE = { hero: 3000, gallery: 2560 };
-const QUALITY = 86;
+const QUALITY = 86; // faixa alta
+const COMPACT_QUALITY = 95; // faixa compacta, fonte sem perda
+const LOSSLESS_SOURCES = new Set([".png", ".tif", ".tiff"]);
 const PASSTHROUGH_MAX = 300 * 1024; // webp já pequeno: copia sem re-encode
 
 /**
- * `quality` por job sobrescreve o QUALITY global. Use em fontes pequenas
- * (≤ ~2000 px): sem margem para reduzir, cada perda de compressão aparece —
- * e o next/image ainda re-codifica na entrega.
- * @type {Record<string, { srcDir: string; quality?: number; images: {src:string; out:string; role?: "hero"|"gallery"; quality?: number; sharpen?: boolean}[] }>}
+ * `quality` por imagem sobrescreve a da faixa; `sharpen` é opcional.
+ * @type {Record<string, { srcDir: string; images: {src:string; out:string; role?: "hero"|"gallery"; quality?: number; sharpen?: boolean}[] }>}
  */
 const JOBS = {
   "follow-savassi": {
@@ -106,9 +115,7 @@ const JOBS = {
 
   "solar-manilha": {
     srcDir: "img/Solar Manilha - Itaborai RJ",
-    // Renders de 1448–2095 px: chegam no tamanho de exibição, então q86
-    // borrava texturas e bordas. Quase sem perda; o next/image reduz o peso.
-    quality: 96,
+    // Originais de 1448–2111 px: todos caem na faixa compacta.
     images: [
       { src: "Imagens Externas - Condominio/01-Acesso Principal.png", out: "acesso-principal", role: "hero" },
       { src: "Imagem Aérea.png", out: "vista-aerea", role: "hero" },
@@ -216,22 +223,6 @@ const SINGLES = [
 
 // Imagens institucionais (Quem Somos + Engenharia). Rode com o slug "institucional".
 const INSTITUTIONAL = [
-  // Marca — lockups "assinatura" (Grupo Natus + ALIATTO | OASI). Line-art
-  // plano com alfa → webp lossless (nítido e leve).
-  {
-    name: "brand: assinatura principal (colorida)",
-    src: "img/LOGOS/LOGO/JPG/GRUPO_NATUS_PRINCIPAL_ASSINATURA.png",
-    out: "public/brand/grupo-natus-assinatura.webp",
-    maxSide: 1400,
-    lossless: true,
-  },
-  {
-    name: "brand: assinatura negativa (branca, p/ fundo escuro)",
-    src: "img/LOGOS/LOGO/JPG/GRUPO_NATUS_NEGATIVA_ASSINATURA.png",
-    out: "public/brand/grupo-natus-assinatura-negativa.webp",
-    maxSide: 1400,
-    lossless: true,
-  },
   // Quem Somos
   {
     name: "quem-somos: parede da recepção (Grupo Natus / ALIATTO | OASI)",
@@ -474,6 +465,9 @@ async function writeDimensionsManifest() {
   console.log(`\n▸ manifesto: ${Object.keys(sorted).length} imagens → ${relative(ROOT, out)}`);
 }
 
+/** Imagens que ficaram na faixa compacta (fonte abaixo do alvo). */
+const compact = [];
+
 async function run() {
   const requested = process.argv.slice(2);
   const KEYWORDS = new Set(["singles", "institucional", "brand", "manifest"]);
@@ -520,14 +514,23 @@ async function run() {
         }
 
         const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
-        let pipeline = sharp(srcPath)
-          .rotate()
-          .resize({ width: maxSide, height: maxSide, fit: "inside", withoutEnlargement: true });
+        const { width = 0, height = 0 } = await sharp(srcPath).metadata();
+        const high = Math.max(width, height) >= maxSide;
+        const lossless = LOSSLESS_SOURCES.has(extname(img.src).toLowerCase());
+        const quality = img.quality ?? (!high && lossless ? COMPACT_QUALITY : QUALITY);
+        if (!high) compact.push(`${slug}/${img.out}  ${width}x${height}  q${quality}`);
+
+        let pipeline = sharp(srcPath).rotate();
+        if (high) pipeline = pipeline.resize({ width: maxSide, height: maxSide, fit: "inside" });
         // Nitidez leve (sigma baixo) só onde pedido: em render pequeno exibido
         // grande, devolve a definição das bordas sem criar halo.
         if (img.sharpen) pipeline = pipeline.sharpen({ sigma: 0.6 });
         await pipeline
-          .webp({ quality: img.quality ?? job.quality ?? QUALITY, effort: 6, smartSubsample: true })
+          .webp({
+            quality,
+            effort: 6,
+            smartSubsample: true,
+          })
           .toFile(outPath);
 
         const after = (await stat(outPath)).size;
@@ -538,6 +541,11 @@ async function run() {
         process.exitCode = 1;
       }
     }
+  }
+
+  if (compact.length) {
+    console.log(`\n▸ faixa compacta (${compact.length}): original abaixo do alvo, servido no tamanho nativo`);
+    for (const line of compact) console.log(`  ${line}`);
   }
 
   await writeDimensionsManifest();

@@ -117,7 +117,7 @@ describe("Gallery", () => {
     // carrossel "Explore nossos empreendimentos".
     const user = setup();
     const outro: DevelopmentImage[] = [
-      { src: "/brand/grupo-natus-assinatura.webp", alt: "Outro render", kind: "imagens" },
+      { src: "/brand/grupo-natus-preta.png", alt: "Outro render", kind: "imagens" },
       { src: "/brand/grupo-natus-negativa.png", alt: "Outra obra", kind: "obra" },
     ];
     const { rerender } = render(<Gallery images={images} />);
@@ -135,6 +135,54 @@ describe("Gallery", () => {
     const alvo = gatilho.getAttribute("aria-controls");
     expect(alvo).toBeTruthy();
     expect(document.getElementById(alvo!)).not.toBeNull();
+  });
+
+  it("panorâmica aparece inteira (contain) sobre um fundo desfocado decorativo", () => {
+    render(
+      <Gallery
+        images={[
+          { src: "/x/panorama.webp", alt: "Panorama", kind: "imagens", width: 2095, height: 750 },
+          { src: "/x/foto.webp", alt: "Foto", kind: "imagens", width: 1536, height: 1024 },
+        ]}
+      />,
+    );
+    const foto = within(palco()).getByRole("img", { name: "Panorama" });
+    expect(foto).toHaveClass("object-contain");
+    const fundo = palco().querySelector('img[alt=""]');
+    expect(fundo).not.toBeNull();
+    expect(fundo?.closest("[aria-hidden='true']")).not.toBeNull();
+  });
+
+  it("foto na proporção do palco preenche (cover), sem fundo extra", async () => {
+    const user = setup();
+    render(
+      <Gallery
+        images={[
+          { src: "/x/panorama.webp", alt: "Panorama", kind: "imagens", width: 2095, height: 750 },
+          { src: "/x/foto.webp", alt: "Foto", kind: "imagens", width: 1536, height: 1024 },
+        ]}
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: /próxima imagem/i }));
+    expect(within(palco()).getByRole("img", { name: "Foto" })).toHaveClass("object-cover");
+    expect(palco().querySelector('img[alt=""]')).toBeNull();
+  });
+
+  it("o sizes do palco segue a largura declarada (meia coluna no canteiro)", () => {
+    const fotos: DevelopmentImage[] = [
+      { src: "/x/a.webp", alt: "A", kind: "obra", width: 1600, height: 1000 },
+      { src: "/x/b.webp", alt: "B", kind: "obra", width: 1600, height: 1000 },
+    ];
+    const { rerender } = render(<Gallery images={fotos} />);
+    expect(within(palco()).getByRole("img", { name: "A" })).toHaveAttribute(
+      "sizes",
+      "(max-width: 1024px) 100vw, 1024px",
+    );
+    rerender(<Gallery images={fotos} desktopWidth={600} />);
+    expect(within(palco()).getByRole("img", { name: "A" })).toHaveAttribute(
+      "sizes",
+      "(max-width: 1024px) 100vw, 600px",
+    );
   });
 
   it("fecha o lightbox no Escape", async () => {

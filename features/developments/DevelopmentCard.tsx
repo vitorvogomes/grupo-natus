@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { DevelopmentBadges, SoldOutBand } from "./DevelopmentBadges";
 import { formatLocality } from "./locality";
 import { PLACEHOLDER_IMAGE, pickHeroImage } from "./pickHeroImage";
+import { coverSizes } from "./coverSizes";
 import type { Development } from "@/types/development";
 
 type DevelopmentCardProps = {
@@ -27,7 +28,10 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
           src={hero ? hero.src : PLACEHOLDER_IMAGE}
           alt={hero ? hero.alt : `${development.name} — imagem em breve`}
           fill
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes={coverSizes(hero ?? {}, [
+            { upTo: 768, vw: 100, aspect: 4 / 3 },
+            { vw: 33, aspect: 4 / 3 },
+          ])}
           className="object-cover transition-transform duration-300 ease-out group-hover:scale-105"
         />
         {hero ? null : (

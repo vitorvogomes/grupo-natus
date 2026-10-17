@@ -77,4 +77,12 @@ describe("DevelopmentCard", () => {
     render(<DevelopmentCard development={base} />);
     expect(screen.getByText(/imagem em breve/i)).toBeInTheDocument();
   });
+
+  it("panorâmica na capa: pede a largura que o corte 4:3 exige (não chega ampliada)", () => {
+    render(<DevelopmentCard development={{ ...base, images: [{ src: "/x/panorama.webp", alt: "Panorama", kind: "imagens" as const, width: 2095, height: 750 }] }} />);
+    expect(screen.getByRole("img", { name: "Panorama" })).toHaveAttribute(
+      "sizes",
+      "(max-width: 768px) 210vw, 69vw",
+    );
+  });
 });

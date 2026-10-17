@@ -120,7 +120,8 @@ export default async function DevelopmentPage({ params }: PageParams) {
             id={DEV_SECTIONS.imagens.id}
             className={`${sectionClass} bg-surface-muted`}
           >
-            <h2 className="mb-8 text-balance text-3xl font-semibold text-ink md:text-4xl">
+            {/* Alinhado à galeria compacta (max-w-5xl), não à borda do container. */}
+            <h2 className="mx-auto mb-8 max-w-5xl text-balance text-3xl font-semibold text-ink md:text-4xl">
               Galeria
             </h2>
             <Gallery images={images} />

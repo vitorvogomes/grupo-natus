@@ -85,4 +85,12 @@ describe("DevelopmentAmenities", () => {
     render(<DevelopmentAmenities name="X" groups={groups} />);
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
+
+  it("foto de apoio panorâmica: sizes ajustado ao corte 4:3", () => {
+    render(<DevelopmentAmenities name="X" groups={groups} image={{ src: "/x/panorama.webp", alt: "Panorama", kind: "imagens" as const, width: 2095, height: 750 }} />);
+    expect(screen.getByRole("img", { name: "Panorama" })).toHaveAttribute(
+      "sizes",
+      "(max-width: 1024px) 210vw, 94vw",
+    );
+  });
 });

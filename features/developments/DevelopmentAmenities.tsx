@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Image } from "@/components/ui/Image";
+import { coverSizes } from "./coverSizes";
 import type {
   DevelopmentAmenityGroup,
   DevelopmentImage,
@@ -101,7 +102,10 @@ export function DevelopmentAmenities({
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes="(max-width: 1024px) 100vw, 45vw"
+                sizes={coverSizes(image, [
+                  { upTo: 1024, vw: 100, aspect: 4 / 3 },
+                  { vw: 45, aspect: 4 / 3 },
+                ])}
                 quality={90}
                 className="object-cover"
               />
