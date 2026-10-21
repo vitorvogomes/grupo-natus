@@ -54,6 +54,8 @@ type Seed = {
   mcmv?: boolean;
   /** 100% vendido — só em "pronto". */
   soldOut?: boolean;
+  /** `idempreendimento` no CV CRM (lista da API, confirmada pelo cliente). */
+  crmId?: number;
 };
 
 /** Atalho do seed: `slug` + nome curto do arquivo → caminho público. */
@@ -71,7 +73,164 @@ const img = (slug: string, file: string) => `/empreendimentos/${slug}/${file}.we
  */
 const SEEDS: readonly Seed[] = [
   {
+    mcmv: true,
+    slug: "solar-manilha",
+    crmId: 4,
+    name: "Solar Manilha",
+    status: "lancamento",
+    city: "Itaboraí",
+    neighborhood: "Manilha",
+    state: "RJ",
+    // Evidência: "Unidades de 2 quartos" + planta "Apartamento Tipo".
+    propertyType: "apartamento",
+    summary:
+      "Lançamento em Manilha, Itaboraí/RJ: 368 unidades de 2 quartos em condomínio fechado com lazer de clube, enquadrado no Minha Casa Minha Vida.",
+    description: [
+      "Lazer completo, para momentos únicos com toda a sua família.",
+      "O sossego e a segurança de um condomínio fechado, rodeado de verde.",
+      "Mais praticidade para a sua rotina.",
+      "Plantas inteligentes, com cada espaço bem aproveitado.",
+    ].join("\n"),
+    address: "R. Carlota Maria do Amor Divino — Loteamento Santo Antônio, Manilha",
+    postalCode: "24856-500",
+    lat: -22.767126,
+    lng: -42.918125,
+    googleMapsUrl: "https://maps.app.goo.gl/fRVp7Sj4uppGjxRe8",
+    images: [
+      // Capa (escolha do cliente): o acesso principal.
+      { src: img("solar-manilha", "acesso-principal"), alt: "Acesso principal do Solar Manilha ao entardecer", kind: "imagens" },
+      // 2ª = foto do resumo (bloco 4:3). A implantação (1,48:1) encaixa nele
+      // melhor que as cenas de 1,79:1 ou as panorâmicas. É um render aéreo
+      // humanizado, não uma planta técnica — por isso entra como "imagens".
+      { src: img("solar-manilha", "implantacao"), alt: "Vista aérea da implantação do condomínio Solar Manilha", kind: "imagens" },
+      { src: img("solar-manilha", "vista-aerea"), alt: "Vista aérea do condomínio Solar Manilha", kind: "imagens" },
+      { src: img("solar-manilha", "portaria"), alt: "Portaria com acesso de pedestres", kind: "imagens" },
+      { src: img("solar-manilha", "piscinas"), alt: "Família nas piscinas adulto e infantil", kind: "imagens" },
+      { src: img("solar-manilha", "quiosques-piscina"), alt: "Quiosque com churrasqueira ao lado da piscina", kind: "imagens" },
+      { src: img("solar-manilha", "quadras"), alt: "Jovens jogando na quadra poliesportiva", kind: "imagens" },
+      { src: img("solar-manilha", "espaco-criancas"), alt: "Crianças brincando no espaço kids", kind: "imagens" },
+      { src: img("solar-manilha", "salao-de-festas"), alt: "Salão de festas com churrasqueira", kind: "imagens" },
+      { src: img("solar-manilha", "salao-de-festas-interno"), alt: "Moradores no salão de festas", kind: "imagens" },
+      { src: img("solar-manilha", "quiosque-academia"), alt: "Quiosque e academia ao ar livre", kind: "imagens" },
+      { src: img("solar-manilha", "academia-aberta"), alt: "Moradores na academia ao ar livre", kind: "imagens" },
+      { src: img("solar-manilha", "bicicletario"), alt: "Bicicletário", kind: "imagens" },
+      { src: img("solar-manilha", "redario"), alt: "Redário", kind: "imagens" },
+      { src: img("solar-manilha", "redario-2"), alt: "Casal descansando no redário", kind: "imagens" },
+      { src: img("solar-manilha", "pet-place"), alt: "Pet place com circuito para cães", kind: "imagens" },
+      { src: img("solar-manilha", "sala-de-estar"), alt: "Família na sala de estar decorada", kind: "imagens" },
+      { src: img("solar-manilha", "sala-de-jantar"), alt: "Sala de jantar decorada", kind: "imagens" },
+      { src: img("solar-manilha", "cozinha-jantar"), alt: "Cozinha integrada à sala de jantar", kind: "imagens" },
+      { src: img("solar-manilha", "cozinha-garden"), alt: "Casal na cozinha com acesso ao garden", kind: "imagens" },
+      { src: img("solar-manilha", "area-de-servico-garden"), alt: "Área de serviço e garden", kind: "imagens" },
+      { src: img("solar-manilha", "garden"), alt: "Garden da unidade", kind: "imagens" },
+      { src: img("solar-manilha", "quarto-casal"), alt: "Quarto de casal decorado", kind: "imagens" },
+      { src: img("solar-manilha", "quarto-casal-2"), alt: "Quarto de casal decorado", kind: "imagens" },
+      { src: img("solar-manilha", "quarto"), alt: "Quarto decorado", kind: "imagens" },
+      { src: img("solar-manilha", "home-office"), alt: "Espaço de home office", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-jantar"), alt: "Apartamento tipo — sala de jantar e cozinha", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-cozinha"), alt: "Apartamento tipo — cozinha e área de serviço", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-vista"), alt: "Apartamento tipo — vista para o condomínio", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-quarto-casal"), alt: "Apartamento tipo — quarto de casal", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-quarto"), alt: "Apartamento tipo — quarto com beliche", kind: "imagens" },
+      { src: img("solar-manilha", "apto-tipo-banheiro"), alt: "Apartamento tipo — banheiro", kind: "imagens" },
+      { src: img("solar-manilha", "planta-apartamento-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+      { src: img("solar-manilha", "planta-garden"), alt: "Planta humanizada — apartamento garden", kind: "planta" },
+    ],
+    // Escolha do cliente: a vista do apartamento tipo, ao lado da lista.
+    amenitiesImage: img("solar-manilha", "apto-tipo-vista"),
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 quartos e opções com garden" },
+      { label: "Unidades", value: "368" },
+      { label: "Lazer", value: "Lazer de clube" },
+    ],
+    amenities: [
+      {
+        category: "Características",
+        items: [
+          "Terreno com área total de 22.572,56 m²",
+          "Unidades de 2 quartos e opções com garden",
+          "23 blocos no total",
+          "Todos os blocos com 4 pavimentos",
+          "368 unidades no total",
+          "Lazer de clube",
+          "275 vagas de carro e 23 vagas de moto",
+          "Enquadrado no Minha Casa Minha Vida",
+        ],
+      },
+      {
+        category: "Área de lazer",
+        items: [
+          "Piscina adulto",
+          "Piscina infantil",
+          "Churrasqueiras",
+          "Redário",
+          "Salão de festas",
+          "Espaço fitness",
+          "Quadra",
+          "Espaço kids",
+        ],
+      },
+      { category: "Comodidades", items: ["Bicicletário", "Pet place", "Car Wash"] },
+      {
+        category: "Segurança",
+        items: [
+          "Guarita 24h",
+          "Condomínio fechado com cancela e portão eletrônico para veículos",
+          "Câmera nos acessos de veículos e pedestres",
+        ],
+      },
+    ],
+  },
+  {
+    mcmv: true,
+    slug: "golden-ville-residence",
+    crmId: 2,
+    name: "Golden Ville Residence",
+    status: "em_construcao",
+    city: "Niterói",
+    neighborhood: "Maria Paula",
+    state: "RJ",
+    propertyType: "apartamento",
+    summary:
+      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
+    description: [
+      "Apartamentos de 2 quartos com suíte e varanda.",
+      "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",
+      "A 10 minutos dos centros de Niterói e São Gonçalo e a 14 km das praias da Região Oceânica.",
+      "104 unidades em condomínio fechado, com portaria 24h.",
+    ].join("\n"),
+    // Grafia do cliente; conferir se o nome oficial é "Figueiredo".
+    address: "R. Frederico Malesherbes Figueredo — Maria Paula",
+    lat: -22.8750505,
+    lng: -43.0312706,
+    googleMapsUrl: "https://maps.app.goo.gl/EUBUJ4rRtfSnV5Jv9",
+    images: [
+      { src: img("golden-ville-residence", "fachada"), alt: "Fachada do Golden Ville Residence", kind: "imagens" },
+      { src: img("golden-ville-residence", "piscina"), alt: "Piscina", kind: "imagens" },
+      { src: img("golden-ville-residence", "academia"), alt: "Academia", kind: "imagens" },
+      { src: img("golden-ville-residence", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
+      { src: img("golden-ville-residence", "churrasqueira"), alt: "Espaço churrasqueira", kind: "imagens" },
+      { src: img("golden-ville-residence", "sala"), alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "quarto"), alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "cozinha"), alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+      { src: img("golden-ville-residence", "planta-terreo"), alt: "Planta humanizada — térreo", kind: "planta" },
+    ],
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 quartos com suíte" },
+      { label: "Unidades", value: "104" },
+      { label: "Lazer", value: "Piscina e academia" },
+    ],
+    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
+    // fundação aparece.
+    progress: {
+      overallPercentage: 7,
+      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+    },
+  },
+  {
     slug: "follow-savassi",
+    crmId: 3,
     name: "Follow Savassi",
     status: "lancamento",
     city: "Belo Horizonte",
@@ -143,160 +302,6 @@ const SEEDS: readonly Seed[] = [
         { name: "Acabamento interno", percentage: 60, order: 4 },
         { name: "Acabamento externo", percentage: 50, order: 5 },
       ],
-    },
-  },
-  {
-    mcmv: true,
-    slug: "solar-manilha",
-    name: "Solar Manilha",
-    status: "lancamento",
-    city: "Itaboraí",
-    neighborhood: "Manilha",
-    state: "RJ",
-    // Evidência: "Unidades de 2 quartos" + planta "Apartamento Tipo".
-    propertyType: "apartamento",
-    summary:
-      "Lançamento em Manilha, Itaboraí/RJ: 368 unidades de 2 quartos em condomínio fechado com lazer de clube, enquadrado no Minha Casa Minha Vida.",
-    description: [
-      "Lazer completo, para momentos únicos com toda a sua família.",
-      "O sossego e a segurança de um condomínio fechado, rodeado de verde.",
-      "Mais praticidade para a sua rotina.",
-      "Plantas inteligentes, com cada espaço bem aproveitado.",
-    ].join("\n"),
-    address: "R. Carlota Maria do Amor Divino — Loteamento Santo Antônio, Manilha",
-    postalCode: "24856-500",
-    lat: -22.767126,
-    lng: -42.918125,
-    googleMapsUrl: "https://maps.app.goo.gl/fRVp7Sj4uppGjxRe8",
-    images: [
-      // Capa (escolha do cliente): o acesso principal.
-      { src: img("solar-manilha", "acesso-principal"), alt: "Acesso principal do Solar Manilha", kind: "imagens" },
-      // 2ª = foto do resumo (bloco 4:3). A implantação (1,48:1) encaixa nele;
-      // uma panorâmica 2,8:1 seria cortada e ampliada. É um render aéreo
-      // humanizado, não uma planta técnica — por isso entra como "imagens".
-      { src: img("solar-manilha", "implantacao"), alt: "Vista aérea da implantação do condomínio Solar Manilha", kind: "imagens" },
-      { src: img("solar-manilha", "vista-aerea"), alt: "Vista aérea do condomínio Solar Manilha", kind: "imagens" },
-      { src: img("solar-manilha", "portaria"), alt: "Portaria", kind: "imagens" },
-      { src: img("solar-manilha", "piscinas"), alt: "Piscinas adulto e infantil", kind: "imagens" },
-      { src: img("solar-manilha", "quiosques-piscina"), alt: "Quiosques e piscina", kind: "imagens" },
-      { src: img("solar-manilha", "quadras"), alt: "Quadras", kind: "imagens" },
-      { src: img("solar-manilha", "espaco-criancas"), alt: "Espaço kids", kind: "imagens" },
-      { src: img("solar-manilha", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
-      { src: img("solar-manilha", "salao-de-festas-interno"), alt: "Salão de festas — interior", kind: "imagens" },
-      { src: img("solar-manilha", "quiosque-academia"), alt: "Quiosque e academia ao ar livre", kind: "imagens" },
-      { src: img("solar-manilha", "academia-aberta"), alt: "Academia ao ar livre", kind: "imagens" },
-      { src: img("solar-manilha", "bicicletario"), alt: "Bicicletário", kind: "imagens" },
-      { src: img("solar-manilha", "redario"), alt: "Redário", kind: "imagens" },
-      { src: img("solar-manilha", "redario-2"), alt: "Redário", kind: "imagens" },
-      { src: img("solar-manilha", "pet-place"), alt: "Pet place", kind: "imagens" },
-      { src: img("solar-manilha", "sala-de-estar"), alt: "Sala de estar decorada", kind: "imagens" },
-      { src: img("solar-manilha", "sala-de-jantar"), alt: "Sala de jantar decorada", kind: "imagens" },
-      { src: img("solar-manilha", "cozinha-jantar"), alt: "Cozinha integrada à sala de jantar", kind: "imagens" },
-      { src: img("solar-manilha", "cozinha-garden"), alt: "Cozinha com acesso ao garden", kind: "imagens" },
-      { src: img("solar-manilha", "area-de-servico-garden"), alt: "Área de serviço e garden", kind: "imagens" },
-      { src: img("solar-manilha", "garden"), alt: "Garden da unidade", kind: "imagens" },
-      { src: img("solar-manilha", "quarto-casal"), alt: "Quarto de casal decorado", kind: "imagens" },
-      { src: img("solar-manilha", "quarto-casal-2"), alt: "Quarto de casal decorado", kind: "imagens" },
-      { src: img("solar-manilha", "quarto"), alt: "Quarto decorado", kind: "imagens" },
-      { src: img("solar-manilha", "home-office"), alt: "Espaço de home office", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-jantar"), alt: "Apartamento tipo — sala de jantar e cozinha", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-cozinha"), alt: "Apartamento tipo — cozinha e área de serviço", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-vista"), alt: "Apartamento tipo — vista para o condomínio", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-quarto-casal"), alt: "Apartamento tipo — quarto de casal", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-quarto"), alt: "Apartamento tipo — quarto com beliche", kind: "imagens" },
-      { src: img("solar-manilha", "apto-tipo-banheiro"), alt: "Apartamento tipo — banheiro", kind: "imagens" },
-      { src: img("solar-manilha", "planta-apartamento-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
-      { src: img("solar-manilha", "planta-garden"), alt: "Planta humanizada — apartamento garden", kind: "planta" },
-    ],
-    // Escolha do cliente: a vista do apartamento tipo, ao lado da lista.
-    amenitiesImage: img("solar-manilha", "apto-tipo-vista"),
-    extraFeatures: [
-      { label: "Apartamentos", value: "2 quartos e opções com garden" },
-      { label: "Unidades", value: "368" },
-      { label: "Lazer", value: "Lazer de clube" },
-    ],
-    amenities: [
-      {
-        category: "Características",
-        items: [
-          "Terreno com área total de 22.572,56 m²",
-          "Unidades de 2 quartos e opções com garden",
-          "23 blocos no total",
-          "Todos os blocos com 4 pavimentos",
-          "368 unidades no total",
-          "Lazer de clube",
-          "275 vagas de carro e 23 vagas de moto",
-          "Enquadrado no Minha Casa Minha Vida",
-        ],
-      },
-      {
-        category: "Área de lazer",
-        items: [
-          "Piscina adulto",
-          "Piscina infantil",
-          "Churrasqueiras",
-          "Redário",
-          "Salão de festas",
-          "Espaço fitness",
-          "Quadra",
-          "Espaço kids",
-        ],
-      },
-      { category: "Comodidades", items: ["Bicicletário", "Pet place", "Car Wash"] },
-      {
-        category: "Segurança",
-        items: [
-          "Guarita 24h",
-          "Condomínio fechado com cancela e portão eletrônico para veículos",
-          "Câmera nos acessos de veículos e pedestres",
-        ],
-      },
-    ],
-  },
-  {
-    mcmv: true,
-    slug: "golden-ville-residence",
-    name: "Golden Ville Residence",
-    status: "em_construcao",
-    city: "Niterói",
-    neighborhood: "Maria Paula",
-    state: "RJ",
-    propertyType: "apartamento",
-    summary:
-      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
-    description: [
-      "Apartamentos de 2 quartos com suíte e varanda.",
-      "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",
-      "A 10 minutos dos centros de Niterói e São Gonçalo e a 14 km das praias da Região Oceânica.",
-      "104 unidades em condomínio fechado, com portaria 24h.",
-    ].join("\n"),
-    // Grafia do cliente; conferir se o nome oficial é "Figueiredo".
-    address: "R. Frederico Malesherbes Figueredo — Maria Paula",
-    lat: -22.8750505,
-    lng: -43.0312706,
-    googleMapsUrl: "https://maps.app.goo.gl/EUBUJ4rRtfSnV5Jv9",
-    images: [
-      { src: img("golden-ville-residence", "fachada"), alt: "Fachada do Golden Ville Residence", kind: "imagens" },
-      { src: img("golden-ville-residence", "piscina"), alt: "Piscina", kind: "imagens" },
-      { src: img("golden-ville-residence", "academia"), alt: "Academia", kind: "imagens" },
-      { src: img("golden-ville-residence", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
-      { src: img("golden-ville-residence", "churrasqueira"), alt: "Espaço churrasqueira", kind: "imagens" },
-      { src: img("golden-ville-residence", "sala"), alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "quarto"), alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "cozinha"), alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
-      { src: img("golden-ville-residence", "planta-terreo"), alt: "Planta humanizada — térreo", kind: "planta" },
-    ],
-    extraFeatures: [
-      { label: "Apartamentos", value: "2 quartos com suíte" },
-      { label: "Unidades", value: "104" },
-      { label: "Lazer", value: "Piscina e academia" },
-    ],
-    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
-    // fundação aparece.
-    progress: {
-      overallPercentage: 7,
-      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
     },
   },
   {
@@ -441,7 +446,7 @@ const SEEDS: readonly Seed[] = [
   // Breve lançamento: fase embrionária, seção mínima com a foto padrão. As
   // maquetes do Gutierrez seguem em public/empreendimentos/gutierrez/ para
   // voltarem quando o lançamento tiver material aprovado.
-  { slug: "gutierrez", name: "Gutierrez", status: "breve_lancamento", city: "Belo Horizonte", state: "MG", highlight: "20 un. alto luxo", propertyType: "apartamento" },
+  { slug: "gutierrez", name: "Mirante Gutierrez", status: "breve_lancamento", city: "Belo Horizonte", state: "MG", highlight: "20 un. alto luxo", propertyType: "apartamento" },
   // Evidência: highlight "180 studios".
   { slug: "one-studios", name: "One Studios", status: "breve_lancamento", city: "Niterói", state: "RJ", highlight: "180 studios", propertyType: "studio" },
   { mcmv: true, slug: "sunset-ville-residence", name: "Sunset Ville Residence", status: "breve_lancamento", city: "Belo Horizonte", state: "MG", highlight: "72 un. MCMV", propertyType: "apartamento" },
@@ -480,7 +485,12 @@ function fromSeed(seed: Seed): Development {
     ...(seed.propertyType ? { propertyType: seed.propertyType } : {}),
     ...(seed.mcmv ? { mcmv: true } : {}),
     ...(seed.soldOut ? { soldOut: true } : {}),
-    summary: seed.summary ?? `${TODO} — resumo de ${seed.name}`,
+    ...(seed.crmId ? { crmId: seed.crmId } : {}),
+    // Sem resumo (breve lançamento): uma frase montada só do que o seed sabe.
+    // Ela é a descrição da página no Google, então nunca leva o TODO.
+    summary:
+      seed.summary ??
+      `${seed.name}: breve lançamento do Grupo Natus em ${seed.city}/${seed.state}${seed.highlight ? ` — ${seed.highlight}` : ""}.`,
     description: seed.description ?? `${TODO} — descrição completa de ${seed.name}`,
     images: (seed.images ?? []).map(withDimensions),
     features,

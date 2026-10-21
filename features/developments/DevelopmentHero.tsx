@@ -7,13 +7,14 @@ import type { Development } from "@/types/development";
 /**
  * O hero (`min-h-[60vh]`) muda de proporção com a tela: quase retrato no
  * celular, quase quadrado no tablet em pé, ~2,4:1 no desktop. É o LCP (com
- * preload), então o fator tem teto de 1,5×: sem ele, o celular baixaria a
- * fonte inteira.
+ * preload), então o fator tem teto: sem ele, o celular baixaria a fonte
+ * inteira. O teto é 2× desde a entrega em AVIF (2026-10-21): com metade dos
+ * bytes, cabe a nitidez que o 1,5× cortava no celular 3× (densidade 0,71×).
  */
 const HERO_BOXES: readonly CoverBox[] = [
-  { upTo: 768, vw: 100, aspect: 0.75, maxFactor: 1.5 },
-  { upTo: 1024, vw: 100, aspect: 1.2, maxFactor: 1.5 },
-  { vw: 100, aspect: 2.4, maxFactor: 1.5 },
+  { upTo: 768, vw: 100, aspect: 0.75, maxFactor: 2 },
+  { upTo: 1024, vw: 100, aspect: 1.2, maxFactor: 2 },
+  { vw: 100, aspect: 2.4, maxFactor: 2 },
 ];
 
 type DevelopmentHeroProps = {

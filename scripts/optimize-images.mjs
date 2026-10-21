@@ -6,14 +6,25 @@
  * responsivas em runtime; aqui garantimos que a FONTE não pese dezenas de MB
  * (NFR1 / Core Web Vitals) sem gastar a definição que ela tem.
  *
+ * O arquivo em public/ é a FONTE do next/image, não o que o visitante baixa:
+ * o Next redimensiona e re-codifica (AVIF/WEBP) a cada largura pedida.
+ * Medido nos renders do Solar v2 (2026-10-21): subir a fonte de q86 para
+ * q92 rende ~0,5 dB na entrega; guardar quase sem perda (near-lossless)
+ * rende 2–3 dB a mais, mas sem diferença visível na tela e com 4–5× o peso
+ * (public/ iria de 36 para 162 MB). Fica q92.
+ *
  * Duas faixas, escolhidas pelo tamanho do original (sem ajuste manual):
- *   - alta: lado maior ≥ o alvo do papel (Follow, 4K) → reduz ao alvo, q86.
- *     Sobra resolução, então a compressão não aparece.
- *   - compacta: original menor que o alvo (Solar, ~2000 px) → tamanho nativo.
+ *   - alta: lado maior ≥ o alvo do papel (renders 4K/5K) → reduz ao alvo, q92.
+ *   - compacta: original menor que o alvo → tamanho nativo (nunca amplia).
  *     Fonte sem perda (PNG/TIFF) vai em q95: sem margem para reduzir, cada
- *     perda aparece — e o next/image ainda re-codifica na entrega. Fonte já
- *     comprimida (JPEG/WEBP pequenos) fica no q86: um q95 só guardaria os
- *     artefatos dela com 50–75% mais bytes. O relatório lista as compactas.
+ *     perda aparece. Fonte já comprimida (JPEG/WEBP pequenos) fica no q86:
+ *     um q95 só guardaria os artefatos dela com 50–75% mais bytes.
+ *     O relatório lista as compactas: é onde a fonte limita a nitidez.
+ * `quality`/`sharpen` por imagem só como override.
+ *
+ * Ao fim, apaga o cache do otimizador do Next (.next/cache/images e
+ * .next/dev/cache/images): ele guarda as variantes por URL e, como o nome do
+ * arquivo não muda ao trocar a foto, continuaria servindo a imagem antiga.
  *
  * Uso:  node scripts/optimize-images.mjs [slug ...]
  *   sem argumento → processa todos os JOBS; com slugs → só aqueles.
@@ -22,7 +33,7 @@
  * Mapeamento arquivo→saída é explícito (JOBS). `role: "hero"` usa lado maior
  * maior; webp já otimizado (<300 KB) é copiado sem re-encode (evita 2ª perda).
  */
-import { mkdir, stat, copyFile, readdir, writeFile } from "node:fs/promises";
+import { mkdir, stat, copyFile, readdir, rm, writeFile } from "node:fs/promises";
 import { extname, join, relative } from "node:path";
 import sharp from "sharp";
 
@@ -30,8 +41,9 @@ const ROOT = process.cwd();
 const OUT_ROOT = join(ROOT, "public", "empreendimentos");
 
 const MAX_SIDE = { hero: 3000, gallery: 2560 };
-const QUALITY = 86; // faixa alta
+const QUALITY = 92; // faixa alta
 const COMPACT_QUALITY = 95; // faixa compacta, fonte sem perda
+const COMPACT_LOSSY_QUALITY = 86; // faixa compacta, fonte já comprimida
 const LOSSLESS_SOURCES = new Set([".png", ".tif", ".tiff"]);
 const PASSTHROUGH_MAX = 300 * 1024; // webp já pequeno: copia sem re-encode
 
@@ -115,27 +127,28 @@ const JOBS = {
 
   "solar-manilha": {
     srcDir: "img/Solar Manilha - Itaborai RJ",
-    // Originais de 1448–2111 px: todos caem na faixa compacta.
+    // Remessa v2 (Humanizadas - v2, 5504 px): as 13 cenas refeitas com gente
+    // caem na faixa alta. O resto (1448–2111 px) segue na compacta.
     images: [
-      { src: "Imagens Externas - Condominio/01-Acesso Principal.png", out: "acesso-principal", role: "hero" },
+      { src: "Humanizadas - v2/solar 7.png", out: "acesso-principal", role: "hero" },
       { src: "Imagem Aérea.png", out: "vista-aerea", role: "hero" },
-      { src: "Imagens Externas - Condominio/02-Portaria.png", out: "portaria" },
-      { src: "Imagens Externas - Condominio/03-Quadras.png", out: "quadras" },
-      { src: "Imagens Externas - Condominio/04-Espaço Crianças.png", out: "espaco-criancas" },
-      { src: "Imagens Externas - Condominio/05-Salão de Festas.png", out: "salao-de-festas" },
-      { src: "Imagens Externas - Condominio/06 - Salão de festas-Interno.png", out: "salao-de-festas-interno" },
-      { src: "Imagens Externas - Condominio/07-Piscinas.png", out: "piscinas" },
+      { src: "Humanizadas - v2/solar6.png", out: "portaria" },
+      { src: "Humanizadas - v2/solar8.png", out: "quadras" },
+      { src: "Humanizadas - v2/solar 9.png", out: "espaco-criancas" },
+      { src: "Humanizadas - v2/Solar 15.png", out: "salao-de-festas" },
+      { src: "Humanizadas - v2/solar 10.png", out: "salao-de-festas-interno" },
+      { src: "Humanizadas - v2/solar 11.png", out: "piscinas" },
       { src: "Imagens Externas - Condominio/08 - Quiosque e Academia Aberta.png", out: "quiosque-academia" },
-      { src: "Imagens Externas - Condominio/09-Academia Aberta.png", out: "academia-aberta" },
-      { src: "Imagens Externas - Condominio/10 - Quiosques e Piscina.png", out: "quiosques-piscina" },
+      { src: "Humanizadas - v2/solar 3.png", out: "academia-aberta" },
+      { src: "Humanizadas - v2/Solar 16.png", out: "quiosques-piscina" },
       { src: "Imagens Externas - Condominio/11 - Bicicletário.png", out: "bicicletario" },
       { src: "Imagens Externas - Condominio/12 - Redário.png", out: "redario" },
-      { src: "Imagens Externas - Condominio/13 - Redário.png", out: "redario-2" },
-      { src: "Imagens Externas - Condominio/14 - Petplace.png", out: "pet-place" },
-      { src: "Imagens Internas/01.png", out: "sala-de-estar" },
+      { src: "Humanizadas - v2/solar 2.png", out: "redario-2" },
+      { src: "Humanizadas - v2/solar 1.png", out: "pet-place" },
+      { src: "Humanizadas - v2/solar5.png", out: "sala-de-estar" },
       { src: "Imagens Internas/02.png", out: "sala-de-jantar" },
       { src: "Imagens Internas/03.png", out: "cozinha-jantar" },
-      { src: "Imagens Internas/04.png", out: "cozinha-garden" },
+      { src: "Humanizadas - v2/solar 4.png", out: "cozinha-garden" },
       { src: "Imagens Internas/05.png", out: "area-de-servico-garden" },
       { src: "Imagens Internas/06.png", out: "garden" },
       { src: "Imagens Internas/07.png", out: "quarto-casal" },
@@ -205,6 +218,9 @@ const SINGLES = [
     src: "img/Follow Savassi - Belo Horizonte MG/0065-OASIS_FACHADA NOTURNA CAM 02_4K.jpg",
     out: "public/home/hero.webp",
     maxSide: 3000,
+    // Limite na largura (hero largo na tela): pelo lado maior, o retrato
+    // ficaria com 2399 px, abaixo dos 2880 de uma tela 2×.
+    fitWidth: true,
   },
   {
     // 2560 (e não 2000): o painel da Home renderiza esta foto a ~930 CSS px,
@@ -411,6 +427,44 @@ async function buildFavicon() {
   }
 }
 
+/**
+ * Imagens de compartilhamento e de atalho:
+ * - public/brand/og-grupo-natus.jpg (1200×630): Open Graph/Twitter padrão das
+ *   páginas sem imagem própria — logo negativa sobre o navy institucional.
+ *   JPEG porque nem todo leitor de link (LinkedIn, e-mail) aceita WEBP.
+ * - app/apple-icon.png (180×180): o Next serve como <link rel="apple-touch-icon">.
+ */
+async function buildSocialImages() {
+  console.log("\n▸ brand: compartilhamento e apple-icon");
+  try {
+    const W = 1200;
+    const H = 630;
+    const logo = await sharp(join(ROOT, "public/brand/grupo-natus-negativa.png"))
+      .resize({ width: 720 })
+      .toBuffer();
+    const meta = await sharp(logo).metadata();
+    const ogPath = join(ROOT, "public/brand/og-grupo-natus.jpg");
+    await sharp({ create: { width: W, height: H, channels: 3, background: "#1d3145" } })
+      .composite([{ input: logo, left: Math.round((W - meta.width) / 2), top: Math.round((H - meta.height) / 2) }])
+      .jpeg({ quality: 88, mozjpeg: true })
+      .toFile(ogPath);
+    console.log(`  public/brand/og-grupo-natus.jpg  ${W}x${H}  ${KB((await stat(ogPath)).size)}`);
+
+    const applePath = join(ROOT, "app/apple-icon.png");
+    const mark = await sharp(join(ROOT, "img/LOGOS/Favicon/favicon-natus-beige.png"))
+      .resize({ width: 132, height: 132, fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .toBuffer();
+    await sharp({ create: { width: 180, height: 180, channels: 3, background: "#243c54" } })
+      .composite([{ input: mark, left: 24, top: 24 }])
+      .png({ compressionLevel: 9 })
+      .toFile(applePath);
+    console.log(`  app/apple-icon.png  180x180  ${KB((await stat(applePath)).size)}`);
+  } catch (err) {
+    console.warn(`  ⚠ pulando as imagens de compartilhamento: ${err.message}`);
+    process.exitCode = 1;
+  }
+}
+
 /** Processa uma lista de assets avulsos (src/out/maxSide explícitos). */
 async function optimizeFlat(label, list) {
   console.log(`\n▸ ${label} (${list.length})`);
@@ -422,13 +476,12 @@ async function optimizeFlat(label, list) {
       const before = (await stat(join(ROOT, item.src))).size;
       await sharp(join(ROOT, item.src))
         .rotate()
-        .resize({
-          width: item.maxSide,
-          height: item.maxSide,
-          fit: "inside",
-          withoutEnlargement: true,
-        })
-        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6 })
+        .resize(
+          item.fitWidth
+            ? { width: item.maxSide, withoutEnlargement: true }
+            : { width: item.maxSide, height: item.maxSide, fit: "inside", withoutEnlargement: true },
+        )
+        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6, smartSubsample: true })
         .toFile(outPath);
       const after = (await stat(outPath)).size;
       console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
@@ -481,6 +534,7 @@ async function run() {
   if (!requested.length || requested.includes("brand")) {
     await buildMapPin();
     await buildFavicon();
+    await buildSocialImages();
   }
 
   const slugs = requested.length
@@ -515,22 +569,27 @@ async function run() {
 
         const maxSide = MAX_SIDE[img.role === "hero" ? "hero" : "gallery"];
         const { width = 0, height = 0 } = await sharp(srcPath).metadata();
-        const high = Math.max(width, height) >= maxSide;
+        // O hero é largo na tela: o que limita a nitidez é a LARGURA. Um render
+        // em retrato (Follow, 3999×5000) reduzido pelo lado maior ficaria com
+        // 2399 px de largura — abaixo dos 2880 de um hero em tela 2×.
+        const hero = img.role === "hero";
+        const high = (hero ? width : Math.max(width, height)) >= maxSide;
         const lossless = LOSSLESS_SOURCES.has(extname(img.src).toLowerCase());
-        const quality = img.quality ?? (!high && lossless ? COMPACT_QUALITY : QUALITY);
+        const quality =
+          img.quality ?? (high ? QUALITY : lossless ? COMPACT_QUALITY : COMPACT_LOSSY_QUALITY);
         if (!high) compact.push(`${slug}/${img.out}  ${width}x${height}  q${quality}`);
 
         let pipeline = sharp(srcPath).rotate();
-        if (high) pipeline = pipeline.resize({ width: maxSide, height: maxSide, fit: "inside" });
+        if (high) {
+          pipeline = pipeline.resize(
+            hero ? { width: maxSide } : { width: maxSide, height: maxSide, fit: "inside" },
+          );
+        }
         // Nitidez leve (sigma baixo) só onde pedido: em render pequeno exibido
         // grande, devolve a definição das bordas sem criar halo.
         if (img.sharpen) pipeline = pipeline.sharpen({ sigma: 0.6 });
         await pipeline
-          .webp({
-            quality,
-            effort: 6,
-            smartSubsample: true,
-          })
+          .webp({ quality, effort: 6, smartSubsample: true })
           .toFile(outPath);
 
         const after = (await stat(outPath)).size;
@@ -549,6 +608,15 @@ async function run() {
   }
 
   await writeDimensionsManifest();
+  await clearNextImageCache();
+}
+
+/** O cache do next/image é por URL: trocar a foto sem apagá-lo serve a antiga. */
+async function clearNextImageCache() {
+  for (const dir of [".next/cache/images", ".next/dev/cache/images"]) {
+    await rm(join(ROOT, dir), { recursive: true, force: true });
+  }
+  console.log("▸ cache de imagens do Next apagado (o dev/start regenera as variantes)");
 }
 
 run().catch((err) => {

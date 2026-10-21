@@ -145,6 +145,11 @@ export type Development = {
    * vira uma faixa no card (`SoldOutBand`), não um badge a mais.
    */
   soldOut?: boolean;
+  /**
+   * `idempreendimento` no CV CRM: liga o lead do formulário ao empreendimento
+   * certo. Ausente = o lead entra no CRM sem empreendimento.
+   */
+  crmId?: number;
   /** Tipologia curta para o hero (ex.: "2 e 3 quartos"). */
   tagline?: string;
   summary: string;
@@ -162,5 +167,4 @@ export type Development = {
   videoUrl?: string;
   progress?: ConstructionProgress;
   contact?: { whatsappMessage?: string };
-  seo?: { title?: string; description?: string; ogImage?: string };
 };

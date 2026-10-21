@@ -29,8 +29,9 @@ describe("Seed dos empreendimentos", () => {
       } else {
         expect(dev.description).not.toMatch(/TODO/);
       }
-      // Resumo é sempre preenchido (factual ou placeholder rotulado).
+      // Resumo sempre preenchido e factual: vira a descrição no Google.
       expect(dev.summary.length).toBeGreaterThan(0);
+      expect(dev.summary).not.toMatch(/TODO/);
     }
   });
 
@@ -183,6 +184,21 @@ describe("Seed dos empreendimentos", () => {
         expect(img.height, img.src).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("o Gutierrez se chama Mirante Gutierrez; o slug (URL e chave no CRM) não muda", () => {
+    expect(developments.find((d) => d.slug === "gutierrez")?.name).toBe("Mirante Gutierrez");
+  });
+
+  it("o ID do CV CRM, quando existe, é inteiro positivo e não se repete", () => {
+    const ids = developments.flatMap((d) => (d.crmId === undefined ? [] : [d.crmId]));
+    for (const id of ids) expect(Number.isInteger(id) && id > 0).toBe(true);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("liga os empreendimentos cadastrados no CV CRM (GET /v1/cadastros/empreendimentos, 2026-10-20)", () => {
+    const crmIds = Object.fromEntries(developments.filter((d) => d.crmId).map((d) => [d.slug, d.crmId]));
+    expect(crmIds).toEqual({ "golden-ville-residence": 2, "follow-savassi": 3, "solar-manilha": 4 });
   });
 
   it("inclui os empreendimentos-chave conhecidos", () => {

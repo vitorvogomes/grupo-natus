@@ -133,9 +133,10 @@ function GalleryStage({
             alt={current.alt}
             fill
             sizes={`(max-width: ${FULL_WIDTH_UP_TO}px) ${Math.round(100 * factor)}vw, ${Math.round(desktopWidth * factor)}px`}
-            // 90 (e não o 75 padrão): o palco mostra a foto quase no tamanho
-            // da fonte, e renders pequenos não têm margem para mais perda.
-            quality={90}
+            // 100 no palco e no lightbox, onde a foto é examinada de perto: o
+            // Next converte para AVIF 63 (escala 50/80), que fica igual ao
+            // original na tela com metade dos bytes do WEBP 90 de antes.
+            quality={100}
             className={fit === "contain" ? "object-contain" : "object-cover"}
           />
           <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-navy-900/70 px-3 py-1 text-xs font-medium text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
