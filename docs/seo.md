@@ -1,6 +1,8 @@
 # SEO, migração de URLs e marca: plano de execução
 
-Plano para fazer depois. Cada item diz **onde** mexer (arquivo, painel ou serviço) e **como saber que deu certo**. A ordem dos blocos é a de execução recomendada: a migração (§3) é o que mais pode custar ranking se for esquecida, e acontece no dia em que o site novo assumir o domínio.
+> **Estado em 2026-10-20 (v5):** a parte de código (§2 e §3.2) está feita; o que resta é fora do código (§3.1 completar com o Search Console, §3.3, §4). Itens feitos marcados com ✅.
+
+Cada item diz **onde** mexer (arquivo, painel ou serviço) e **como saber que deu certo**. A ordem dos blocos é a de execução recomendada: a migração (§3) é o que mais pode custar ranking se for esquecida, e acontece no dia em que o site novo assumir o domínio.
 
 > Levantamento de 2026-10-12, feito sobre o site atual (WordPress em `www.natusgrupo.com.br`) e sobre este repositório. Antes de executar, confira se nada mudou.
 
@@ -10,70 +12,34 @@ Plano para fazer depois. Cada item diz **onde** mexer (arquivo, painel ou servi�
 
 | Item | Onde | Estado |
 |---|---|---|
-| Sitemap | `app/sitemap.ts` | Rotas estáticas e um item por empreendimento |
-| robots.txt | `app/robots.ts` | Libera tudo; bloqueia `/theme-showcase` e `/api/` |
-| Metadados base | `app/layout.tsx` (`metadataBase`, `title.template = "%s \| Grupo Natus"`, OG `pt_BR`) | Descrição padrão genérica |
-| Metadados por página | `export const metadata` em cada `page.tsx`; `generateMetadata` em `app/empreendimentos/[slug]/page.tsx` | Título = nome; descrição = `summary` |
-| URL canônica | `alternates.canonical` nas páginas de empreendimento | Ok |
-| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (nome, url, areaServed, `sameAs`, `taxID`) e `Residence` por empreendimento (com `postalCode` quando há) | Falta logo, contato e `geo` |
-| Domínio | `SITE_URL` em `lib/site.ts` = `https://www.natusgrupo.com.br` | **A confirmar** (www ou sem www) |
-| Imagens | `next/image`, WEBP via pipeline, alt em todas | Ok |
-| Acessibilidade e semântica | landmarks, um `h1` por página, skip-link | Ok |
+| Sitemap | `app/sitemap.ts` (rotas de `STATIC_ROUTES` em `lib/site.ts` + um item por empreendimento) | ✅ |
+| robots.txt | `app/robots.ts` | ✅ libera tudo; bloqueia `/theme-showcase` (404 em produção) e `/api/` |
+| Metadados base | `app/layout.tsx`: `metadataBase`, `title.default` com descritor, template, OG/Twitter padrão, `themeColor` | ✅ |
+| Metadados por página | `pageMetadata()` / `developmentMetadata()` em `features/seo/metadata.ts` | ✅ canônica + OG + Twitter em todas; teste de unicidade em `app/metadata.test.ts` |
+| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (logo, sede, contato, `sameAs`), `WebSite` (home), `ApartmentComplex`/`Residence` (geo, capa, CEP), `BreadcrumbList` | ✅ falta só `legalName`/`taxID` (razão social) |
+| Imagem de compartilhamento | `public/brand/og-grupo-natus.jpg` (padrão) e a capa no empreendimento | ✅ |
+| 404 | `app/not-found.tsx` com links para empreendimentos e contato | ✅ |
+| Redirects do WordPress | `content/redirects.ts` → `next.config.ts` (308); `npm run check:redirects` | ✅ 19 URLs; completar com o Search Console |
+| Domínio | `SITE_URL` = `https://www.natusgrupo.com.br` (com `www`, como o Google indexa hoje) | ✅ decidido; "sem www → www" na hospedagem |
 
 ---
 
 ## 2. Melhorias no código
 
-Ferramenta: carregue a skill **`nextjs-seo`** antes de começar. Ela tem o checklist de auditoria e os padrões do App Router: metadata, imagens OG, JSON-LD e Core Web Vitals. A **`marketing:seo-audit`** serve para a revisão de conteúdo e palavras-chave.
+Ferramenta: carregue a skill **`nextjs-seo`** antes de mexer. Ela tem o checklist de auditoria e os padrões do App Router: metadata, imagens OG, JSON-LD e Core Web Vitals. A **`marketing:seo-audit`** serve para a revisão de conteúdo e palavras-chave.
 
-### 2.1 Domínio e canônicas
-1. Decida o domínio canônico: `www.natusgrupo.com.br` (o atual) ou sem `www`. O Google indexa hoje com `www`; manter isso evita uma migração extra.
-2. Ajuste `SITE_URL` em `lib/site.ts`. Sitemap, robots, `metadataBase`, canônicas e JSON-LD derivam dele.
-3. Adicione `alternates.canonical` às páginas estáticas que ainda não têm: home, `/empreendimentos`, `/engenharia`, `/quem-somos`, `/contato`, `/negocie-seu-terreno`.
-4. No catálogo `/empreendimentos?status=…&cidade=…`, aponte a canônica para `/empreendimentos` sem a query, para os filtros não virarem páginas duplicadas.
-5. **Verificar**: `curl -s https://<domínio>/empreendimentos/follow-savassi | grep canonical` mostra a URL absoluta correta.
+### 2.1–2.4 Feito na v5 ✅
+O que existe está na tabela do §1. As decisões que não aparecem no código:
+- **Domínio**: `www.natusgrupo.com.br`, como o Google indexa hoje (evita uma migração extra). "Sem www → www" é configuração da hospedagem.
+- **Catálogo filtrado** (`/empreendimentos?status=…`): a canônica é `/empreendimentos`, para os filtros não virarem páginas duplicadas.
+- **Títulos**: a home leva nome + descritor ("Grupo Natus — Incorporadora e construtora em BH e no RJ"); o empreendimento é montado do dado ("{nome} — {tipo} em {bairro}, {cidade}/{UF}"); referência de ~50–60 caracteres no título e ~140–160 na descrição.
+- **JSON-LD**: sem `subOrganization` (o site fala só em nome do Grupo Natus) e sem `offers` (não há preço). `legalName`/`taxID` entram quando a razão social do CNPJ for confirmada.
+- **Breve lançamentos**: indexados, com descrição factual montada do dado.
+- **Verificar** depois de publicar: `curl -s https://www.natusgrupo.com.br/empreendimentos/follow-savassi | grep canonical`; [Rich Results Test](https://search.google.com/test/rich-results) e [Schema Markup Validator](https://validator.schema.org/) numa URL de cada tipo; o depurador de compartilhamento do Facebook ou do LinkedIn.
 
-### 2.2 Títulos e descrições com intenção de busca
-Hoje o Google exibe "Uma empresa mineira que atua em MG e RJ, incorpora e…" em quase todos os resultados, porque o site atual não tem descrição por página. Corrigir isso é o ganho mais rápido.
-
-1. **Home** (`app/layout.tsx`, `title.default` e `description`): nome **com descritor**. Por exemplo:
-   - Título: "Grupo Natus — Incorporadora e construtora em BH e no RJ"
-   - Descrição: "Do Minha Casa Minha Vida ao alto luxo: empreendimentos em Belo Horizonte, região metropolitana e Leste Fluminense. Aliatto Incorporadora e Oasi Engenharia."
-2. **Empreendimentos** (`generateMetadata` em `app/empreendimentos/[slug]/page.tsx`): monte o título com tipologia e praça, por exemplo "Follow Savassi — Apartamentos de 1 a 3 suítes na Savassi, BH". Duas formas de fazer:
-   - preencher `seo.title`/`seo.description` no seed; hoje o `fromSeed` em `content/developments/data.ts` não mapeia `seo`, então é preciso adicionar ao `Seed`;
-   - ou derivar `"{nome} — {tagline/feature} em {bairro}, {cidade}"` dos campos que já existem.
-3. **Institucionais**: título e descrição próprios em `quem-somos`, `engenharia`, `contato` e `negocie-seu-terreno`, com a praça e o serviço ("Engenharia e execução de obras em BH | Oasi Engenharia").
-4. Limites de referência: título com ~50–60 caracteres, descrição com ~140–160, sem repetir a mesma descrição em duas páginas.
-5. **Verificar**: crie um teste que percorre as rotas e falha com título ou descrição duplicados.
-
-### 2.3 Imagem de compartilhamento (Open Graph)
-1. **Por empreendimento**: um `opengraph-image.tsx` em `app/empreendimentos/[slug]/`, ou o `seo.ogImage` apontando para a capa (`pickHeroImage`). O campo existe no tipo, mas o seed nunca o preenche.
-2. **Site inteiro**: um `app/opengraph-image.png` (1200×630) com a marca, como padrão.
-3. **Verificar**: cole a URL no depurador de compartilhamento do Facebook ou do LinkedIn, ou num grupo de WhatsApp.
-
-### 2.4 Dados estruturados (JSON-LD), em `features/seo/jsonLd.tsx`
-1. **Organization**, na home e no layout:
-   - `logo` (URL absoluta de `public/brand/…`), `legalName` (quando o CNPJ for confirmado), `address` (Av. Getúlio Vargas, 1621), `telephone`, `email`;
-   - `contactPoint`;
-   - ✅ `sameAs` com Instagram, Facebook e LinkedIn (`SOCIAL` em `lib/site.ts`); acrescentar o perfil no Google quando existir;
-   - `subOrganization` com a Aliatto Incorporadora e a Oasi Engenharia.
-   - **Nunca** coloque o nome de um concorrente em `alternateName` (ver §5).
-2. **Empreendimentos**: troque `Residence` por `ApartmentComplex` (ou `Residence` com `containsPlace`). Inclua:
-   - `geo` (`GeoCoordinates` com `lat`/`lng`, já presentes nos dados);
-   - `image` (capa, URL absoluta);
-   - `address.neighborhood`;
-   - um `offers` só se houver preço real.
-3. **BreadcrumbList** nas páginas de empreendimento: Início › Empreendimentos › {nome}.
-4. **WebSite** na home (nome do site). `SearchAction` só se a busca do site tiver URL própria.
-5. **Verificar**: [Rich Results Test](https://search.google.com/test/rich-results) e [Schema Markup Validator](https://validator.schema.org/) em uma URL de cada tipo, com zero erros.
-
-### 2.5 Conteúdo e indexação
-1. **Breve lançamentos** (Gutierrez, One Studios, Sunset Ville, Royal Ville) são páginas com pouco texto. Decida entre:
-   - (a) `robots: { index: false }` no `generateMetadata` quando `status === "breve_lancamento"`, até haver material;
-   - (b) manter indexado e escrever um parágrafo real sobre o bairro e o produto.
-   Com (a), a página sai do sitemap também (filtre em `app/sitemap.ts`).
-2. **Texto por empreendimento**: um parágrafo autoral sobre a localização (o `location.note` já existe e só o Follow o tem) ajuda a ranquear por "apartamento em {bairro}".
-3. **Links internos**: o "explore" e o catálogo já ligam tudo. Das institucionais, vale linkar Quem Somos → empreendimentos em destaque.
+### 2.5 Conteúdo (opcional, ganho de ranking)
+1. **Texto por empreendimento**: um parágrafo autoral sobre a localização (`location.note`, que só o Follow tem) ajuda a ranquear por "apartamento em {bairro}".
+2. **Links internos**: o "explore" e o catálogo já ligam tudo. Das institucionais, vale linkar Quem Somos → empreendimentos em destaque.
 
 ### 2.6 Desempenho (Core Web Vitals)
 1. Rode o PageSpeed Insights na home, numa página de lançamento e em `/quem-somos`, no celular. Meta: LCP < 2,5 s, CLS < 0,1, INP < 200 ms.
@@ -118,16 +84,10 @@ O site atual é WordPress, e **o sitemap dele está vazio**: `/sitemap.xml` list
 4. A busca `site:natusgrupo.com.br` no Google.
 5. URLs típicas de WordPress que o Google pode ter guardado: `/?p=123`, `/category/…`, `/tag/…`, `/author/…`, `/feed/`, `/wp-login.php`. Redirecione para `/` as que tiverem tráfego; o resto pode retornar 404/410.
 
-### 3.2 Implementação (código)
-1. Em `next.config.ts`, adicione `async redirects()` com `permanent: true` (308, tratado pelo Google como 301). Cubra as duas formas, com e sem barra final:
-   ```ts
-   { source: "/portfolio-item/follow-savassi", destination: "/empreendimentos/follow-savassi", permanent: true },
-   { source: "/portfolio-item/follow-savassi/", destination: "/empreendimentos/follow-savassi", permanent: true },
-   ```
-   Ou com um parâmetro opcional: `source: "/portfolio-item/:slug/"`, mais um mapa explícito para os slugs que mudaram.
-2. Mantenha a tabela num arquivo de dados (ex.: `content/redirects.ts`) e gere o `redirects()` a partir dele, com teste. O teste deve garantir que todo destino existe: é um slug de `getAllDevelopments()` ou uma rota estática.
-3. Destino nunca é outra URL antiga (sem cadeias), e uma URL antiga nunca aponta para uma página `noindex`.
-4. **Verificar antes de publicar**: um script que, contra o build local (`npm run build && npm start`), faz `curl -sI` em cada URL antiga e confere `308`/`301` com `Location` correto, e depois `200` no destino.
+### 3.2 Implementação (código) ✅
+`content/redirects.ts` é a tabela; o `next.config.ts` gera os `redirects()` (308, tratado pelo Google como 301). O teste garante que todo destino existe (slug ou rota estática), que não há cadeia e que as origens são únicas. Com `trailingSlash: false` o Next tira a barra antes: `/x/` → `/x` → destino (2 saltos, aceito pelo Google), então uma entrada cobre as duas formas.
+
+Para acrescentar URLs (do Search Console): uma linha na tabela, e depois `npm run build && npm start` + `npm run check:redirects`, que confere 308 + `Location` e 200 no destino.
 
 ### 3.3 Dia da troca (fora do código)
 1. Publique o site novo **no mesmo domínio**. Sem troca de domínio, a ferramenta "Mudança de endereço" do Search Console não se aplica.
@@ -176,8 +136,8 @@ Use o mesmo nome, endereço e telefone em todo lugar: site (`lib/site.ts` → `C
 Não há como controlar o ranking de outra empresa. O que funciona é dar ao Google sinais fortes e consistentes de que "Grupo Natus" é **esta** entidade:
 
 1. **Perfil da Empresa no Google verificado** (§4.2). É o sinal mais forte para a busca pela marca.
-2. **Título da home com nome e descritor** (§2.2). "Grupo Natus — Incorporadora e construtora em BH e no RJ" distingue mais que o nome sozinho.
-3. **JSON-LD `Organization` completo** (§2.4): logo, endereço, área de atuação, subsidiárias e `sameAs` para os perfis oficiais.
+2. **Título da home com nome e descritor** (§2.1–2.4). "Grupo Natus — Incorporadora e construtora em BH e no RJ" distingue mais que o nome sozinho.
+3. **JSON-LD `Organization` completo** (§1): logo, endereço, área de atuação e `sameAs` para os perfis oficiais.
 4. **Mesmo nome, logo e link em todos os perfis** (§4.3), apontando para o site.
 5. **Não** usar "Natos" em lugar nenhum do site: nem em texto, nem em `alternateName`, nem como palavra-chave. Isso associaria as duas entidades em vez de separá-las.
 6. Se o concorrente aparecer acima em anúncios: uma campanha pequena de **Google Ads com a própria marca** ("Grupo Natus") protege a primeira posição a custo baixo.
@@ -202,12 +162,12 @@ Não há como controlar o ranking de outra empresa. O que funciona é dar ao Goo
 ## 7. Checklist resumido
 
 **Antes de publicar**
-- [ ] Domínio canônico decidido; `SITE_URL` ajustado
-- [ ] Títulos e descrições únicos em todas as rotas (com teste)
-- [ ] Imagem OG padrão e por empreendimento
-- [ ] JSON-LD completo e validado (Organization, empreendimento, BreadcrumbList)
-- [ ] Decisão sobre `noindex` dos breve lançamentos
-- [ ] Tabela de redirects completa (Search Console + Screaming Frog + Wayback) e testada contra o build
+- [x] Domínio canônico decidido; `SITE_URL` ajustado
+- [x] Títulos e descrições únicos em todas as rotas (com teste)
+- [x] Imagem OG padrão e por empreendimento
+- [x] JSON-LD completo (Organization, empreendimento, BreadcrumbList) — validar no Rich Results Test após publicar
+- [x] Decisão sobre `noindex` dos breve lançamentos (indexados, descrição factual)
+- [ ] Tabela de redirects completa — Wayback e home ao vivo ✅; falta o export do Search Console (e Screaming Frog, opcional). Testada contra o build ✅
 - [ ] Search Console verificado por DNS e relatórios antigos exportados
 - [ ] Perfil da Empresa no Google criado ou reivindicado
 

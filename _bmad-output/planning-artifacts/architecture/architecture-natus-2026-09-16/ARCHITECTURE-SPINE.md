@@ -4,7 +4,7 @@ type: architecture-spine
 purpose: build-substrate
 altitude: initiative
 paradigm: 'layered feature-based (Next.js App Router)'
-scope: 'Website institucional Grupo Natus — Next.js + conteúdo estático + Supabase (condicional)'
+scope: 'Website institucional Grupo Natus — Next.js + conteúdo estático + Supabase (só leads; admin condicional)'
 status: draft
 created: '2026-09-16'
 updated: '2026-09-16'
@@ -26,7 +26,7 @@ companions: []
 - `features/<domínio>/` — UI + lógica por domínio (developments, contact, engineering, land-submission).
 - `components/` — primitivos de UI compartilhados (design system).
 - `content/` — conteúdo estático tipado (fonte de verdade dos empreendimentos).
-- `lib/` — abstrações de integração e utilidades (WhatsApp, Maps, email, supabase).
+- `lib/` — abstrações de integração e utilidades (WhatsApp, Maps, email, supabase, CV CRM, env).
 - `types/`, `styles/` — tipos e tokens.
 
 A regra de dependência (quem pode depender de quem) está no diagrama em *Invariants & Rules* (AD-1).
@@ -59,18 +59,19 @@ graph TD
 ### AD-3 — Integrações externas atrás de abstração única
 - **Binds:** FR6 (WhatsApp), FR7 (Maps), FR11 (email)
 - **Prevents:** número/URL/credencial hardcodados espalhados por componentes.
-- **Rule:** cada integração externa vive em um único módulo em `lib/` (`lib/whatsapp`, `lib/maps`, `lib/email`) e é consumida só por ele. Componentes recebem dados/props, nunca chamam o provedor direto.
+- **Rule:** cada integração externa vive em um único módulo em `lib/` (`lib/whatsapp`, `lib/maps`, `lib/email`, `lib/crm/cvcrm`, `lib/supabase/server`) e é consumida só por ele. Componentes recebem dados/props, nunca chamam o provedor direto.
 - **Consentimento (LGPD, v4):** integração de terceiros que grava cookies (Google Maps hoje; GA4/Pixel depois) só carrega através de `useConsent()` (`features/consent/`), com a categoria lida do cookie primário `natus_consent` (`lib/consent.ts`). Mapas passam por `MapConsentGate`. Categoria nova entra junto com a ferramenta, nunca vazia.
 
 ### AD-4 — Escrita e secrets só no servidor
 - **Binds:** FR8, FR9, FR10, FR11, FR15
 - **Prevents:** vazamento de secret ao cliente; submissão inconsistente.
 - **Rule:** mutações/envios ocorrem em **Route Handlers** (`app/api/**`); formulários fazem POST server-side. Variáveis sensíveis são server-only (sem prefixo `NEXT_PUBLIC_`). Nenhum secret é lido em Client Component.
+- **Leads (v5):** o servidor valida cada formulário contra o seu contrato (`lib/leads/schema.ts`; chave desconhecida é descartada) e resolve o empreendimento pelo slug — nome e `crmId` nunca vêm do navegador. Segredos lidos só por `lib/env.ts` (`server-only`), por nome; módulos com segredo importam `server-only`.
 
 ### AD-5 — Supabase opcional com RLS inviolável
 - **Binds:** FR5, FR15, NFR5
 - **Prevents:** bypass de RLS; alteração acidental de políticas/segredos existentes.
-- **Rule:** Supabase só entra sob necessidade concreta (Gate C). Toda tabela nova tem RLS. **Nunca** remover/alterar RLS, env ou secrets existentes. Acesso server-side via `@supabase/ssr`; a anon key só em leitura pública. Quando um dado migra para o banco, **o banco passa a ser a única fonte de verdade** daquele dado — o `content` deixa de duplicá-lo (evita dois donos do mesmo dado, ex.: progresso). `[ADOPTED]`
+- **Rule:** Supabase só entra sob necessidade concreta (v5: gravar leads; conteúdo e admin seguem no Gate C). Toda tabela nova tem RLS. **Nunca** remover/alterar RLS, env ou secrets existentes. Acesso server-side com a chave secreta (`lib/supabase/server.ts`, `@supabase/supabase-js`, sem sessão); tabela que só o servidor escreve tem RLS ligado e **nenhuma policy**, com `anon`/`authenticated` revogados (v5: `site_leads`, `site_contacts`). `@supabase/ssr` só se houver auth. Quando um dado migra para o banco, **o banco passa a ser a única fonte de verdade** daquele dado — o `content` deixa de duplicá-lo (evita dois donos do mesmo dado, ex.: progresso). `[ADOPTED]`
 
 ### AD-6 — Cada rota é dona do seu SEO
 - **Binds:** FR14
@@ -105,8 +106,9 @@ graph TD
 | Tailwind CSS | 4.3.3 `[INSTALLED]` (via `@tailwindcss/postcss`) |
 | Vitest + Testing Library | 5.0.1 + RTL 16 + jsdom 29 `[INSTALLED]` |
 | ESLint | 9.39 + `eslint-config-next` 16.3.5 (flat config nativo) `[INSTALLED]` |
-| @supabase/supabase-js + @supabase/ssr | 2.x `[ASSUMPTION]` (Epic 8) |
-| Email (Resend) | latest `[ASSUMPTION]` (Epic 5) |
+| @supabase/supabase-js | 2.118 `[INSTALLED]` (v5, só servidor; `@supabase/ssr` só com auth, Epic 8) |
+| Email (Resend) | API HTTP via `fetch`, sem SDK `[ADOPTED]` (v5) |
+| CV CRM | API v1 via `fetch` (headers `email` + `token`) `[ADOPTED]` (v5) |
 | Starter | **Scaffold manual** (não `create-next-app`) — controle fino do Vitest/coverage e da estrutura top-level do spine. `[RESOLVED]` |
 
 ## Structural Seed
@@ -131,7 +133,7 @@ natus-website/
     home/  institutional/  mcmv/  seo/
   components/                  # Button, Badge, Card, Image, Modal, WhatsAppButton...
   content/developments/        # 11 empreendimentos (fonte de verdade) — AD-2
-  lib/                         # whatsapp, maps, email, consent, env — AD-3/4 (supabase só no Gate C)
+  lib/                         # whatsapp, maps, email, consent, env, crm, leads, supabase (só leads) — AD-3/4/5
   types/                       # Development, ConstructionProgress
   styles/                      # tokens Tailwind v4 @theme — AD-7
 ```
@@ -158,7 +160,7 @@ erDiagram
 | Progresso de obra (FR5) | `features/developments`, `types` | AD-2, AD-5 |
 | WhatsApp (FR6) | `lib/whatsapp`, `components/WhatsAppButton` | AD-3 |
 | Localização/Maps (FR7) | `lib/maps` | AD-3 |
-| Formulários + email (FR8-11) | `features/contact`, `app/api`, `lib/email` | AD-4 |
+| Formulários + leads (FR8-11) | `features/contact`, `app/api/leads`, `lib/leads`, `lib/email`, `lib/crm`, `lib/supabase` | AD-3, AD-4, AD-5 |
 | Privacidade + cookies (FR16) | `lib/consent`, `features/consent`, `app/politica-de-privacidade` | AD-3 |
 | Institucionais (FR12, FR13) | `app/engenharia`, `app/quem-somos` | AD-7 |
 | SEO (FR14) | rotas + `sitemap.ts`/`robots.ts` | AD-6 |
@@ -169,6 +171,6 @@ erDiagram
 - **Estrutura interna de cada `feature/`** — dona do código quando existir (não fixar agora).
 - **Modelo relacional detalhado no Supabase** — só no Gate C (Epic 8); shape em `types` até lá.
 - **Estratégia de Maps interativo (API key/custo)** — decidir no Epic 3; começar por embed/link.
-- **Provedor de email definitivo e anti-spam** — confirmar no Epic 5 (Resend é `[ASSUMPTION]`).
+- ~~**Provedor de email definitivo**~~ — Resend (v5). Anti-spam: honeypot + rate-limit em memória (trocar por store compartilhado se o host for serverless com várias instâncias).
 - **Estratégia de mídia pesada (vídeos/panoramas)** — dimensionar quando houver assets reais.
 - **CDN/host/deploy** — fora de escopo por ora (validação 100% local).

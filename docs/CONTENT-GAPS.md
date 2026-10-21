@@ -14,13 +14,13 @@ Status novos: **Lançamento** (página completa, destaque) · **Em construção*
 | # | Empreendimento | Bairro · Cidade/UF | Status | 100% vendido | MCMV | Material |
 |---|---|---|---|---|---|---|
 | 1 | Follow Savassi | Savassi · BH/MG | Lançamento | — | — | completo (fotos da obra pendentes) |
-| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | — | ✔ | completo (34 imagens; os originais de 1448–2111 px são os maiores que existem) |
+| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | — | ✔ | completo (34 imagens; 13 renders v2 de 5504 px, os demais de 1448–2111 px — ver §5) |
 | 3 | Golden Ville Residence | Maria Paula · **Niterói**/RJ | Em construção | — | ✔ | descrição + imagens (fotos da obra pendentes) |
 | 4 | Viver Mais | Itaboraí/RJ | Pronto para morar | ✔ | ✔ | descrição + imagens |
 | 5 | Residencial Denver | Santa Lúcia · BH/MG | Pronto para morar | ✔ | — | descrição + imagens |
 | 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar | ✔ | ✔ | descrição + imagens |
 | 7 | Residenziale Colonnello Figueiredo | Pau Pombo · Nova Lima/MG | Pronto para morar | ✔ | — | descrição + imagens |
-| 8 | Gutierrez | BH/MG | Breve lançamento | — | — | mínimo (maquetes guardadas em `public/`) |
+| 8 | Mirante Gutierrez | BH/MG | Breve lançamento | — | — | mínimo (maquetes guardadas em `public/`) |
 | 9 | One Studios | Niterói/RJ | Breve lançamento | — | — | mínimo |
 | 10 | Sunset Ville Residence | BH/MG | Breve lançamento | — | ✔ | mínimo |
 | 11 | Royal Ville Residence | Vespasiano/MG | Breve lançamento | — | ✔ | mínimo |
@@ -45,7 +45,7 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 **Construídas com conteúdo real do site atual + material da empresa** (`img/Quem Somos`, `img/Servico -*`). O que ficou grounded e o que segue TODO:
 
 - [x] **Quem Somos** (`/quem-somos`) — texto do cliente na revisão v3 (2026-10-11): subtítulo, abertura em 3 parágrafos, empresas (Aliatto/Oasi), valores ("Parceria" no lugar de "Qualidade certificada") e **Certificações** (ISO 9001:2015 + **PBQP-H · SiAC Nível A**, logo em `public/quem-somos/pbqp-h.webp`). Na v4 (2026-10-17) a contagem saiu (frase fixa do cliente: "Hoje atuamos entre Belo Horizonte, região metropolitana e Leste Fluminense…"), a seção Empresas do grupo foi removida e o CTA ficou só com a logo da Natus.
-- [x] **Serviços de Engenharia** (`/engenharia`): OASI Engenharia · **obras por administração** (3 categorias reais do site: **Casa de alto padrão (Alphaville)**, **Condomínio (Avenida)**, **Galpão comercial**) com fotos reais otimizadas em `public/engenharia/`.
+- [x] **Serviços de Engenharia** (`/engenharia`): **obras por administração** (3 categorias reais do site: **Casa de alto padrão (Alphaville)**, **Condomínio (Avenida)**, **Galpão comercial**) com fotos reais otimizadas em `public/engenharia/`.
 - [x] **Home**: seção `AboutNatus` com a copy institucional **fornecida pelo cliente** (2026-09-30) — "Nascemos em 2016…" + "É assim que a essência do novo morar sai do papel". A frase "Uma holding à frente da ALIATTO…" saiu na v3. Desde a v4 o site fala em nome do Grupo Natus: Aliatto/Oasi só aparecem na foto da recepção (Quem Somos).
 - [x] **Números institucionais confirmados pelo cliente** (2026-09-30; unidades revistas em 2026-10-11): **10 anos** de experiência, **100 mil m²** de área construída, **+500 unidades** entregues. Exibidos na Home (`features/home/AboutNatus.tsx`) e em `/quem-somos` — **manter os dois em sincronia**. O "10" é literal, não calculado: revisar em 2027.
 - [x] **Ano de fundação (2016) confirmado pelo cliente** na copy enviada.
@@ -60,13 +60,22 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [x] **Marca Minha Casa Minha Vida** — direito de uso, empreendimentos enquadrados e redação dos benefícios confirmados pelo cliente (2026-10-17). Histórico: confirmar o **direito de uso** da marca federal no site e **quais empreendimentos estão de fato enquadrados** no programa. A seção da Home exibe a marca e um claim sobre taxas — ambos sugerem credenciamento. **Os rótulos dos 3 benefícios foram reescritos** (os originais eram idênticos aos da referência Novolar): o claim do cliente "As menores taxas de juros" virou "As menores taxas do mercado **para quem se enquadra** no Minha Casa, Minha Vida", que qualifica a afirmação em vez de deixá-la absoluta. Confirmar a redação com a empresa.
 - [x] **Imagens do Solar Manilha** chegaram (34 arquivos, 77 MB → 7,7 MB). Com a v3, a ordem da Home vem do status: lançamentos primeiro. `FEATURED_SLUGS` saiu.
 - [x] **Negocie seu Terreno**: campos confirmados pelo cliente (2026-10-17): nome, telefone, e-mail, localização, área, tipo e observações.
-- [ ] 🔔 **Envio de e-mail**: definir **provedor** (ex.: Resend) e para **qual caixa** os leads/contatos vão. **Bloqueia a publicação**: sem isso o lead não é entregue nem guardado. O valor do secret será fornecido por você e eu edito `.env` sem exibi-lo.
+- [x] **Envio de e-mail** (v5, 2026-10-20): Resend; destino `LEADS_EMAIL_TO` no `.env` (dev: caixa pessoal do desenvolvedor; **produção: marketing@natusgrupo.com.br**).
+- [ ] 🔔 **Domínio no Resend**: verificar `natusgrupo.com.br` (registros SPF/DKIM no DNS) para enviar como `no-reply@natusgrupo.com.br`. Até lá, `LEADS_EMAIL_FROM` = `onboarding@resend.dev`, que só entrega para o dono da conta Resend. **Bloqueia a publicação.**
+- [x] **CV CRM — ID de cada empreendimento** (`crmId` no seed, 2026-10-20). A API lista só 3 empreendimentos, com os mesmos nomes do site: Golden Ville = 2, Follow = 3, Solar = 4. Os outros entram no CRM sem empreendimento até serem cadastrados lá; quando forem, é só pôr o `crmId` no seed.
+- [ ] 🔔 **Golden Ville — cidade**: o CRM cadastra o empreendimento em **São Gonçalo/RJ**; o site diz **Niterói**. Confirmar com o cliente qual é a correta.
+- [x] **Supabase**: as duas migrações (`site_leads`, `site_contacts`) aplicadas no SQL Editor e testadas de ponta a ponta (2026-10-20); a chave pública não lê nem grava nelas.
+- [ ] 🔔 **Hospedagem**: o proxy precisa sobrescrever `x-real-ip` com o IP do visitante (a Vercel faz isso; num nginx, `proxy_set_header X-Real-IP $remote_addr`). Sem isso, o limite de envios por IP pode ser contornado.
+- [ ] 🔔 **Resend gratuito = 100 e-mails/dia** (3.000/mês). Todo lead fica no banco, então estourar não perde nada; os sem aviso ficam com `email_enviado = false`. Se o volume crescer, plano pago ou e-mail só para Contato/Terreno.
+- [ ] **Retenção (LGPD)**: definir por quanto tempo os leads ficam no banco (a política diz "pelo tempo necessário"); depois, apagar ou anonimizar.
 
 ## 5. Mídia
 - [x] Direitos de uso das imagens em `img/` confirmados pelo cliente (2026-10-17) e o mapeamento arquivo → empreendimento (pastas já atribuídas: Follow Savassi, Gutierrez, Golden Ville).
-- [x] **Pipeline de otimização** criado: `scripts/optimize-images.mjs` (sharp — resize + WEBP ~80%), `npm run optimize:images [slug]`. Lê os originais em `img/` e grava em `public/empreendimentos/<slug>/`. **Follow Savassi (piloto)** processado: 72 MB → **4 MB** (−90–97%/imagem), servindo `.webp`. TIF de 69 MB fica de fora.
-- [x] Replicação concluída: **7 empreendimentos com imagens reais** otimizadas (Follow Savassi, Torres da Lagoa, Viver Mais, Residencial Denver, Gutierrez, Golden Ville, Residenziale) — total `public/empreendimentos/` ~15 MB (53 `.webp`). Mapeamento no `JOBS` de `scripts/optimize-images.mjs`. Identidade do Residenziale **confirmada pelo cliente** (12º empreendimento).
-- [ ] **Sem foto** (breve lançamento, por desenho usam `public/empreendimentos/breve-lancamento.webp`, gerado de `img/breve-lancamento.png`): One Studios, Royal Ville, Sunset Ville e Gutierrez. Este último tem 6 maquetes guardadas, fora do dado.
+- [x] **Pipeline de otimização** (`npm run optimize:images`, `scripts/optimize-images.mjs`): originais em `img/`, WEBP em `public/` (o site entrega em AVIF). Mapeamento arquivo → saída no `JOBS`. Os 7 empreendimentos com página têm imagens reais.
+- [ ] **Sem foto** (breve lançamento, por desenho usam `public/empreendimentos/breve-lancamento.webp`, gerado de `img/breve-lancamento.png`): One Studios, Royal Ville, Sunset Ville e Mirante Gutierrez. Este último tem 6 maquetes guardadas, fora do dado.
+- [ ] **Solar Manilha, fotos fora da remessa v2** (limite da fonte em telas retina, densidade 0,7×): os 15 internos de 1536 px, a implantação, a vista aérea, as duas plantas, o quiosque com academia, o bicicletário e o redário com a mulher lendo. Em tela comum estão nítidas; uma versão de ≥ 2560 px as deixaria iguais às da v2.
+- [ ] **Golden Ville**: a fachada (capa do hero) tem 1688 px; em tela retina o hero pede 2880. Se houver o render em resolução maior, substituir.
+- [ ] **Viver Mais**: a foto de lazer (card) tem 1024 px.
 - [ ] Revisar qualidade dos assets do **Residencial Denver** (massings simples/baixa resolução na origem) — substituir por renders/fotos melhores se a empresa fornecer.
 - [x] **Home v2**: `public/home/familia-mcmv.webp` (3,1 MB → 555 KB, lado maior 2560) e `public/home/minha-casa-minha-vida-logo.png` (logo oficial do programa, fornecido pelo cliente). Originais versionados em `img/home/`.
 - [x] **Hero da Home**: fachada noturna do Follow Savassi (render retrato 3071×3840 num hero em paisagem). O enquadramento vem do `object-position: center 75%` em `features/home/Hero.tsx`, que fixa a faixa visível na entrada; centralizado mostraria só parede. Trocar a imagem = 1 linha em `SINGLES` (`scripts/optimize-images.mjs`).

@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-10-17 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Iniciativa ativa:** **Revisão v4 (pendências do cliente) ✅** — cookies/LGPD, política de privacidade, Solar, Quem Somos · Revisão v3 ✅ · Revisão v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-20 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Última revisão:** **v5 ✅** — leads (Resend, Supabase, CV CRM), SEO/migração, Solar v2 · v4 ✅ · v3 ✅ · v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -18,7 +18,7 @@
 
 ## Epic 2 — Descoberta (Home / Catálogo)  ✅ 5/5
 - ✅ 2.1 Modelo `Development` + camada de conteúdo (loader + unicidade de slug)
-- ✅ 2.2 Seed dos 11 empreendimentos (confirmado: nome/slug/cidade/status; resto TODO) — 🔔 ver `docs/CONTENT-GAPS.md`
+- ✅ 2.2 Seed dos 11 empreendimentos (conteúdo real nas revisões v3–v4; lacunas em `docs/CONTENT-GAPS.md`)
 - ✅ 2.3 Hero + apresentação institucional (copy factual; números como TODO)
 - ✅ 2.4 Grid de catálogo (DevelopmentCard + DevelopmentGrid) na Home e em `/empreendimentos` — FR1
 - ✅ 2.5 Filtros por status e localização (DevelopmentCatalog client) — FR2
@@ -35,14 +35,14 @@
 ## Epic 4 — Evolução das Obras  ✅ 3/3
 - ✅ 4.1 Modelo `ConstructionProgress` + helpers (sortedStages/clamp/formatDate)
 - ✅ 4.2 ProgressBar (acessível) + ProgressTimeline — FR5
-- ✅ 4.3 Integração na seção "Estágio de Obra" (mock rotulado `isPreview`; % reais 🔔 TODO)
+- ✅ 4.3 Integração na seção "Estágio de Obra" (% informados pelo cliente desde a v3)
 
 ## Epic 5 — Conversão por Leads  ✅ 5/5
 - ✅ 5.1 Componentes de formulário acessíveis (Input/Textarea/Select) + validadores
 - ✅ 5.2 Fale Conosco (`/contato`) — FR8
 - ✅ 5.3 Interesse em empreendimento (pré-preenchido pelo slug) — FR9
-- ✅ 5.4 Negocie seu Terreno (`/negocie-seu-terreno`) — FR10 — 🔔 campos a confirmar
-- ✅ 5.5 Envio por email + anti-spam (Route Handler + honeypot + rate-limit) — FR11 — 🔔 provedor/secret (Resend, a confirmar)
+- ✅ 5.4 Negocie seu Terreno (`/negocie-seu-terreno`) — FR10 (campos confirmados na v4)
+- ✅ 5.5 Envio por email + anti-spam (Route Handler + honeypot + rate-limit) — FR11 (Resend + Supabase + CV CRM desde a v5)
 
 ## Epic 6 — Páginas Institucionais  ✅ 2/2
 - ✅ 6.1 Quem Somos (`/quem-somos`) — **conteúdo real** (holding · médio econômico e alto luxo · ALIATTO+OASI · ISO 9001 · hero recepção); história/números seguem 🔔 TODO — FR13
@@ -204,7 +204,72 @@ Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · l
 - ✅ **Engenharia** (edição manual do cliente/dev): a página deixou de citar a Oasi. `OASI`, `Company` e `COMPANIES_TAGLINE` deram lugar a `ENGINEERING_SUMMARY`; metadata e teste acompanharam.
 
 
+## Revisão v5 — leads (Resend, Supabase, CV CRM), SEO/migração e Solar v2 ✅ (2026-10-20)
+- ✅ **Conteúdo** (ajuste do usuário): o Solar abre o portfólio (ordem do seed, fixada em teste) e o Gutierrez passou a **Mirante Gutierrez** (o slug `gutierrez` não muda: é a URL e a chave no CRM).
+- ✅ **Solar v2**: 13 renders novos (5504×3072, com gente, luz de fim de tarde) substituem as cenas equivalentes. Os nomes de saída se mantêm, então só o `src` do `JOBS` mudou. Eles caem na faixa **alta** (hero 3000 px, galeria 2560, q92) e saem do `contain` da galeria, porque não são mais panorâmicos. Originais versionados em `img/Solar Manilha - Itaborai RJ/Humanizadas - v2/`; os antigos substituídos ficaram órfãos no lugar.
+- ✅ **Rota de leads com contrato no servidor** (`lib/leads/schema.ts`, zod): cada formulário tem os seus campos. O que sobra é descartado e o interesse resolve o empreendimento pelo slug no servidor.
+  - Todo lead é gravado no banco; o e-mail é aviso. O visitante só vê erro se nada registrou o lead.
+  - Os segredos passam por `lib/env.ts` (`server-only`), por nome.
+- ✅ **E-mail (Resend, `fetch`)**: destino e remetente só no `.env` (`LEADS_EMAIL_TO`, `LEADS_EMAIL_FROM`). Em dev vai para a caixa pessoal; em produção, para marketing@. O corpo leva os rótulos em português e o `reply_to` é o lead.
+- ✅ **Lead da página do empreendimento**:
+  - grava em `public.site_leads` (Supabase, RLS ligado, **sem policy**, `anon`/`authenticated` revogados) e responde na hora;
+  - o **CV CRM** e o e-mail rodam em `after()`. O CRM busca o lead por e-mail e depois por telefone: se existir, **nada é feito**; se não, cria com `idempreendimento` (`crmId` no dado) e origem `SI`. O resultado fica na linha (`crm_status`).
+  - Sem banco, o e-mail vira o registro do lead.
+  - A UTM do anúncio é lida da URL no envio, sem cookie.
+- ✅ **SEO**:
+  - canônica, Open Graph e Twitter em todas as páginas (`pageMetadata`);
+  - títulos com intenção de busca (empreendimento: "{nome} — {tipo} em {bairro}, {cidade}/{UF}");
+  - o breve lançamento deixou de publicar "TODO" como descrição;
+  - teste de unicidade de títulos e descrições.
+  - Imagem de compartilhamento padrão e `apple-icon`.
+  - JSON-LD com logo, sede, contato, `WebSite`, `ApartmentComplex`/`Residence` com `geo` e capa, e `BreadcrumbList`.
+  - 404 com saída; `/theme-showcase` é 404 em produção.
+- ✅ **Redirects do WordPress** (`content/redirects.ts` → `next.config.ts`, 308): 19 URLs (Wayback + home ao vivo). O teste garante que o destino existe e que não há cadeia. `npm run check:redirects` confere contra o servidor: 38/38. A forma com barra final dá 2 saltos, porque o Next tira a barra antes.
+- ✅ **Revisão de segurança (2026-10-21)**:
+  - todo lead também no banco (`site_contacts` para Contato/Terreno), com o e-mail como aviso (`email_enviado`);
+  - mensagem de falha única e genérica (a API não diz o motivo);
+  - rota só JSON, da mesma origem, com até 16 KB;
+  - rate-limit com teto de memória e `x-real-ip`;
+  - campos de uma linha sem caractere de controle;
+  - cabeçalhos de segurança;
+  - política de privacidade atualizada (banco, CRM, UTM);
+  - variáveis do Supabase com os nomes que já existiam (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`).
+  - O bundle do navegador sai sem segredo nem cliente de servidor. Carga local: 325 req/s, p95 136 ms, zero erros.
+- ✅ **Qualidade das imagens (2026-10-21)**:
+  - **Causa da galeria ruim:** o cache do `next dev` (`.next/dev/cache/images`, desde 30/09) servia a panorâmica **antiga** de 2095 px nas larguras 1080–3840. O pipeline agora apaga o cache ao terminar.
+  - **Medição** (PSNR na variante entregue, renders v2):
+    - fonte q86 → q92: +0,5 dB;
+    - fonte quase sem perda: +2–3 dB, mas sem diferença visível e com `public/` indo de 36 para 162 MB (descartada).
+  - **Entrega:** AVIF (metade dos bytes, mesma aparência); palco e lightbox em q100 (AVIF 63); `deviceSizes` ganhou 2560.
+  - **Hero:** passou a ser limitado pela largura (os renders em retrato do Follow e da Home passaram de 2399 para 3000 px) e o teto de ampliação foi de 1,5× para 2× (capa do Solar no celular 3×: densidade de 0,71 para ≥ 1; 243 KB em AVIF).
+  - **Conferência de 174 imagens** em 1440@1×, 1440@2× e 390@3×: o que sobra abaixo de 0,9× é só limite da fonte (fachada do Golden Ville com 1688 px; lazer do Viver Mais com 1024 px).
+  - `public/`: 36 → 52 MB.
+- ✅ **Teste de ponta a ponta (2026-10-20)**, com as chaves reais, preenchendo os formulários no Chromium (`next start`):
+  - Contato e Terreno gravaram em `site_contacts`, e o e-mail chegou (`email_enviado`);
+  - Interesse no Solar: gravou com a UTM. O CRM foi testado nos três caminhos: lead novo criado (origem WebSite, empreendimento 4, corretor atribuído); 2º envio com o mesmo e-mail = `existente`; e um telefone já cadastrado = `existente`, sem editar nada;
+  - a chave pública do Supabase não lê nem grava nas duas tabelas (42501);
+  - `crmId` ligado pela lista da API, com nomes idênticos aos do site: Golden Ville = 2, Follow = 3, Solar = 4. Os outros 8 não estão no CRM e entram sem empreendimento.
+
+### Code review v5 (2026-10-20)
+`/code-review` sobre o diff da v5: 10 achados + 3 menores. Corrigidos com teste:
+- 🐛 **CV CRM — falso "existente"**: medido na API, um filtro que ela não reconhece é ignorado e devolve a lista geral (`telefone=lixo` → 200 com 6.212 leads), e o código tomava o 1º como o mesmo lead. Agora só conta um lead com o mesmo e-mail ou telefone. Um 400 só é "não encontrado" com "Lead não encontrado"; outro 400 é erro, sem criar às cegas.
+- **Rate-limit**: sem `x-real-ip`, vale o **último** `x-forwarded-for` (o que o proxy acrescentou), não o 1º, que o cliente pode forjar. Na inundação de chaves novas, quem está bloqueado não é descartado. O corpo é medido em bytes.
+- **Origem atrás de proxy**: aceita o domínio do site e o 1º `x-forwarded-host`. Antes, um `Host` interno recusava todo envio.
+- **Remetente padrão** `onboarding@resend.dev` (o `no-reply@` só funciona com o domínio verificado).
+- **UTM malformada** (quebra de linha vinda do nome do anúncio) é saneada, não derruba o lead. Os limites de tamanho são um só (`FIELD_MAX`): o `LeadForm` mostra "Use até N caracteres" em vez do erro genérico, e a área do terreno subiu para 100.
+- **Sem banco**: e-mail e CRM saem antes da resposta, e basta um registrar o lead.
+- **Limpeza**: um cliente Supabase por processo. Saíram o `seo` do modelo (o seed nunca o preenchia), `readOnly`/`defaultValue` do `LeadField` e um TODO de processo já resolvido. `CONTACT.address` passou a ser montado de `HEADQUARTERS`. Os hooks do `.claude/` foram alinhados ao `coverage.include` (`content/`, `types/`).
+- Não aplicado: `og:image` do empreendimento em WEBP (WhatsApp, Facebook e Instagram aceitam; o LinkedIn pode não mostrar). Gerar um JPEG por capa fica para quando o compartilhamento no LinkedIn importar.
+
+**Gate:** 529 testes · cobertura 96,7% stmts · 92,8% branches · lint e typecheck ok.
+
+- 🔔 **Pendente**:
+  - verificar o domínio no Resend (hoje sai pela conta pessoal, para o e-mail de dev);
+  - export do Search Console para completar a tabela de redirects;
+  - hospedagem com o proxy sobrescrevendo `x-real-ip`.
+
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
+> A v5 usa o Supabase só para gravar leads (`site_leads`, `site_contacts`, RLS sem policy, aplicadas no SQL Editor). Não há Supabase local, migração de conteúdo nem painel: o Gate C segue fechado.
 - ⬜ 8.1 Inicializar Supabase local — NFR5
 - ⬜ 8.2 Migrar entidades necessárias com RLS
 - ⬜ 8.3 Painel `/admin` com Supabase Auth — FR15
@@ -234,12 +299,12 @@ Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · l
 - ✅ **Radix Select** nos filtros do catálogo (`SelectField`) + **Forms com react-hook-form + zod** (schema dinâmico; honeypot/rate-limit/`/api/leads` preservados). `<select>` nativo mantido no lead form (robustez, ADR 0001)
 - ✅ Galeria — imagem em destaque + hover-zoom + grade das demais + lightbox — **substituída na revisão v2** por palco + régua de miniaturas (ver o bloco da Parte 2)
 - ✅ A6/B4 — theme-showcase refrescado (Fraunces/Inter, seção Ícones, `outlineInverse`, ProgressTimeline real, primitivos de form reais) + polir card (Link estilizado no lugar de `<a><button>`; MapPin na localização)
-- ✅ Estágio de obra com as **etapas oficiais da Natus** (Terraplanagem→Acabamentos + Total Construído) via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome, 0% no que falta); layout reorganizado (Total Construído em destaque + card de etapas). % reais seguem 🔔 TODO (`isPreview`)
+- ✅ Estágio de obra com as etapas da Natus via `CONSTRUCTION_STAGES`/`canonicalStages` (fonte única; casa por nome). Etapas e % atualizadas na v3
 - ✅ Revisão de design (auto-review do diff): resolvidos todos os achados — **contraste AA** (`muted-foreground`→stone-600; cor de erro dedicada `--color-status-error` no lugar do âmbar); % da etapa em `text-ink`; ProgressBar anima o fill on-view (motion); chevron do Select rotaciona no open + scroll buttons; hint "Ampliar" também no foco de teclado; raio da galeria unificado
-- ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB. 🔔 Faltam 5 lançamentos sem foto (assets da empresa); Denver com assets fracos
+- ✅ Fase C — pipeline de imagens `scripts/optimize-images.mjs` (sharp, WEBP q86, lado maior 2560/3000; passthrough p/ webp já otimizado) + `npm run optimize:images`. **7 empreendimentos com imagens reais** (Follow Savassi, Torres da Lagoa, Viver Mais, Denver, Gutierrez, Golden Ville, Residenziale) — 53 `.webp` ~15 MB (hoje: faixas alta/compacta e entrega AVIF, ver v4 e v5)
 - ✅ **12º empreendimento** cadastrado (Residenziale Colonnello Figueiredo, Nova Lima/MG — do site atual; **pronto para morar**). Catálogo/SSG agora com 12 empreendimentos
 - ✅ Galeria **diversificada por contexto** (abas Externa / Apartamento / Plantas / Obras). **Simplificada na revisão v2** para `imagens · planta · obra` — Externa e Apartamento viravam duas abas quase idênticas
-- ✅ Progresso **real** do site oficial no Follow Savassi (Terraplanagem 100%, resto 0%); `updatedAt` opcional (site não informa data)
+- ✅ `updatedAt` opcional no progresso (o cliente descartou a data na v4)
 - ✅ **Conteúdo institucional (Fase C2)** — Quem Somos + Engenharia reconstruídas com copy verbatim do site atual + material da empresa; 11 imagens institucionais otimizadas (`public/quem-somos/*`, `public/engenharia/*`, keyword `institucional` no pipeline); Home `InstitutionalIntro` grounded. Lacunas restantes rotuladas TODO (ver `docs/CONTENT-GAPS.md §3`)
 - ✅ Verificação: 232 testes · cobertura 98%+/91% · typecheck/lint/build (**25 páginas**) ok
 - ✅ `interface-review` — skills `better-*` de domínio **instaladas** (ver `skills-lock.json`) e a revisão formal foi executada na Home v2 e na revisão v2 (ver blocos abaixo)
@@ -268,7 +333,7 @@ Retorno do cliente sobre a v1: tipografia de título serifada, hero com ruído e
 - ✅ **Carrossel do catálogo** (`FeaturedDevelopments`) — **modo centralizado**: o slide ativo fica no meio em tamanho cheio e os vizinhos espiam reduzidos dos dois lados (margens percentuais nas pontas, porque padding em container de scroll é inconsistente entre browsers). Mostra **todos os 12**; `FEATURED_SLUGS` passou a definir só quem abre (Follow Savassi · Golden Ville · **Torres da Lagoa**, no lugar do Solar Manilha, que não tem imagem) via `getHomeDevelopments()`. O índice **acompanha a rolagem**, para que o swipe mude o destaque, com trava durante a rolagem programática — sem ela, os eventos da própria animação reescreviam o índice e cliques rápidos avançavam um slide só. Scroll-snap nativo + wrap, **sem embla/shadcn**: o `carousel.tsx` do shadcn cairia dentro do `coverage.include` (≈250 linhas a cobrir) e o embla mede layout, que o jsdom não faz — os botões renderizariam `disabled` e o teste de "avançar slide" seria impossível sem mockar a lib.
 - ✅ **Seção Minha Casa Minha Vida** — logo oficial do programa (arquivo do cliente, sem recolorir/distorcer), copy fornecida, "Simule agora" via `buildWhatsAppUrl` (AD-3) e 3 cards de benefício. **Redesenhada para não espelhar a referência**: painel único (conteúdo e foto encostados numa só peça, em vez de dois blocos soltos) e benefícios como **faixa separada por fios**, não três caixas — cada um com título próprio e linha de apoio, no lugar dos rótulos soltos. Fundo no **navy-600 do rodapé** (era navy-800, destoava do resto do site). Nitidez da foto: **`sizes` tem de descrever a largura RENDERIZADA, não a do box**. Com `object-cover` num box mais alto que a proporção da foto (637×520 contra 16:9), o browser desenha a imagem a ~930 px e corta as laterais; declarar os 640 px do box o fazia baixar a variante de 640 e ampliá-la 1,46×. Corrigido para `950px` (medido no browser: fator 1,46 → 0,86) e o original subiu para 2560, para que a variante de 1920 das telas 2× venha de um arquivo maior. **Reconferir esse valor sempre que o painel mudar de altura** — já quebrou duas vezes por mudança de layout.
 - ✅ **Seção Grupo Natus** (`AboutNatus`, substitui `InstitutionalIntro`) — copy real do cliente e os 3 números agora reais (10 anos · 100 mil m² · +1.500, revisto para +500 na v3), empilhados à direita, com selo de ícone em navy, número em destaque e rótulo abaixo (referência: Pro Domo). Os mesmos números preencheram o `STATS` de `/quem-somos`, que estava em `TODO: CONTENT REQUIRED`.
-- 🔔 Pendente do cliente: vídeo/GIF do hero; tipologia de 4 empreendimentos; imagens do Solar Manilha; direito de uso da marca MCMV.
+- 🔔 Pendente do cliente: vídeo/GIF do hero (tipologia, imagens do Solar e uso da marca MCMV resolvidos na v3–v4).
 
 - ✅ **Motion nas seções da Home** — `Reveal` ganhou `as?: "div" | "li"` para escalonar itens sem meter um `div` entre a lista e seus itens (quebraria a semântica para leitores de tela). Benefícios do MCMV e cards de números entram em cascata (delay de 90 ms por item); as duas seções perderam o `Reveal` externo em `app/page.tsx`, que duplicaria o movimento. Verificado no browser: opacidade 0 → 0,98/0,90/0,66 a 300 ms → 1 ao final, e item fora da viewport não antecipa.
 - ✅ **Aviso do Next** `next-image-unconfigured-qualities`: `images.qualities = [75, 90]` em `next.config.ts` (75 é o padrão; 90 só nas fotos com rosto, onde o artefato aparece na pele).
@@ -290,8 +355,8 @@ Rodadas `/code-review` e `better-interface` com as skills `better-*` (que estava
 Verificação: **306 testes** · cobertura 98,4% stmts / **93,9% branches** / 98,7% funcs / 99% lines · typecheck, lint e build ok · contraste, área de toque, âncora e hierarquia remedidos no browser depois da mudança.
 
 ## Decisões & pendências em aberto
-- Provedor de email (FR11) — `[ASSUMPTION]` Resend, a confirmar. Sem ele configurado, o lead não é entregue nem guardado.
-- Pins Supabase (`@supabase/ssr`) — a confirmar no Gate C (ou antes, se os leads passarem a ser gravados).
-- Leads → CRM da Natus: aguardando a reunião com quem gere o CRM e os anúncios.
+- ~~Provedor de email (FR11)~~ — decidido (v5): Resend via `fetch`; destino e remetente no `.env`. Falta verificar o domínio `natusgrupo.com.br` no Resend para o remetente `no-reply@`.
+- ~~Supabase~~ — decidido (v5): só `@supabase/supabase-js` no servidor, para `site_leads` e `site_contacts`, sem auth e sem `@supabase/ssr`. O painel admin (Gate C) segue fora.
+- ~~Leads → CRM~~ — decidido (v5): CV CRM, cria só o que não existe (`lib/crm/cvcrm.ts`). A UTM fica só no banco: no CRM o lead entra como "WebSite", sem mídia, para não criar mídias novas lá.
 - ~~Google Maps embed vs. API~~ — decidido: embed sem chave; JS API com o pin da Natus quando houver chave + Map ID (`docs/google-maps.md`), sempre atrás do consentimento.
 - ~~Conteúdo e status dos 11 empreendimentos~~ — confirmados pelo cliente (v3 e v4); pendências de conteúdo em `docs/CONTENT-GAPS.md`.

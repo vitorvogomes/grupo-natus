@@ -18,7 +18,7 @@ case "$f" in
 esac
 # Só dirs de código da aplicação.
 case "$f" in
-  */src/*|*/app/*|*/components/*|*/lib/*|*/features/*) : ;;
+  */app/*|*/components/*|*/lib/*|*/features/*|*/content/*) : ;;
   *) exit 0 ;;
 esac
 
