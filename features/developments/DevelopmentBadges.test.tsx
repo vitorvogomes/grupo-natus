@@ -20,11 +20,11 @@ describe("DevelopmentBadges", () => {
 
 describe("SalesBand", () => {
   it.each([
-    ["vendido", "100% vendido", "bg-band-vendido"],
-    ["pre_lancamento", "Pré-lançamento", "bg-band-pre-lancamento"],
-    ["ultimas_unidades", "Últimas unidades", "bg-band-ultimas-unidades"],
-  ] as const)("%s: anuncia “%s” com a cor própria", (band, label, bg) => {
+    ["vendido", "100% vendido"],
+    ["pre_lancamento", "Pré-lançamento"],
+    ["ultimas_unidades", "Últimas unidades"],
+  ] as const)("%s: anuncia “%s” na mesma faixa azul", (band, label) => {
     render(<SalesBand band={band} />);
-    expect(screen.getByText(label)).toHaveClass(bg);
+    expect(screen.getByText(label)).toHaveClass("bg-band", "text-white");
   });
 });

@@ -62,12 +62,9 @@
   /* Selos de status são neutros (components/ui/Badge); o verde serve o botão
    * do WhatsApp. */
   --color-status-pronto: #4f7a52; /* verde sóbrio */
-  /* Faixas comerciais do card (`SalesBand`; não são status). Pré-lançamento
-   * no nude da marca, com texto navy-900; as outras duas com texto branco
-   * (nude-700 ≈ 5,6:1, navy-700 ≈ 12:1). */
-  --color-band-pre-lancamento: var(--color-nude-400);
-  --color-band-ultimas-unidades: var(--color-nude-700);
-  --color-band-vendido: var(--color-navy-700);
+  /* Faixa comercial do card (`SalesBand`; não é status): uma cor só para as
+   * três fases, com texto branco (≈ 12:1). */
+  --color-band: var(--color-navy-700);
   /* Erro de formulário — vermelho acessível (≈6.3:1 em branco); não usar âmbar
    * (lê como aviso e reprova contraste com texto branco). */
   --color-status-error: #b3261e;

@@ -26,19 +26,12 @@ export function DevelopmentBadges({
   );
 }
 
-const BAND_CLASS: Record<SalesBandValue, string> = {
-  pre_lancamento: "bg-band-pre-lancamento text-navy-900",
-  ultimas_unidades: "bg-band-ultimas-unidades text-white",
-  vendido: "bg-band-vendido text-white",
-};
-
 /** Faixa horizontal da fase de vendas — só no card (o resumo usa os selos). */
 export function SalesBand({ band, className }: { band: SalesBandValue; className?: string }) {
   return (
     <p
       className={cn(
-        "px-5 py-2 text-sm font-semibold uppercase tracking-wide",
-        BAND_CLASS[band],
+        "bg-band px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white",
         className,
       )}
     >
