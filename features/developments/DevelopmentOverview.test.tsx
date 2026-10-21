@@ -60,7 +60,7 @@ describe("DevelopmentOverview", () => {
   it("mostra os selos (status + MCMV), sem a faixa de vendido (só no card)", () => {
     render(
       <DevelopmentOverview
-        development={{ ...base, status: "pronto", mcmv: true, soldOut: true }}
+        development={{ ...base, status: "pronto", mcmv: true, salesBand: "vendido" }}
       />,
     );
     expect(screen.getByText("Pronto para morar")).toBeInTheDocument();

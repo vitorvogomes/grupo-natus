@@ -30,15 +30,17 @@ describe("DevelopmentCard", () => {
     expect(screen.getByText("Minha Casa Minha Vida")).toBeInTheDocument();
   });
 
-  it("faixa de 100% vendido só no empreendimento esgotado", () => {
+  it("faixa comercial só quando o empreendimento tem uma", () => {
     const { rerender } = render(<DevelopmentCard development={base} />);
-    expect(screen.queryByText(/100% vendido/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/100% vendido|pré-lançamento|últimas unidades/i)).not.toBeInTheDocument();
     rerender(
       <DevelopmentCard
-        development={{ ...base, status: "pronto", soldOut: true }}
+        development={{ ...base, status: "pronto", salesBand: "vendido" }}
       />,
     );
     expect(screen.getByText(/100% vendido/i)).toBeInTheDocument();
+    rerender(<DevelopmentCard development={{ ...base, salesBand: "ultimas_unidades" }} />);
+    expect(screen.getByText(/últimas unidades/i)).toBeInTheDocument();
   });
 
   it("mostra características-chave", () => {

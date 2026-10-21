@@ -77,10 +77,11 @@ describe("camada de conteúdo de empreendimentos (AD-2)", () => {
     expect(getAllDevelopments()[0]?.status).toBe("lancamento");
   });
 
-  it("o Solar Manilha abre o portfólio, seguido do Follow Savassi (ordem do seed)", () => {
-    expect(getAllDevelopments().slice(0, 2).map((d) => d.slug)).toEqual([
+  it("o top 3 do portfólio é Solar → Follow → Golden Ville (lançamento, depois as obras na ordem do seed)", () => {
+    expect(getAllDevelopments().slice(0, 3).map((d) => d.slug)).toEqual([
       "solar-manilha",
       "follow-savassi",
+      "golden-ville-residence",
     ]);
   });
 

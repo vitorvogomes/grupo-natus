@@ -52,8 +52,8 @@ type Seed = {
   locationNote?: string;
   /** Enquadrado no MCMV — só com evidência no material. */
   mcmv?: boolean;
-  /** 100% vendido — só em "pronto". */
-  soldOut?: boolean;
+  /** Faixa comercial do card (ver `SALES_BANDS`). */
+  salesBand?: Development["salesBand"];
   /** `idempreendimento` no CV CRM (lista da API, confirmada pelo cliente). */
   crmId?: number;
 };
@@ -78,13 +78,14 @@ const SEEDS: readonly Seed[] = [
     crmId: 4,
     name: "Solar Manilha",
     status: "lancamento",
+    salesBand: "pre_lancamento", // cliente, 2026-10-20
     city: "Itaboraí",
     neighborhood: "Manilha",
     state: "RJ",
     // Evidência: "Unidades de 2 quartos" + planta "Apartamento Tipo".
     propertyType: "apartamento",
     summary:
-      "Lançamento em Manilha, Itaboraí/RJ: 368 unidades de 2 quartos em condomínio fechado com lazer de clube, enquadrado no Minha Casa Minha Vida.",
+      "Em Manilha, Itaboraí/RJ: 368 unidades de 2 quartos em condomínio fechado com lazer de clube, enquadrado no Minha Casa Minha Vida.",
     description: [
       "Lazer completo, para momentos únicos com toda a sua família.",
       "O sossego e a segurança de um condomínio fechado, rodeado de verde.",
@@ -182,64 +183,19 @@ const SEEDS: readonly Seed[] = [
     ],
   },
   {
-    mcmv: true,
-    slug: "golden-ville-residence",
-    crmId: 2,
-    name: "Golden Ville Residence",
-    status: "em_construcao",
-    city: "Niterói",
-    neighborhood: "Maria Paula",
-    state: "RJ",
-    propertyType: "apartamento",
-    summary:
-      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
-    description: [
-      "Apartamentos de 2 quartos com suíte e varanda.",
-      "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",
-      "A 10 minutos dos centros de Niterói e São Gonçalo e a 14 km das praias da Região Oceânica.",
-      "104 unidades em condomínio fechado, com portaria 24h.",
-    ].join("\n"),
-    // Grafia do cliente; conferir se o nome oficial é "Figueiredo".
-    address: "R. Frederico Malesherbes Figueredo — Maria Paula",
-    lat: -22.8750505,
-    lng: -43.0312706,
-    googleMapsUrl: "https://maps.app.goo.gl/EUBUJ4rRtfSnV5Jv9",
-    images: [
-      { src: img("golden-ville-residence", "fachada"), alt: "Fachada do Golden Ville Residence", kind: "imagens" },
-      { src: img("golden-ville-residence", "piscina"), alt: "Piscina", kind: "imagens" },
-      { src: img("golden-ville-residence", "academia"), alt: "Academia", kind: "imagens" },
-      { src: img("golden-ville-residence", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
-      { src: img("golden-ville-residence", "churrasqueira"), alt: "Espaço churrasqueira", kind: "imagens" },
-      { src: img("golden-ville-residence", "sala"), alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "quarto"), alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "cozinha"), alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
-      { src: img("golden-ville-residence", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
-      { src: img("golden-ville-residence", "planta-terreo"), alt: "Planta humanizada — térreo", kind: "planta" },
-    ],
-    extraFeatures: [
-      { label: "Apartamentos", value: "2 quartos com suíte" },
-      { label: "Unidades", value: "104" },
-      { label: "Lazer", value: "Piscina e academia" },
-    ],
-    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
-    // fundação aparece.
-    progress: {
-      overallPercentage: 7,
-      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
-    },
-  },
-  {
     slug: "follow-savassi",
     crmId: 3,
     name: "Follow Savassi",
-    status: "lancamento",
+    // Em obra e nas últimas unidades (cliente, 2026-10-20).
+    status: "em_construcao",
+    salesBand: "ultimas_unidades",
     city: "Belo Horizonte",
     neighborhood: "Savassi",
     state: "MG",
     // Evidência: alts "Apartamento decorado (unidade 1001/1003/303)".
     propertyType: "apartamento",
     summary:
-      "Lançamento na Savassi, em Belo Horizonte/MG: apartamentos de 1 a 3 suítes, rooftop com piscina de borda infinita e projeto de Estela Netto.",
+      "Na Savassi, em Belo Horizonte/MG: apartamentos de 1 a 3 suítes, rooftop com piscina de borda infinita e projeto de Estela Netto.",
     description: [
       "Rooftop com piscina de borda infinita, espaço fitness e área gourmet.",
       "Automação residencial, janelas acústicas e fechadura eletrônica em todas as unidades.",
@@ -306,7 +262,54 @@ const SEEDS: readonly Seed[] = [
   },
   {
     mcmv: true,
-    soldOut: true,
+    slug: "golden-ville-residence",
+    crmId: 2,
+    name: "Golden Ville Residence",
+    status: "em_construcao",
+    city: "Niterói",
+    neighborhood: "Maria Paula",
+    state: "RJ",
+    propertyType: "apartamento",
+    summary:
+      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
+    description: [
+      "Apartamentos de 2 quartos com suíte e varanda.",
+      "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",
+      "A 10 minutos dos centros de Niterói e São Gonçalo e a 14 km das praias da Região Oceânica.",
+      "104 unidades em condomínio fechado, com portaria 24h.",
+    ].join("\n"),
+    // Grafia do cliente; conferir se o nome oficial é "Figueiredo".
+    address: "R. Frederico Malesherbes Figueredo — Maria Paula",
+    lat: -22.8750505,
+    lng: -43.0312706,
+    googleMapsUrl: "https://maps.app.goo.gl/EUBUJ4rRtfSnV5Jv9",
+    images: [
+      { src: img("golden-ville-residence", "fachada"), alt: "Fachada do Golden Ville Residence", kind: "imagens" },
+      { src: img("golden-ville-residence", "piscina"), alt: "Piscina", kind: "imagens" },
+      { src: img("golden-ville-residence", "academia"), alt: "Academia", kind: "imagens" },
+      { src: img("golden-ville-residence", "salao-de-festas"), alt: "Salão de festas", kind: "imagens" },
+      { src: img("golden-ville-residence", "churrasqueira"), alt: "Espaço churrasqueira", kind: "imagens" },
+      { src: img("golden-ville-residence", "sala"), alt: "Sala do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "quarto"), alt: "Quarto do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "cozinha"), alt: "Cozinha do apartamento (perspectiva)", kind: "imagens" },
+      { src: img("golden-ville-residence", "planta-tipo"), alt: "Planta humanizada — apartamento tipo", kind: "planta" },
+      { src: img("golden-ville-residence", "planta-terreo"), alt: "Planta humanizada — térreo", kind: "planta" },
+    ],
+    extraFeatures: [
+      { label: "Apartamentos", value: "2 quartos com suíte" },
+      { label: "Unidades", value: "104" },
+      { label: "Lazer", value: "Piscina e academia" },
+    ],
+    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
+    // fundação aparece.
+    progress: {
+      overallPercentage: 7,
+      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+    },
+  },
+  {
+    mcmv: true,
+    salesBand: "vendido",
     slug: "viver-mais",
     name: "Viver Mais",
     status: "pronto",
@@ -343,7 +346,7 @@ const SEEDS: readonly Seed[] = [
     ],
   },
   {
-    soldOut: true,
+    salesBand: "vendido",
     slug: "residencial-denver",
     name: "Residencial Denver",
     status: "pronto",
@@ -374,7 +377,7 @@ const SEEDS: readonly Seed[] = [
   },
   {
     mcmv: true,
-    soldOut: true,
+    salesBand: "vendido",
     slug: "torres-da-lagoa",
     name: "Torres da Lagoa",
     status: "pronto",
@@ -408,7 +411,7 @@ const SEEDS: readonly Seed[] = [
     ],
   },
   {
-    soldOut: true,
+    salesBand: "vendido",
     slug: "residenziale-colonnello-figueiredo",
     name: "Residenziale Colonnello Figueiredo",
     status: "pronto",
@@ -484,7 +487,7 @@ function fromSeed(seed: Seed): Development {
     },
     ...(seed.propertyType ? { propertyType: seed.propertyType } : {}),
     ...(seed.mcmv ? { mcmv: true } : {}),
-    ...(seed.soldOut ? { soldOut: true } : {}),
+    ...(seed.salesBand ? { salesBand: seed.salesBand } : {}),
     ...(seed.crmId ? { crmId: seed.crmId } : {}),
     // Sem resumo (breve lançamento): uma frase montada só do que o seed sabe.
     // Ela é a descrição da página no Google, então nunca leva o TODO.

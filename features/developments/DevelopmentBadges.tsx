@@ -1,15 +1,15 @@
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
-import type { Development } from "@/types/development";
+import { SALES_BAND_LABELS, type Development, type SalesBand as SalesBandValue } from "@/types/development";
 
 type DevelopmentBadgesProps = {
-  development: Pick<Development, "status" | "mcmv" | "soldOut">;
+  development: Pick<Development, "status" | "mcmv">;
   className?: string;
 };
 
 /**
- * Selos do empreendimento: o status e, quando enquadrado, o MCMV. "100%
- * vendido" fica de fora de propósito — é a `SoldOutBand`, uma faixa com peso
+ * Selos do empreendimento: o status e, quando enquadrado, o MCMV. A fase de
+ * vendas fica de fora de propósito — é a `SalesBand`, uma faixa com peso
  * próprio, e não mais um selo disputando a mesma linha.
  */
 export function DevelopmentBadges({
@@ -26,16 +26,23 @@ export function DevelopmentBadges({
   );
 }
 
-/** Faixa horizontal de "100% vendido" — só no card (o resumo usa os selos). */
-export function SoldOutBand({ className }: { className?: string }) {
+const BAND_CLASS: Record<SalesBandValue, string> = {
+  pre_lancamento: "bg-band-pre-lancamento text-navy-900",
+  ultimas_unidades: "bg-band-ultimas-unidades text-white",
+  vendido: "bg-band-vendido text-white",
+};
+
+/** Faixa horizontal da fase de vendas — só no card (o resumo usa os selos). */
+export function SalesBand({ band, className }: { band: SalesBandValue; className?: string }) {
   return (
     <p
       className={cn(
-        "bg-status-vendido px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white",
+        "px-5 py-2 text-sm font-semibold uppercase tracking-wide",
+        BAND_CLASS[band],
         className,
       )}
     >
-      100% vendido
+      {SALES_BAND_LABELS[band]}
     </p>
   );
 }
