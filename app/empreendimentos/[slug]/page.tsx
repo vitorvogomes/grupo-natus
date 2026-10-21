@@ -18,7 +18,8 @@ import { DevelopmentCta } from "@/features/developments/DevelopmentCta";
 import { ExploreDevelopments } from "@/features/developments/ExploreDevelopments";
 import { MinhaCasaMinhaVida } from "@/features/mcmv/MinhaCasaMinhaVida";
 import { Reveal } from "@/components/motion/Reveal";
-import { JsonLd, developmentSchema } from "@/features/seo/jsonLd";
+import { JsonLd, breadcrumbSchema, developmentSchema } from "@/features/seo/jsonLd";
+import { developmentMetadata } from "@/features/seo/metadata";
 
 type PageParams = { params: Promise<{ slug: string }> };
 
@@ -33,21 +34,7 @@ export async function generateMetadata({
   const development = getDevelopmentBySlug(slug);
   if (!development) return {};
 
-  const title = development.seo?.title ?? development.name;
-  const description = development.seo?.description ?? development.summary;
-  const canonical = `/empreendimentos/${development.slug}`;
-
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      images: development.seo?.ogImage ? [development.seo.ogImage] : undefined,
-    },
-  };
+  return developmentMetadata(development);
 }
 
 const sectionClass =
@@ -101,6 +88,7 @@ export default async function DevelopmentPage({ params }: PageParams) {
   return (
     <main>
       <JsonLd data={developmentSchema(development)} />
+      <JsonLd data={breadcrumbSchema(development)} />
       <DevelopmentHero development={development} />
       <DevelopmentAnchorNav sections={sections} />
 

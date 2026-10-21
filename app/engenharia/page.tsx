@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import Link from "next/link";
 import { Home, Map, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -12,11 +13,12 @@ import {
   VALUES,
 } from "@/features/institutional/content";
 
-export const metadata: Metadata = {
-  title: "Serviços de Engenharia",
+export const metadata: Metadata = pageMetadata({
+  title: "Engenharia e execução de obras",
   description:
     "Engenharia do Grupo Natus: planejamento, execução e controle de obra, com custo previsível e cronograma cumprido. Certificações ISO 9001:2015 e PBQP-H.",
-};
+  path: "/engenharia",
+});
 
 // Os três valores que descrevem a execução (os outros falam de relação
 // comercial e ficam em Quem Somos). Texto do cliente, sem paráfrase.

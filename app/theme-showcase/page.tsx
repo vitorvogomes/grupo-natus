@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import {
   BedDouble,
   Check,
@@ -105,6 +106,8 @@ function Section({
 }
 
 export default function ThemeShowcasePage() {
+  // Ferramenta de aprovação do design (Gate A): fora do ar em produção.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <main className="mx-auto max-w-[var(--container-max)] px-4 py-10 sm:px-6 lg:px-8">
       <header className="pb-6">

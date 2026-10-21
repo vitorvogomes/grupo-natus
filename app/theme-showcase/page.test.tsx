@@ -1,8 +1,15 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import ThemeShowcasePage from "./page";
 
+afterEach(() => vi.unstubAllEnvs());
+
 describe("Theme Showcase (Gate A)", () => {
+  it("não existe em produção (404)", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect(() => ThemeShowcasePage()).toThrow(/NEXT_HTTP_ERROR_FALLBACK;404|NEXT_NOT_FOUND/);
+  });
+
   it("tem o título principal", () => {
     render(<ThemeShowcasePage />);
     expect(

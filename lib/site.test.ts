@@ -1,5 +1,7 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { NAV_LINKS, CONTACT, LEGAL, SOCIAL } from "./site";
+import { NAV_LINKS, CONTACT, HEADQUARTERS, LEGAL, SOCIAL, THEME_COLOR } from "./site";
 
 describe("Configuração do site", () => {
   it("expõe os links principais de navegação na ordem esperada", () => {
@@ -35,5 +37,14 @@ describe("Configuração do site", () => {
       facebook: "https://www.facebook.com/p/Grupo-Natus-100093927445460/",
       linkedin: "https://www.linkedin.com/company/grupo-natus/",
     });
+  });
+
+  it("a cor da barra do navegador é o token navy-700 do tema (AD-7)", () => {
+    const css = readFileSync(join(process.cwd(), "styles/theme.css"), "utf8");
+    expect(css).toContain(`--color-navy-700: ${THEME_COLOR};`);
+  });
+
+  it("a sede estruturada (JSON-LD) é a mesma do contato", () => {
+    for (const part of Object.values(HEADQUARTERS)) expect(CONTACT.address).toContain(part);
   });
 });

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "@/styles/globals.css";
 import { Header } from "@/components/Header";
@@ -7,7 +7,8 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ConsentProvider } from "@/features/consent/ConsentProvider";
 import { CookieBanner } from "@/features/consent/CookieBanner";
 import { JsonLd, organizationSchema } from "@/features/seo/jsonLd";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, THEME_COLOR } from "@/lib/site";
+import { DEFAULT_SHARE_IMAGE, HOME_DESCRIPTION, HOME_TITLE, SITE_NAME } from "@/features/seo/metadata";
 
 // Inter (corpo) + Outfit (títulos/display, sans geométrica) — a geometria
 // circular da Outfit ecoa o logotipo NATUS. Ambas variáveis: um arquivo por
@@ -27,16 +28,23 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Grupo Natus",
-    template: "%s | Grupo Natus",
+    default: HOME_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Grupo Natus — empreendimentos imobiliários e engenharia. Conheça nossos empreendimentos.",
+  description: HOME_DESCRIPTION,
+  // Padrão para rotas sem metadados próprios; as páginas usam pageMetadata().
   openGraph: {
-    siteName: "Grupo Natus",
+    siteName: SITE_NAME,
     locale: "pt_BR",
     type: "website",
+    images: [DEFAULT_SHARE_IMAGE],
   },
+  twitter: { card: "summary_large_image" },
+};
+
+// Cor da barra do navegador no celular: o navy institucional.
+export const viewport: Viewport = {
+  themeColor: THEME_COLOR,
 };
 
 export default function RootLayout({

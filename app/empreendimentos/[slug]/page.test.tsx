@@ -38,9 +38,10 @@ describe("Rota /empreendimentos/[slug] (FR3)", () => {
     const meta = await generateMetadata({
       params: Promise.resolve({ slug: "follow-savassi" }),
     });
-    expect(meta.title).toBe("Follow Savassi");
+    const title = "Follow Savassi — Apartamentos em Savassi, Belo Horizonte/MG";
+    expect(meta.title).toBe(title);
     expect(meta.alternates?.canonical).toBe("/empreendimentos/follow-savassi");
-    expect(meta.openGraph?.title).toBe("Follow Savassi");
+    expect(meta.openGraph?.title).toBe(title);
   });
 
   it("generateMetadata retorna vazio para slug inexistente", async () => {

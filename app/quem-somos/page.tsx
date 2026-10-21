@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Image } from "@/components/ui/Image";
@@ -7,11 +8,12 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Certifications } from "@/features/institutional/Certifications";
 import { OPERATION_STATS, VALUES } from "@/features/institutional/content";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Quem Somos",
   description:
-    "O Grupo Natus é uma holding de incorporação e construção, atuando do Minha Casa Minha Vida ao alto luxo em Minas Gerais e no Rio de Janeiro.",
-};
+    "O Grupo Natus incorpora e constrói do Minha Casa Minha Vida ao alto luxo, em Belo Horizonte, região metropolitana e Leste Fluminense, em parceria com proprietários de terreno e investidores.",
+  path: "/quem-somos",
+});
 
 export default function QuemSomosPage() {
   return (

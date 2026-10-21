@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import { LeadForm, type LeadField } from "@/features/contact/LeadForm";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Negocie seu Terreno",
   description:
-    "Tem um terreno? Apresente para o Grupo Natus avaliar uma parceria ou compra.",
-};
+    "Tem um terreno em Minas Gerais ou no Rio de Janeiro? Apresente ao Grupo Natus para avaliarmos uma parceria ou a compra da área.",
+  path: "/negocie-seu-terreno",
+});
 
 // Campos confirmados pelo cliente (2026-10-17).
 const FIELDS: LeadField[] = [
