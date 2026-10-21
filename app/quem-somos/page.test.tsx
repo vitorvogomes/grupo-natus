@@ -8,9 +8,6 @@ describe("Página /quem-somos (FR13)", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: /holding/i }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: /empresas do grupo/i }),
-    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /valores/i })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Certificações" }),
@@ -25,13 +22,14 @@ describe("Página /quem-somos (FR13)", () => {
         "Do Minha Casa Minha Vida ao alto luxo, em Minas Gerais e no Rio de Janeiro.",
       ),
     ).toBeInTheDocument();
-    // Alinhado ao portfólio: 4 prontos para morar e 7 nos demais status.
+    // Frase fixa do cliente (revisão v4), no lugar da contagem por status.
     expect(
-      screen.getByText(/4 empreendimentos entregues e 7 em desenvolvimento/),
+      screen.getByText(
+        "Hoje atuamos entre Belo Horizonte, região metropolitana e Leste Fluminense. Boa parte dos nossos empreendimentos nascem de parcerias com proprietários de terreno, construtores e investidores.",
+      ),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/a Aliatto estrutura o empreendimento, a Oasi executa a obra/),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(/empreendimentos entregues/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/por meio da Aliatto/)).not.toBeInTheDocument();
   });
 
   it("troca 'Qualidade certificada' por 'Parceria' (o selo tem bloco próprio)", () => {
@@ -42,14 +40,14 @@ describe("Página /quem-somos (FR13)", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("apresenta as empresas reais do grupo", () => {
+  it("não tem mais a seção Empresas do grupo (revisão v4)", () => {
     render(<QuemSomosPage />);
     expect(
-      screen.getByRole("heading", { name: /aliatto incorporadora/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: /empresas do grupo/i }),
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: /oasi engenharia/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: /aliatto incorporadora/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("mostra as duas certificações: ISO 9001:2015 e PBQP-H (SiAC Nível A)", () => {
@@ -63,13 +61,8 @@ describe("Página /quem-somos (FR13)", () => {
     expect(screen.getByRole("img", { name: /PBQP-H/ })).toBeInTheDocument();
   });
 
-  it("usa o lockup de marca (holding + empresas) e a métrica de área construída", () => {
+  it("mostra a métrica de área construída", () => {
     render(<QuemSomosPage />);
-    expect(
-      screen.getByRole("img", {
-        name: "Grupo Natus — ALIATTO Incorporadora e OASI Engenharia",
-      }),
-    ).toBeInTheDocument();
     expect(screen.getByText(/Área construída/i)).toBeInTheDocument();
   });
 
@@ -84,10 +77,15 @@ describe("Página /quem-somos (FR13)", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("tem CTA de contato", () => {
+  it("tem CTA de contato só com a logo da Natus (sem o lockup das empresas)", () => {
     render(<QuemSomosPage />);
     expect(
       screen.getByRole("link", { name: /fale conosco|contato/i }),
     ).toHaveAttribute("href", "/contato");
+    expect(screen.getByRole("img", { name: "Grupo Natus" })).toHaveAttribute(
+      "src",
+      expect.stringContaining("grupo-natus-negativa.png"),
+    );
+    expect(document.querySelector('img[src*="assinatura"]')).toBeNull();
   });
 });

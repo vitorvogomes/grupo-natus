@@ -70,7 +70,7 @@ export function GalleryLightbox({
                 alt={current.alt}
                 fill
                 sizes="100vw"
-                quality={90}
+                quality={100}
                 className="object-contain"
               />
             </div>

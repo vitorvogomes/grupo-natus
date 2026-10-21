@@ -15,14 +15,16 @@ describe("Página /engenharia (FR12)", () => {
     expect(screen.getByRole("heading", { name: "Certificações" })).toBeInTheDocument();
   });
 
-  it("usa o texto institucional da Oasi (o mesmo de Quem Somos)", () => {
+  it("fala em nome do Grupo Natus, com os valores compartilhados com Quem Somos", () => {
     render(<EngenhariaPage />);
     expect(
       screen.getByText(/Do canteiro à entrega das chaves: planejamento, execução e controle de obra/),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/a Aliatto estrutura o empreendimento, a Oasi executa a obra/),
+      screen.getByText(/Além dos empreendimentos do grupo, executamos obras por administração/),
     ).toBeInTheDocument();
+    // Desde a v4 as empresas não são apresentadas separadamente.
+    expect(screen.queryByText(/Aliatto|Oasi/)).not.toBeInTheDocument();
     for (const valor of ["Método", "Eficiência", "Transparência"]) {
       expect(screen.getByRole("heading", { name: valor })).toBeInTheDocument();
     }

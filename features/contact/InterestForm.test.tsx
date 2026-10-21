@@ -6,7 +6,7 @@ import * as submit from "./submitLead";
 
 describe("InterestForm (FR9)", () => {
   it("pede só nome, telefone e e-mail", () => {
-    render(<InterestForm slug="follow-savassi" name="Follow Savassi" />);
+    render(<InterestForm slug="follow-savassi" />);
     expect(screen.getByLabelText(/nome/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/telefone/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/e-mail/i)).toBeInTheDocument();
@@ -16,18 +16,19 @@ describe("InterestForm (FR9)", () => {
   });
 
   it("usa o CTA pedido pelo cliente", () => {
-    render(<InterestForm slug="x" name="X" />);
+    render(<InterestForm slug="x" />);
     expect(
       screen.getByRole("button", { name: "Quero saber mais!" }),
     ).toBeInTheDocument();
   });
 
-  it("envia o empreendimento junto, mesmo sem campo na tela", async () => {
+  it("envia o slug, a página e a UTM do anúncio junto, sem campo na tela", async () => {
+    window.history.pushState({}, "", "/empreendimentos/follow-savassi?utm_source=facebook");
     const spy = vi
       .spyOn(submit, "submitLead")
       .mockResolvedValue({ ok: true });
     const user = userEvent.setup();
-    render(<InterestForm slug="follow-savassi" name="Follow Savassi" />);
+    render(<InterestForm slug="follow-savassi" />);
 
     await user.type(screen.getByLabelText(/nome/i), "Maria");
     await user.type(screen.getByLabelText(/telefone/i), "31988887777");
@@ -37,11 +38,13 @@ describe("InterestForm (FR9)", () => {
     expect(spy).toHaveBeenCalledWith({
       type: "interesse",
       slug: "follow-savassi",
-      empreendimento: "Follow Savassi",
+      pagina: "/empreendimentos/follow-savassi",
+      utm_source: "facebook",
       nome: "Maria",
       telefone: "31988887777",
       email: "maria@exemplo.com",
     });
     spy.mockRestore();
+    window.history.pushState({}, "", "/");
   });
 });

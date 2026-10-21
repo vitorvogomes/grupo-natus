@@ -29,8 +29,9 @@ describe("Seed dos empreendimentos", () => {
       } else {
         expect(dev.description).not.toMatch(/TODO/);
       }
-      // Resumo é sempre preenchido (factual ou placeholder rotulado).
+      // Resumo sempre preenchido e factual: vira a descrição no Google.
       expect(dev.summary.length).toBeGreaterThan(0);
+      expect(dev.summary).not.toMatch(/TODO/);
     }
   });
 
@@ -64,20 +65,38 @@ describe("Seed dos empreendimentos", () => {
 
   it("usa os percentuais informados pelo cliente", () => {
     const pct = (slug: string) => developments.find((d) => d.slug === slug)!.progress!;
-    for (const slug of ["follow-savassi", "solar-manilha"]) {
-      expect(pct(slug).overallPercentage).toBe(70);
-      expect(Object.fromEntries(pct(slug).stages.map((s) => [s.name, s.percentage]))).toEqual({
-        Fundação: 99,
-        Estrutura: 100,
-        Alvenaria: 90,
-        "Acabamento interno": 60,
-        "Acabamento externo": 50,
-      });
-    }
+    expect(pct("follow-savassi").overallPercentage).toBe(70);
+    expect(
+      Object.fromEntries(pct("follow-savassi").stages.map((s) => [s.name, s.percentage])),
+    ).toEqual({
+      Fundação: 100,
+      Estrutura: 100,
+      Alvenaria: 90,
+      "Acabamento interno": 60,
+      "Acabamento externo": 50,
+    });
     expect(pct("golden-ville-residence")).toEqual({
       overallPercentage: 7,
       stages: [{ name: "Fundação", percentage: 70, order: 1 }],
     });
+  });
+
+  it("Solar Manilha não mostra estágio de obra (decisão do cliente)", () => {
+    expect(developments.find((d) => d.slug === "solar-manilha")!.progress).toBeUndefined();
+  });
+
+  it("tipo de imóvel confirmado pelo cliente em todos os empreendimentos", () => {
+    for (const dev of developments) expect(dev.propertyType, dev.slug).toBeDefined();
+    for (const slug of ["viver-mais", "gutierrez", "sunset-ville-residence"]) {
+      expect(developments.find((d) => d.slug === slug)!.propertyType).toBe("apartamento");
+    }
+  });
+
+  it("endereços informados pelo cliente (Golden Ville e Solar Manilha)", () => {
+    const loc = (slug: string) => developments.find((d) => d.slug === slug)!.location;
+    expect(loc("golden-ville-residence").address).toMatch(/Frederico Malesherbes/);
+    expect(loc("solar-manilha").address).toMatch(/Carlota Maria do Amor Divino/);
+    expect(loc("solar-manilha").postalCode).toBe("24856-500");
   });
 
   it("só classifica imagens nas três categorias da galeria", () => {
@@ -137,11 +156,13 @@ describe("Seed dos empreendimentos", () => {
     expect(sm.location.neighborhood).toBe("Manilha");
     expect(sm.images.length).toBeGreaterThan(20);
     expect(sm.images.some((i) => i.kind === "planta")).toBe(true);
-    // Capa escolhida pelo cliente: a implantação (render aéreo, não planta).
+    // Capa escolhida pelo cliente: o acesso principal. A implantação vem em
+    // seguida porque ilustra o resumo (proporção próxima do bloco 4:3).
     expect(sm.images[0]).toMatchObject({
-      src: "/empreendimentos/solar-manilha/implantacao.webp",
+      src: "/empreendimentos/solar-manilha/acesso-principal.webp",
       kind: "imagens",
     });
+    expect(sm.images[1]?.src).toBe("/empreendimentos/solar-manilha/implantacao.webp");
     expect(sm.amenities?.map((a) => a.category)).toEqual([
       "Características",
       "Área de lazer",
@@ -163,6 +184,21 @@ describe("Seed dos empreendimentos", () => {
         expect(img.height, img.src).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("o Gutierrez se chama Mirante Gutierrez; o slug (URL e chave no CRM) não muda", () => {
+    expect(developments.find((d) => d.slug === "gutierrez")?.name).toBe("Mirante Gutierrez");
+  });
+
+  it("o ID do CV CRM, quando existe, é inteiro positivo e não se repete", () => {
+    const ids = developments.flatMap((d) => (d.crmId === undefined ? [] : [d.crmId]));
+    for (const id of ids) expect(Number.isInteger(id) && id > 0).toBe(true);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("liga os empreendimentos cadastrados no CV CRM (GET /v1/cadastros/empreendimentos, 2026-10-20)", () => {
+    const crmIds = Object.fromEntries(developments.filter((d) => d.crmId).map((d) => [d.slug, d.crmId]));
+    expect(crmIds).toEqual({ "golden-ville-residence": 2, "follow-savassi": 3, "solar-manilha": 4 });
   });
 
   it("inclui os empreendimentos-chave conhecidos", () => {

@@ -1,12 +1,13 @@
 ---
-description: Implementa uma story de docs/epics.md com TDD estrito (red→green→refactor) e gate de cobertura ≥85%.
+description: Implementa uma story do backlog (_bmad-output/planning-artifacts/epics.md) com TDD estrito (red→green→refactor) e gate de cobertura ≥85%.
 argument-hint: <ID da story, ex. E4.2> ou uma descrição
 ---
 
 Implemente a story **$ARGUMENTS** com **TDD sagrado**. Não pule etapas.
+(Revisão de cliente fora do backlog também segue este ciclo; registre-a como seção própria no `docs/PROGRESS.md`.)
 
 ## Antes de codar
-1. Localize a story em `@docs/epics.md` (e o epic pai). Releia seus **Critérios de Aceite (CA)**.
+1. Localize a story no backlog canônico `@_bmad-output/planning-artifacts/epics.md` (e o epic pai). Releia seus **Critérios de Aceite (CA)**.
 2. Consulte `@docs/prd.md` (FR/NFR e modelo de dados) e `@CLAUDE.md` (restrições críticas).
 3. Carregue as skills relevantes ao que vai construir: `nextjs-app-router-patterns`, `tailwind-design-system`, `framer-motion-animator`, `nextjs-seo`, `supabase` / `supabase-postgres-best-practices`, `vitest-testing`.
 4. Respeite as regras do README: **não inventar conteúdo** (`TODO: CONTENT REQUIRED`), **não tocar em RLS/env/secrets**, preservar branding Natus, sem over-engineering.

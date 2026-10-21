@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DevelopmentLocation } from "./DevelopmentLocation";
+import { ConsentProvider } from "@/features/consent/ConsentProvider";
+import { CONSENT_COOKIE, writeConsent } from "@/lib/consent";
 import type { DevelopmentLocation as Location } from "@/types/development";
 
 const completa: Location = {
@@ -24,6 +26,18 @@ describe("DevelopmentLocation", () => {
     expect(screen.getByText(/Av. Getúlio Vargas, 1.676/)).toBeInTheDocument();
   });
 
+  it("mostra o CEP quando informado", () => {
+    render(
+      <DevelopmentLocation
+        name="Solar Manilha"
+        location={{ ...soCidade, address: "R. Carlota Maria do Amor Divino", postalCode: "24856-500" }}
+      />,
+    );
+    expect(
+      screen.getByText(/R. Carlota Maria do Amor Divino, Itaboraí — RJ · CEP 24856-500/),
+    ).toBeInTheDocument();
+  });
+
   it("oferece rota no Google Maps e no Waze", () => {
     render(<DevelopmentLocation name="X" location={completa} />);
     expect(screen.getByRole("link", { name: /google maps/i })).toHaveAttribute(
@@ -36,9 +50,15 @@ describe("DevelopmentLocation", () => {
     );
   });
 
-  it("renderiza o mapa quando há coordenadas", () => {
-    render(<DevelopmentLocation name="Follow Savassi" location={completa} />);
+  it("renderiza o mapa quando há coordenadas e os mapas foram aceitos", () => {
+    writeConsent({ mapas: true });
+    render(
+      <ConsentProvider>
+        <DevelopmentLocation name="Follow Savassi" location={completa} />
+      </ConsentProvider>,
+    );
     expect(screen.getByTitle("Mapa de Follow Savassi")).toBeInTheDocument();
+    document.cookie = `${CONSENT_COOKIE}=; Max-Age=0; Path=/`;
   });
 
   it("sem endereço, mantém cidade/UF e os links — só o mapa some", () => {

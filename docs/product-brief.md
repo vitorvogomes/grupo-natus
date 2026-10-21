@@ -24,11 +24,11 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 ## 5. Escopo (páginas)
 
 1. **Home / Catálogo** — institucional + catálogo dos 11 empreendimentos + conversão.
-2. **Empreendimento `[slug]`** — 12 páginas geradas de um único template a partir de dados.
+2. **Empreendimento `[slug]`** — 11 páginas geradas de um único template a partir de dados.
 3. **Serviços de Engenharia**.
 4. **Negocie seu Terreno** — captação de proprietários/corretores.
 5. **Quem Somos**.
-6. **Fale Conosco** — contato + formulário (envio por email).
+6. **Fale Conosco** — contato + formulário (gravado no banco, aviso por e-mail).
 
 ## 6. Empreendimentos (confirmados pelo cliente — revisão v3, 2026-10-11)
 
@@ -41,7 +41,7 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 | 5 | Residencial Denver | Santa Lúcia · Belo Horizonte/MG | Pronto para morar · 100% vendido | 14 studios |
 | 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar · 100% vendido | 112 aptos · MCMV |
 | 7 | Residenziale Colonnello Figueiredo | Pau Pombo · Nova Lima/MG | Pronto para morar · 100% vendido | 20 un. |
-| 8 | Gutierrez | Belo Horizonte/MG | Breve lançamento | 20 un. alto luxo |
+| 8 | Mirante Gutierrez | Belo Horizonte/MG | Breve lançamento | 20 un. alto luxo |
 | 9 | One Studios | Niterói/RJ | Breve lançamento | 180 studios |
 | 10 | Sunset Ville Residence | Belo Horizonte/MG | Breve lançamento | 72 un. · MCMV |
 | 11 | Royal Ville Residence | Vespasiano/MG | Breve lançamento | 96 casas · MCMV |
@@ -51,7 +51,7 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 ## 7. Funcionalidades solicitadas pela empresa
 
 - Progresso de evolução por empreendimento (atualizável conforme a obra avança).
-- Contatos simples: formulários enviados por email + redirecionamento WhatsApp com botão flutuante.
+- Contatos simples: formulários gravados no banco e avisados por e-mail (o interesse em empreendimento também vai ao CV CRM) + WhatsApp com botão flutuante.
 - Localização dos empreendimentos via Google Maps.
 - Site dinâmico/interativo com capacidade para vídeos, GIFs, galerias, animações (motion com função, sem exagero).
 - SEO estruturado (base correta, não prioridade #1).
@@ -73,7 +73,7 @@ Deploy/CI/CD/hosting; painel admin e persistência em banco **antes de necessida
 
 - **Next.js (App Router) + TypeScript**; Server Components por padrão, Client só quando necessário.
 - Supabase apenas quando houver necessidade real de persistência; APIs via Route Handlers do Next; auth via Supabase Auth.
-- **Sem over-engineering.** Empreendimento como entidade de dados (não 12 páginas duplicadas). Componentizar por comportamento/reuso.
+- **Sem over-engineering.** Empreendimento como entidade de dados (não 11 páginas duplicadas). Componentizar por comportamento/reuso.
 - **Preservar** RLS, env vars e secrets do Supabase existente. Validação **100% local** primeiro.
 
 ## 12. Critérios de sucesso

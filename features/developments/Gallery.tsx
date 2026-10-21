@@ -7,6 +7,8 @@ import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import { Image } from "@/components/ui/Image";
 import { cn } from "@/lib/utils";
 import { GalleryLightbox } from "./GalleryLightbox";
+import { coverFactor } from "./coverSizes";
+import { stageFit } from "./stageFit";
 import {
   DEVELOPMENT_IMAGE_KINDS,
   IMAGE_KIND_LABELS,
@@ -16,6 +18,11 @@ import {
 
 type GalleryProps = {
   images: readonly DevelopmentImage[];
+  /**
+   * Largura do palco no desktop, em CSS px, para o `sizes`. Padrão: a
+   * galeria compacta inteira; meia coluna (canteiro) declara a sua.
+   */
+  desktopWidth?: number;
 };
 
 const tabTriggerClass = cn(
@@ -25,6 +32,15 @@ const tabTriggerClass = cn(
   "data-[state=active]:bg-ink data-[state=active]:text-white",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
 );
+
+/** Proporção do palco (`aspect-[16/10]`). */
+const STAGE_ASPECT = 16 / 10;
+
+/** Largura máxima do palco (`max-w-5xl`), em CSS px. */
+const STAGE_MAX = 1024;
+
+/** Abaixo disto o palco ocupa a largura da tela (sem colunas). */
+const FULL_WIDTH_UP_TO = 1024;
 
 const stageNavClass = cn(
   "absolute top-1/2 z-10 inline-flex size-10 -translate-y-1/2 items-center justify-center",
@@ -45,9 +61,11 @@ const stageNavClass = cn(
 function GalleryStage({
   list,
   onOpen,
+  desktopWidth,
 }: {
   list: readonly DevelopmentImage[];
   onOpen: (index: number) => void;
+  desktopWidth: number;
 }) {
   const [index, setIndex] = useState(0);
   const railRef = useRef<HTMLUListElement>(null);
@@ -56,6 +74,9 @@ function GalleryStage({
   const many = total > 1;
 
   if (!current) return null;
+  const fit = stageFit(current, STAGE_ASPECT);
+  // Em contain a foto cabe na largura do palco; em cover, pede a sobra do corte.
+  const factor = fit === "contain" ? 1 : coverFactor(current, STAGE_ASPECT);
 
   function go(delta: number) {
     setIndex((i) => (i + delta + total) % total);
@@ -94,15 +115,29 @@ function GalleryStage({
           onClick={() => onOpen(index)}
           className="group absolute inset-0 cursor-zoom-in focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
         >
+          {fit === "contain" ? (
+            // A foto inteira sobre ela mesma desfocada: sem faixas vazias e
+            // sem o zoom do cover. A miniatura de 64px basta para um blur.
+            <span aria-hidden="true" className="absolute inset-0">
+              <Image
+                src={current.src}
+                alt=""
+                fill
+                sizes="64px"
+                className="scale-110 object-cover opacity-70 blur-2xl"
+              />
+            </span>
+          ) : null}
           <Image
             src={current.src}
             alt={current.alt}
             fill
-            sizes="(max-width: 1024px) 100vw, 1216px"
-            // 90 (e não o 75 padrão): o palco mostra a foto quase no tamanho
-            // da fonte, e renders pequenos não têm margem para mais perda.
-            quality={90}
-            className="object-cover"
+            sizes={`(max-width: ${FULL_WIDTH_UP_TO}px) ${Math.round(100 * factor)}vw, ${Math.round(desktopWidth * factor)}px`}
+            // 100 no palco e no lightbox, onde a foto é examinada de perto: o
+            // Next converte para AVIF 63 (escala 50/80), que fica igual ao
+            // original na tela com metade dos bytes do WEBP 90 de antes.
+            quality={100}
+            className={fit === "contain" ? "object-contain" : "object-cover"}
           />
           <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-navy-900/70 px-3 py-1 text-xs font-medium text-white opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
             <ZoomIn aria-hidden="true" className="size-3.5" />
@@ -183,7 +218,7 @@ function GalleryStage({
   );
 }
 
-export function Gallery({ images }: GalleryProps) {
+export function Gallery({ images, desktopWidth = STAGE_MAX }: GalleryProps) {
   // Ordem canônica das abas (DEVELOPMENT_IMAGE_KINDS), não a de aparição no
   // dado: senão reordenar o array de imagens reordenaria as abas da página.
   const kinds = useMemo(
@@ -217,7 +252,10 @@ export function Gallery({ images }: GalleryProps) {
   }
 
   return (
-    <div>
+    // Galeria compacta (1024px) em todo o site, abas incluídas: renders de
+    // ~1500–2100 px chegam ao palco com densidade ≥ 1,5× em vez de serem
+    // ampliados até a borda do container.
+    <div className="mx-auto max-w-5xl">
       {tabbed ? (
         <TabsPrimitive.Root
           value={kind}
@@ -246,12 +284,13 @@ export function Gallery({ images }: GalleryProps) {
               <GalleryStage
                 list={images.filter((i) => i.kind === k)}
                 onOpen={setLightbox}
+                desktopWidth={desktopWidth}
               />
             </TabsPrimitive.Content>
           ))}
         </TabsPrimitive.Root>
       ) : (
-        <GalleryStage list={images} onOpen={setLightbox} />
+        <GalleryStage list={images} onOpen={setLightbox} desktopWidth={desktopWidth} />
       )}
 
       <GalleryLightbox

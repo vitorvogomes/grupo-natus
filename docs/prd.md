@@ -1,6 +1,6 @@
 # PRD — Website Grupo Natus
 
-> Artefato BMAD (Fase 2 — Product Requirements). Complementa `docs/product-brief.md`. O detalhamento por epic/story está em `docs/epics.md`.
+> Artefato BMAD (Fase 2 — Product Requirements). Complementa `docs/product-brief.md`. O detalhamento por epic/story está em `_bmad-output/planning-artifacts/epics.md`.
 
 ## 1. Objetivos e métricas
 
@@ -25,11 +25,12 @@
 - **FR8** — Formulário de **Fale Conosco** (nome, email, telefone, assunto, mensagem).
 - **FR9** — Formulário de **interesse em empreendimento** (nome, telefone, email, empreendimento, mensagem).
 - **FR10** — Formulário **Negocie seu Terreno** (campos definidos neste PRD — ver Epic 7).
-- **FR11** — Envio de formulários por email via Route Handler do Next (após fluxo definido); feedback claro de sucesso/erro; estratégia anti-spam.
+- **FR11** — Formulários via Route Handler do Next: todo lead gravado no Supabase, aviso por e-mail (Resend) e, no interesse em empreendimento, lead no CV CRM só se ainda não existir (v5); feedback claro de sucesso/erro; anti-spam (honeypot + rate-limit).
 - **FR12** — Página **Serviços de Engenharia** (atuação, metodologia, tipos de projeto, capacidade técnica, obras, diferenciais, CTA).
-- **FR13** — Página **Quem Somos** (história, empresas, atuação, valores, números).
+- **FR13** — Página **Quem Somos** (posicionamento, atuação, valores, certificações, números). A seção de empresas saiu na revisão v4.
 - **FR14** — SEO por página e por empreendimento: metadata, title, description, canonical, Open Graph, sitemap, robots, structured data quando fizer sentido, URLs amigáveis, alt text.
 - **FR15** — (Condicional) Painel `/admin` com Supabase Auth para gerenciar progresso/conteúdo/imagens/leads — **somente se necessidade concreta**.
+- **FR16** — **Privacidade (LGPD)**: página de Política de Privacidade; consentimento de cookies (aceitar todos / só necessários / preferências, revogável pelo rodapé); integrações de terceiros com cookie (Google Maps; futuras ferramentas de análise/anúncio) só carregam após o aceite; formulários com aviso e link para a política. (Revisão v4, 2026-10-17.)
 
 ## 3. Requisitos não-funcionais (NFR)
 
@@ -69,11 +70,11 @@ type ConstructionProgress = {
 }
 ```
 
-Camada de conteúdo estática (`content/`) até haver necessidade de administração dinâmica → então migrar entidades específicas para Supabase (Developments, DevelopmentProgress, DevelopmentImages, Leads, ContactMessages). **Não criar tabelas antecipadamente.**
+Camada de conteúdo estática (`content/`) até haver necessidade de administração dinâmica → então migrar entidades específicas para Supabase (Developments, DevelopmentProgress, DevelopmentImages, Leads, ContactMessages). **Não criar tabelas antecipadamente.** (v5: só os leads foram para o banco, `site_leads` e `site_contacts`; o conteúdo segue estático.)
 
 ## 5. Arquitetura-alvo
 
-`Next.js (App Router + TS)` → conteúdo estático + Route Handlers → (quando necessário) Supabase (Postgres + RLS + Auth). Estrutura de pastas proposta: `src/app`, `src/components`, `src/features/{developments,contact,engineering,land-submission}`, `src/content`, `src/lib`, `src/styles`, `src/types`.
+`Next.js (App Router + TS)` → conteúdo estático + Route Handlers → (quando necessário) Supabase (Postgres + RLS + Auth). Estrutura de pastas (sem `src/`): `app`, `components`, `features/{developments,home,institutional,mcmv,contact,consent,seo}`, `content`, `lib`, `styles`, `types`, `scripts`.
 
 > **Arquitetura detalhada (fonte de verdade):** [`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md) — invariantes AD-1…AD-8, stack verificado (Next 16.3.5 / React 19 / Tailwind 4.3 / Vitest 5.0.1) e Capability→Architecture map.
 
@@ -83,7 +84,7 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 
 | Epic | Título | Entrega de valor | FRs |
 |------|--------|------------------|-----|
-| 1 | Fundação & Identidade Navegável | Scaffold Next.js+TS+Vitest(90%), tokens da marca, shell, WhatsApp, theme-showcase (Gate A) | FR6 |
+| 1 | Fundação & Identidade Navegável | Scaffold Next.js+TS+Vitest (gate 85%, ADR 0001), tokens da marca, shell, WhatsApp, theme-showcase (Gate A) | FR6 |
 | 2 | Descoberta (Home / Catálogo) | Modelo `Development`, seed dos 12, Home, grid, filtros | FR1, FR2 |
 | 3 | Página do Empreendimento & Catálogo | Template `[slug]` (galeria, mapa, status, CTA, SEO); Gate B | FR3,4,7,6,14 |
 | 4 | Evolução das Obras | Progresso (percentual+etapas), estático → Supabase | FR5 |
@@ -103,5 +104,5 @@ Backlog canônico (8 epics · 35 stories) em **`_bmad-output/planning-artifacts/
 
 - Conteúdo dos 4 breve lançamentos e a data/periodicidade da atualização de obra (ver `docs/CONTENT-GAPS.md`). Os 7 com página completa ou reduzida já têm conteúdo do cliente.
 - Google Maps: embed público por padrão; o pin da marca entra com a chave + Map ID (`docs/google-maps.md`).
-- Estratégia de envio de email (provedor) e anti-spam a definir.
+- ~~Provedor de e-mail e anti-spam~~ — decidido na v5 (Resend; honeypot + rate-limit). O domínio no Resend ainda precisa ser verificado.
 - Necessidade real de admin/persistência — decidir no Gate C.

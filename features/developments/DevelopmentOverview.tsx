@@ -32,7 +32,10 @@ export function DevelopmentOverview({ development }: DevelopmentOverviewProps) {
             fill
             // Bloco 4:3 com object-cover: foto mais larga pede largura extra
             // para cobrir a altura (ver coverSizes).
-            sizes={coverSizes(image, 4 / 3, 50)}
+            sizes={coverSizes(image, [
+              { upTo: 768, vw: 100, aspect: 4 / 3 },
+              { vw: 50, aspect: 4 / 3 },
+            ])}
             quality={90}
             className="object-cover"
           />

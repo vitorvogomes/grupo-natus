@@ -38,9 +38,10 @@ describe("Rota /empreendimentos/[slug] (FR3)", () => {
     const meta = await generateMetadata({
       params: Promise.resolve({ slug: "follow-savassi" }),
     });
-    expect(meta.title).toBe("Follow Savassi");
+    const title = "Follow Savassi — Apartamentos em Savassi, Belo Horizonte/MG";
+    expect(meta.title).toBe(title);
     expect(meta.alternates?.canonical).toBe("/empreendimentos/follow-savassi");
-    expect(meta.openGraph?.title).toBe("Follow Savassi");
+    expect(meta.openGraph?.title).toBe(title);
   });
 
   it("generateMetadata retorna vazio para slug inexistente", async () => {
@@ -112,9 +113,10 @@ describe("Lançamento — página completa (Follow Savassi)", () => {
     expect(screen.queryByText(/ilustrativos/i)).toBeNull();
   });
 
-  it("mostra o mapa e as rotas", async () => {
+  it("mostra as rotas; o mapa espera o consentimento de cookies", async () => {
     await abrir("follow-savassi");
-    expect(screen.getByTitle("Mapa de Follow Savassi")).toBeInTheDocument();
+    // Fora do ConsentProvider ninguém consentiu: o Google não carrega.
+    expect(screen.queryByTitle("Mapa de Follow Savassi")).toBeNull();
     expect(screen.getByRole("link", { name: /waze/i })).toBeInTheDocument();
   });
 
@@ -138,15 +140,15 @@ describe("Lançamento — página completa (Follow Savassi)", () => {
 });
 
 describe("Lançamento MCMV — página completa (Solar Manilha)", () => {
-  it("tem galeria, diferenciais, obra e a seção do programa", async () => {
+  it("tem galeria, diferenciais e a seção do programa — sem estágio de obra (decisão do cliente)", async () => {
     await abrir("solar-manilha");
     expect(screen.getByRole("heading", { name: "Galeria" })).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: /o que o solar manilha oferece/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("progressbar", { name: /total construído/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: /estágio de obra/i }),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /simule agora/i }),
     ).toBeInTheDocument();

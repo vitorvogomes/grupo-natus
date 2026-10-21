@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { LeadForm, type LeadField } from "@/features/contact/LeadForm";
+import { MapConsentGate } from "@/features/consent/MapConsentGate";
 import { CONTACT } from "@/lib/site";
 import { buildMapEmbedUrl } from "@/lib/maps";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -12,11 +14,12 @@ const HQ_MAP_EMBED = buildMapEmbedUrl({
   address: "Av. Getúlio Vargas, 1621 - Savassi",
 });
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Fale Conosco",
   description:
-    "Fale com o Grupo Natus: telefone, WhatsApp, e-mail e formulário de contato.",
-};
+    "Fale com o Grupo Natus: WhatsApp e telefone (31) 98466-3280, e-mail e formulário de contato. Sede na Savassi, em Belo Horizonte/MG.",
+  path: "/contato",
+});
 
 const FIELDS: LeadField[] = [
   { name: "nome", label: "Nome", required: true },
@@ -88,13 +91,18 @@ export default function ContatoPage() {
           </p>
 
           {HQ_MAP_EMBED ? (
-            <iframe
-              src={HQ_MAP_EMBED}
-              title="Mapa da sede do Grupo Natus"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+            <MapConsentGate
+              tone="light"
               className="mt-2 aspect-video w-full rounded-lg border border-border"
-            />
+            >
+              <iframe
+                src={HQ_MAP_EMBED}
+                title="Mapa da sede do Grupo Natus"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="mt-2 aspect-video w-full rounded-lg border border-border"
+              />
+            </MapConsentGate>
           ) : null}
         </aside>
       </div>

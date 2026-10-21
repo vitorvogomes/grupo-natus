@@ -1,7 +1,6 @@
 import {
   Award,
   Building2,
-  Compass,
   Gauge,
   Handshake,
   KeyRound,
@@ -13,39 +12,18 @@ import {
 } from "lucide-react";
 
 /**
- * Textos institucionais fornecidos pelo cliente (revisão v3, 2026-10-11).
- * Fonte única para Quem Somos e Engenharia: as duas páginas citam as mesmas
- * empresas, valores e certificações, e uma cópia em cada uma divergiria na
+ * Textos institucionais fornecidos pelo cliente (revisões v3 e v4).
+ * Fonte única para Quem Somos, Engenharia e Home: as páginas citam os mesmos
+ * valores, certificações e números, e uma cópia em cada uma divergiria na
  * primeira revisão de texto.
  */
 
-export type Company = {
-  name: string;
-  role: string;
-  icon: LucideIcon;
-  description: string;
-};
-
-export const ALIATTO: Company = {
-  name: "Aliatto Incorporadora",
-  role: "Incorporação imobiliária",
-  icon: Building2,
-  description:
-    "Da prospecção do terreno ao lançamento: estudo de viabilidade, definição do produto, aprovação e comercialização.",
-};
-
-export const OASI: Company = {
-  name: "Oasi Engenharia",
-  role: "Engenharia e execução de obras",
-  icon: Compass,
-  description:
-    "Do canteiro à entrega das chaves: planejamento, execução e controle de obra, com custo previsível e cronograma cumprido.",
-};
-
-export const COMPANIES: readonly Company[] = [ALIATTO, OASI];
-
-export const COMPANIES_TAGLINE =
-  "Duas empresas, um ciclo completo: a Aliatto estrutura o empreendimento, a Oasi executa a obra.";
+/**
+ * Resumo da engenharia, em nome do Grupo Natus (o site não apresenta as
+ * empresas do grupo separadamente).
+ */
+export const ENGINEERING_SUMMARY =
+  "Do canteiro à entrega das chaves: planejamento, execução e controle de obra, com custo previsível e cronograma cumprido.";
 
 export type Value = { label: string; icon: LucideIcon; description: string };
 

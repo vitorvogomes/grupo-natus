@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,10 @@ type ModalProps = {
 };
 
 export function Modal({ open, onClose, title, children, className }: ModalProps) {
+  // Controlado por estado, o Modal não tem `Dialog.Trigger`, e o Radix só
+  // devolve o foco ao trigger. Então ele lembra quem estava focado ao abrir e
+  // volta para lá ao fechar (WCAG 2.4.3), se o elemento ainda existir.
+  const returnFocusTo = useRef<HTMLElement | null>(null);
   return (
     <DialogPrimitive.Root
       open={open}
@@ -31,6 +35,16 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
           )}
         />
         <DialogPrimitive.Content
+          onOpenAutoFocus={() => {
+            returnFocusTo.current =
+              document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          }}
+          onCloseAutoFocus={(event) => {
+            if (returnFocusTo.current?.isConnected) {
+              event.preventDefault();
+              returnFocusTo.current.focus();
+            }
+          }}
           className={cn(
             "fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2",
             "rounded-lg bg-surface p-6 shadow-xl",

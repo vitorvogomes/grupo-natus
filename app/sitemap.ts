@@ -1,21 +1,12 @@
 import type { MetadataRoute } from "next";
 import { getAllDevelopments } from "@/content/developments";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, STATIC_ROUTES } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = [
-    "",
-    "/empreendimentos",
-    "/engenharia",
-    "/quem-somos",
-    "/negocie-seu-terreno",
-    "/contato",
-  ];
-
-  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
-    url: `${SITE_URL}${route}`,
+  const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((route) => ({
+    url: route === "/" ? SITE_URL : `${SITE_URL}${route}`,
     changeFrequency: "monthly",
-    priority: route === "" ? 1 : 0.8,
+    priority: route === "/" ? 1 : route === "/politica-de-privacidade" ? 0.3 : 0.8,
   }));
 
   const developmentEntries: MetadataRoute.Sitemap = getAllDevelopments().map(

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { BackToTop } from "./BackToTop";
+import { SocialLinks } from "./SocialLinks";
+import { CookiePreferencesButton } from "@/features/consent/CookiePreferencesButton";
 import { buttonVariants } from "./ui/Button";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
@@ -10,10 +12,7 @@ import { CONTACT, LEGAL, NAV_LINKS } from "@/lib/site";
 const linkClass = "text-navy-100 transition-colors hover:text-brand";
 
 export function Footer() {
-  const legalBits = [
-    LEGAL.cnpj ? `CNPJ ${LEGAL.cnpj}` : null,
-    LEGAL.creci ? `CRECI ${LEGAL.creci}` : null,
-  ].filter(Boolean);
+  const legalBits = LEGAL.cnpj ? [`CNPJ ${LEGAL.cnpj}`] : [];
   const year = new Date().getFullYear();
 
   return (
@@ -24,9 +23,7 @@ export function Footer() {
           <p className="mt-4 max-w-xs text-sm text-navy-100">
             Incorporação e engenharia em Minas Gerais e no Rio de Janeiro.
           </p>
-          {/* TODO: CONTENT REQUIRED — redes sociais (URLs) em docs/CONTENT-GAPS §6.
-              Ícones de marca serão adicionados quando os links forem confirmados
-              (lucide removeu ícones de marca; usaremos um pacote dedicado). */}
+          <SocialLinks className="mt-6" />
         </div>
 
         <nav aria-label="Navegação do rodapé">
@@ -113,7 +110,13 @@ export function Footer() {
               ...legalBits,
             ].join(" · ")}
           </p>
-          <BackToTop />
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link href="/politica-de-privacidade" className={linkClass}>
+              Política de Privacidade
+            </Link>
+            <CookiePreferencesButton className={linkClass} />
+            <BackToTop />
+          </div>
         </div>
       </div>
     </footer>

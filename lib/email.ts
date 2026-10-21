@@ -1,48 +1,39 @@
+import { emailEnv } from "@/lib/env";
+import type { EmailMessage } from "@/lib/leads/format";
+
 /**
- * Abstração única de e-mail (AD-3/AD-4). Envio server-side apenas.
- * Provedor: Resend `[ASSUMPTION]` — a confirmar (ver docs/CONTENT-GAPS.md §4).
- * Secrets referenciados por NOME (RESEND_API_KEY, LEADS_EMAIL_TO); nunca logados.
+ * Abstração única de e-mail (AD-3/AD-4): Resend via HTTP, só no servidor.
+ * Destino e remetente vêm do .env (`LEADS_EMAIL_TO`, `LEADS_EMAIL_FROM`), para
+ * dev e produção apontarem para caixas diferentes. Os logs não levam dados do
+ * lead nem a chave.
  */
-
-export type Lead = { type: string } & Record<string, string>;
-
-export function isEmailConfigured(): boolean {
-  return Boolean(process.env.RESEND_API_KEY && process.env.LEADS_EMAIL_TO);
-}
-
-function formatLead(lead: Lead): { subject: string; text: string } {
-  const lines = Object.entries(lead)
-    .filter(([key]) => key !== "type")
-    .map(([key, value]) => `${key}: ${value}`);
-  return {
-    subject: `[Natus] Novo lead: ${lead.type}`,
-    text: `Tipo: ${lead.type}\n${lines.join("\n")}`,
-  };
-}
-
-export async function sendLeadEmail(lead: Lead): Promise<{ delivered: boolean }> {
-  if (!isEmailConfigured()) {
-    // Não perder o lead silenciosamente: registrar sem expor secret.
-    console.warn(
-      `[leads] e-mail não configurado — lead '${lead.type}' não entregue.`,
-    );
+export async function sendEmail(message: EmailMessage): Promise<{ delivered: boolean }> {
+  const env = emailEnv();
+  if (!env) {
+    console.warn("[leads] e-mail não configurado (RESEND_API_KEY / LEADS_EMAIL_TO).");
     return { delivered: false };
   }
 
-  const { subject, text } = formatLead(lead);
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      from: "Grupo Natus <no-reply@natusgrupo.com.br>",
-      to: process.env.LEADS_EMAIL_TO,
-      subject,
-      text,
-    }),
-  });
-
-  return { delivered: res.ok };
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.apiKey}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from: env.from,
+        to: env.to,
+        subject: message.subject,
+        text: message.text,
+        ...(message.replyTo ? { reply_to: message.replyTo } : {}),
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) console.error(`[leads] Resend respondeu ${res.status}.`);
+    return { delivered: res.ok };
+  } catch {
+    console.error("[leads] falha de rede ao enviar e-mail.");
+    return { delivered: false };
+  }
 }

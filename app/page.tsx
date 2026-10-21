@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { Hero } from "@/features/home/Hero";
+import { HOME_DESCRIPTION, HOME_TITLE, pageMetadata } from "@/features/seo/metadata";
+import { JsonLd, websiteSchema } from "@/features/seo/jsonLd";
 import { FeaturedDevelopments } from "@/features/home/FeaturedDevelopments";
 import { MinhaCasaMinhaVida } from "@/features/mcmv/MinhaCasaMinhaVida";
 import { AboutNatus } from "@/features/home/AboutNatus";
@@ -6,9 +9,17 @@ import { DevelopmentSearchBar } from "@/features/developments/DevelopmentSearchB
 import { Reveal } from "@/components/motion/Reveal";
 import { getAllDevelopments } from "@/content/developments";
 
+export const metadata: Metadata = pageMetadata({
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+  path: "/",
+  absoluteTitle: true,
+});
+
 export default function Home() {
   return (
     <main>
+      <JsonLd data={websiteSchema()} />
       <Hero />
 
       {/* Alvo da seta do hero; a busca é a primeira coisa depois da dobra.

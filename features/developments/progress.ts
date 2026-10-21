@@ -4,8 +4,8 @@ import type {
 } from "@/types/development";
 
 /**
- * Helpers de progresso de obra (FR5).
- * TODO (processo): definir quem atualiza e a periodicidade — ver docs/CONTENT-GAPS.md.
+ * Helpers de progresso de obra (FR5). Os percentuais são informados pelo
+ * cliente e atualizados no seed.
  * O shape está pronto para migrar a Supabase (AD-5) sem mudar a UI.
  */
 

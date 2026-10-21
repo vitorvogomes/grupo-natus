@@ -44,6 +44,7 @@ export function DevelopmentLocation({
                 <span>
                   {location.address ? `${location.address}, ` : null}
                   {location.city} — {location.state}
+                  {location.postalCode ? ` · CEP ${location.postalCode}` : null}
                 </span>
               </p>
             </div>

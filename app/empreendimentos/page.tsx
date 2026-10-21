@@ -2,12 +2,18 @@ import type { Metadata } from "next";
 import { getAllDevelopments } from "@/content/developments";
 import { DevelopmentCatalog } from "@/features/developments/DevelopmentCatalog";
 import { parseDevelopmentFilters } from "@/features/developments/searchParams";
+import { pageMetadata } from "@/features/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Empreendimentos",
-  description:
-    "Conheça os empreendimentos do Grupo Natus em Minas Gerais e no Rio de Janeiro.",
-};
+// Cidades tiradas do portfólio, para a descrição nunca sair do ar com o dado.
+const cities = [...new Set(getAllDevelopments().map((d) => d.location.city))];
+
+// Canônica sem a query: os filtros (?status=…&cidade=…) não viram páginas
+// duplicadas no Google.
+export const metadata: Metadata = pageMetadata({
+  title: "Empreendimentos — Apartamentos e casas em MG e RJ",
+  description: `Lançamentos, imóveis em construção e prontos para morar do Grupo Natus em ${new Intl.ListFormat("pt-BR").format(cities)}. Filtre por status, cidade e tipo.`,
+  path: "/empreendimentos",
+});
 
 type EmpreendimentosPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;

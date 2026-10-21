@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import Link from "next/link";
 import { Home, Map, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -8,16 +9,16 @@ import { Gallery } from "@/features/developments/Gallery";
 import { Reveal } from "@/components/motion/Reveal";
 import { Certifications } from "@/features/institutional/Certifications";
 import {
-  COMPANIES_TAGLINE,
-  OASI,
+  ENGINEERING_SUMMARY,
   VALUES,
 } from "@/features/institutional/content";
 
-export const metadata: Metadata = {
-  title: "Serviços de Engenharia",
+export const metadata: Metadata = pageMetadata({
+  title: "Engenharia e execução de obras",
   description:
-    "Oasi Engenharia — planejamento, execução e controle de obra do Grupo Natus, com custo previsível e cronograma cumprido. Certificações ISO 9001:2015 e PBQP-H.",
-};
+    "Engenharia do Grupo Natus: planejamento, execução e controle de obra, com custo previsível e cronograma cumprido. Certificações ISO 9001:2015 e PBQP-H.",
+  path: "/engenharia",
+});
 
 // Os três valores que descrevem a execução (os outros falam de relação
 // comercial e ficam em Quem Somos). Texto do cliente, sem paráfrase.
@@ -116,26 +117,23 @@ export default function EngenhariaPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/60 to-navy-900/25" />
         <div className="relative mx-auto max-w-[var(--container-max)] px-4 py-24 sm:px-6 md:py-28 lg:px-8">
           <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-brand">
-            {OASI.name}
+            Grupo Natus
           </p>
           <h1 className="max-w-2xl text-4xl font-bold leading-tight text-white md:text-5xl">
             Serviços de Engenharia
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-navy-100">
-            {OASI.description}
+            {ENGINEERING_SUMMARY}
           </p>
         </div>
       </section>
 
       <div className="mx-auto max-w-[var(--container-max)] px-4 py-16 sm:px-6 lg:px-8">
-        {/* Posicionamento: o papel da Oasi no ciclo do grupo. */}
+        {/* Posicionamento: além dos próprios empreendimentos, obras para terceiros. */}
         <Reveal>
           <section className="max-w-3xl">
             <p className="text-lg leading-relaxed text-ink-soft">
-              {COMPANIES_TAGLINE}
-            </p>
-            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
-              Além dos empreendimentos do grupo, a Oasi executa obras por
+              Além dos empreendimentos do grupo, executamos obras por
               administração: residências de alto padrão, condomínios e galpões
               comerciais.
             </p>

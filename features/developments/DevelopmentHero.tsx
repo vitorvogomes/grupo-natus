@@ -1,7 +1,21 @@
 import { BedDouble, MapPin, Play } from "lucide-react";
 import { Image } from "@/components/ui/Image";
 import { PLACEHOLDER_IMAGE, pickHeroImage } from "./pickHeroImage";
+import { coverSizes, type CoverBox } from "./coverSizes";
 import type { Development } from "@/types/development";
+
+/**
+ * O hero (`min-h-[60vh]`) muda de proporção com a tela: quase retrato no
+ * celular, quase quadrado no tablet em pé, ~2,4:1 no desktop. É o LCP (com
+ * preload), então o fator tem teto: sem ele, o celular baixaria a fonte
+ * inteira. O teto é 2× desde a entrega em AVIF (2026-10-21): com metade dos
+ * bytes, cabe a nitidez que o 1,5× cortava no celular 3× (densidade 0,71×).
+ */
+const HERO_BOXES: readonly CoverBox[] = [
+  { upTo: 768, vw: 100, aspect: 0.75, maxFactor: 2 },
+  { upTo: 1024, vw: 100, aspect: 1.2, maxFactor: 2 },
+  { vw: 100, aspect: 2.4, maxFactor: 2 },
+];
 
 type DevelopmentHeroProps = {
   development: Development;
@@ -17,7 +31,7 @@ export function DevelopmentHero({ development }: DevelopmentHeroProps) {
         alt={hero ? hero.alt : `${development.name} — imagem em breve`}
         fill
         preload
-        sizes="100vw"
+        sizes={coverSizes(hero ?? {}, HERO_BOXES)}
         quality={90}
         className="object-cover"
       />

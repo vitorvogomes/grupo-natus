@@ -8,6 +8,7 @@ describe("sitemap (FR14)", () => {
     const urls = entries.map((e) => e.url);
     expect(urls.some((u) => u.endsWith("/empreendimentos"))).toBe(true);
     expect(urls.some((u) => u.endsWith("/contato"))).toBe(true);
+    expect(urls.some((u) => u.endsWith("/politica-de-privacidade"))).toBe(true);
     for (const dev of getAllDevelopments()) {
       expect(urls.some((u) => u.endsWith(`/empreendimentos/${dev.slug}`))).toBe(
         true,

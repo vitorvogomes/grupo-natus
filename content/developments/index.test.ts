@@ -4,7 +4,6 @@ import {
   findBySlug,
   getAllDevelopments,
   getDevelopmentBySlug,
-  getPortfolioCounts,
   sortByStatusPriority,
 } from "./index";
 import {
@@ -78,16 +77,16 @@ describe("camada de conteúdo de empreendimentos (AD-2)", () => {
     expect(getAllDevelopments()[0]?.status).toBe("lancamento");
   });
 
+  it("o Solar Manilha abre o portfólio, seguido do Follow Savassi (ordem do seed)", () => {
+    expect(getAllDevelopments().slice(0, 2).map((d) => d.slug)).toEqual([
+      "solar-manilha",
+      "follow-savassi",
+    ]);
+  });
+
   it("os lançamentos têm imagem própria (a vitrine não abre com placeholder)", () => {
     for (const dev of getAllDevelopments().filter((d) => d.status === "lancamento")) {
       expect(dev.images.length).toBeGreaterThan(0);
     }
-  });
-
-  it("getPortfolioCounts: entregues = pronto para morar; o resto está em desenvolvimento", () => {
-    const all = getAllDevelopments();
-    const { delivered, inDevelopment } = getPortfolioCounts();
-    expect(delivered).toBe(all.filter((d) => d.status === "pronto").length);
-    expect(delivered + inDevelopment).toBe(all.length);
   });
 });

@@ -47,12 +47,3 @@ export function getDevelopmentBySlug(slug: string): Development | undefined {
   return findBySlug(developments, slug);
 }
 
-/**
- * Entregues ("pronto para morar") × em desenvolvimento (os demais status).
- * Alimenta o texto de Quem Somos, que antes fixava os números à mão.
- */
-export function getPortfolioCounts(): { delivered: number; inDevelopment: number } {
-  const all = getAllDevelopments();
-  const delivered = all.filter((dev) => dev.status === "pronto").length;
-  return { delivered, inDevelopment: all.length - delivered };
-}

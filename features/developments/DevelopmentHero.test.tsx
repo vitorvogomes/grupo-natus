@@ -52,4 +52,12 @@ describe("DevelopmentHero", () => {
     expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: /assista ao vídeo/i })).toBeNull();
   });
+
+  it("panorâmica: o sizes considera a proporção do hero em cada faixa, com teto de 2×", () => {
+    render(<DevelopmentHero development={{ ...base, images: [{ src: "/x/panorama.webp", alt: "Panorama", kind: "imagens" as const, width: 2095, height: 750 }] }} />);
+    expect(screen.getByRole("img", { name: "Panorama" })).toHaveAttribute(
+      "sizes",
+      "(max-width: 768px) 200vw, (max-width: 1024px) 200vw, 116vw",
+    );
+  });
 });
