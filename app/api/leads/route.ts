@@ -85,7 +85,7 @@ export async function POST(request: Request) {
   if (lead.type === "interesse") {
     // Nome e ID no CRM vêm do dado, nunca do navegador.
     const development = getDevelopmentBySlug(lead.slug);
-    if (!development || development.status === "breve_lancamento") return fail(400);
+    if (!development) return fail(400);
     const { ok } = await handleInterestLead(lead, development);
     return ok ? Response.json({ ok: true }) : fail(502);
   }

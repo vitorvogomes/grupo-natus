@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { stubBelowTheFold } from "@/tests/belowTheFold";
 import { Reveal } from "./Reveal";
 
 describe("Reveal", () => {
@@ -36,4 +38,26 @@ describe("Reveal", () => {
     );
   });
 
+  it("o HTML do servidor já vem visível: o conteúdo não espera o JS", () => {
+    const html = renderToString(
+      <Reveal>
+        <p>sem JS</p>
+      </Reveal>,
+    );
+    expect(html).toContain("sem JS");
+    expect(html).not.toMatch(/opacity|transform/);
+  });
+
+  it("abaixo da tela, esconde ao hidratar e revela ao entrar na viewport", async () => {
+    // O IntersectionObserver de teste dispara na hora: o reveal já começa.
+    const { animate } = stubBelowTheFold();
+    render(
+      <Reveal>
+        <span>abaixo</span>
+      </Reveal>,
+    );
+    const wrapper = screen.getByText("abaixo").parentElement!;
+    await waitFor(() => expect(animate).toHaveBeenCalled());
+    expect(wrapper.style.opacity).toBe("0");
+  });
 });

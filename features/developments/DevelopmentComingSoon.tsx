@@ -1,8 +1,8 @@
 import { BellRing, Images } from "lucide-react";
 import { buttonVariants } from "@/components/ui/Button";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 import { STATUS_META, type Development } from "@/types/development";
+import { DEV_SECTIONS } from "./DevelopmentAnchorNav";
 import { DevelopmentBadges } from "./DevelopmentBadges";
 
 type DevelopmentComingSoonProps = {
@@ -15,15 +15,13 @@ type DevelopmentComingSoonProps = {
  * O que existe de verdade — status, praça e tipologia — vira o conteúdo, em
  * vez de a página inteira ser uma sequência de seções dizendo "em breve". A
  * pessoa que chegou aqui por um anúncio ou por busca sai com algo na mão e um
- * caminho para ser avisada, que é o melhor desfecho possível sem renders.
+ * caminho para ser avisada: o botão leva ao formulário de interesse da página,
+ * que grava o lead como nos demais empreendimentos.
  */
 export function DevelopmentComingSoon({
   development,
 }: DevelopmentComingSoonProps) {
   const { name, status, location, features } = development;
-  const href = buildWhatsAppUrl({
-    message: `Olá! Quero receber as novidades do empreendimento ${name}.`,
-  });
 
   const facts = [
     { label: "Status", value: STATUS_META[status].label },
@@ -45,9 +43,7 @@ export function DevelopmentComingSoon({
             mão — plantas, valores e condições.
           </p>
           <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`#${DEV_SECTIONS.contato.id}`}
             className={cn(buttonVariants({ size: "lg" }), "mt-8")}
           >
             <BellRing aria-hidden="true" />

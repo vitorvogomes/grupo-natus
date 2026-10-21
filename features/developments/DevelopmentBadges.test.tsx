@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { DevelopmentBadges, SoldOutBand } from "./DevelopmentBadges";
+import { DevelopmentBadges, SalesBand } from "./DevelopmentBadges";
 
 describe("DevelopmentBadges", () => {
   it("mostra o status", () => {
@@ -16,18 +16,15 @@ describe("DevelopmentBadges", () => {
     rerender(<DevelopmentBadges development={{ status: "pronto" }} />);
     expect(screen.queryByText("Minha Casa Minha Vida")).not.toBeInTheDocument();
   });
-
-  it("100% vendido não vira badge (é a faixa)", () => {
-    render(
-      <DevelopmentBadges development={{ status: "pronto", soldOut: true }} />,
-    );
-    expect(screen.queryByText(/100% vendido/i)).not.toBeInTheDocument();
-  });
 });
 
-describe("SoldOutBand", () => {
-  it("anuncia 100% vendido", () => {
-    render(<SoldOutBand />);
-    expect(screen.getByText("100% vendido")).toBeInTheDocument();
+describe("SalesBand", () => {
+  it.each([
+    ["vendido", "100% vendido", "bg-band-vendido"],
+    ["pre_lancamento", "Pré-lançamento", "bg-band-pre-lancamento"],
+    ["ultimas_unidades", "Últimas unidades", "bg-band-ultimas-unidades"],
+  ] as const)("%s: anuncia “%s” com a cor própria", (band, label, bg) => {
+    render(<SalesBand band={band} />);
+    expect(screen.getByText(label)).toHaveClass(bg);
   });
 });

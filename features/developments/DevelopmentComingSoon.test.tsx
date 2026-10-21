@@ -35,15 +35,11 @@ describe("DevelopmentComingSoon", () => {
     expect(screen.queryByText(/TODO/)).not.toBeInTheDocument();
   });
 
-  it("dá um caminho de saída pelo WhatsApp, com o nome na mensagem", () => {
+  it("\"Quero ser avisado\" leva ao formulário da página", () => {
     render(<DevelopmentComingSoon development={base} />);
-    const link = screen.getByRole("link", { name: /quero ser avisado/i });
-    expect(link).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /quero ser avisado/i })).toHaveAttribute(
       "href",
-      expect.stringContaining("https://wa.me/"),
-    );
-    expect(decodeURIComponent(link.getAttribute("href")!)).toContain(
-      "Solar Manilha",
+      "#falar-com-consultor",
     );
   });
 

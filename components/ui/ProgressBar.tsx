@@ -1,8 +1,8 @@
 "use client";
 
 import * as Progress from "@radix-ui/react-progress";
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { useLayoutEffect, useRef } from "react";
+import { armReveal } from "@/components/motion/armReveal";
 import { cn } from "@/lib/utils";
 
 type ProgressBarProps = {
@@ -24,13 +24,22 @@ export function ProgressBar({
 }: ProgressBarProps) {
   const pct = clamp(value);
   const large = size === "lg";
-  const reduce = useReducedMotion();
   const target = pct / 100;
-  // Observa o TRILHO, não o preenchimento: o indicador nasce em scaleX(0), e
-  // uma caixa de largura zero não cruza o limiar do IntersectionObserver de
-  // forma confiável — a barra poderia nunca encher.
   const trackRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(trackRef, { once: true, amount: 0.3 });
+  const fillRef = useRef<HTMLDivElement>(null);
+
+  // Sai do servidor no valor; abaixo da tela, enche ao rolar (`armReveal`).
+  // O gatilho é o TRILHO: o preenchimento em scaleX(0) tem largura zero e não
+  // cruza o limiar do IntersectionObserver.
+  useLayoutEffect(() => {
+    if (!trackRef.current || !fillRef.current) return;
+    return armReveal(fillRef.current, trackRef.current, {
+      from: { transform: "scaleX(0)" },
+      to: { transform: `scaleX(${target})` },
+      duration: 0.8,
+      amount: 0.3,
+    });
+  }, [target]);
 
   return (
     <div className={className}>
@@ -69,15 +78,10 @@ export function ProgressBar({
         )}
       >
         <Progress.Indicator asChild>
-          <motion.div
+          <div
+            ref={fillRef}
             className="h-full w-full origin-left rounded-full bg-gradient-to-r from-brand to-brand-strong"
-            initial={{ scaleX: reduce ? target : 0 }}
-            animate={{ scaleX: reduce || inView ? target : 0 }}
-            transition={
-              reduce
-                ? { duration: 0 }
-                : { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
-            }
+            style={{ transform: `scaleX(${target})` }}
           />
         </Progress.Indicator>
       </Progress.Root>

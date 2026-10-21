@@ -43,9 +43,22 @@ describe("Seed dos empreendimentos", () => {
 
   it("100% vendido só existe sobre 'pronto para morar' — e todos os prontos estão vendidos", () => {
     for (const dev of developments) {
-      if (dev.soldOut) expect(dev.status).toBe("pronto");
-      if (dev.status === "pronto") expect(dev.soldOut).toBe(true);
+      if (dev.salesBand === "vendido") expect(dev.status).toBe("pronto");
+      if (dev.status === "pronto") expect(dev.salesBand).toBe("vendido");
     }
+  });
+
+  it("pré-lançamento só sobre lançamento; últimas unidades só em obra ou lançamento", () => {
+    for (const dev of developments) {
+      if (dev.salesBand === "pre_lancamento") expect(dev.status).toBe("lancamento");
+      if (dev.salesBand === "ultimas_unidades") expect(["lancamento", "em_construcao"]).toContain(dev.status);
+    }
+  });
+
+  it("faixas e status pedidos pelo cliente (v6): Solar em pré-lançamento, Follow em obra e nas últimas unidades", () => {
+    const bySlug = (slug: string) => developments.find((d) => d.slug === slug)!;
+    expect(bySlug("solar-manilha")).toMatchObject({ status: "lancamento", salesBand: "pre_lancamento" });
+    expect(bySlug("follow-savassi")).toMatchObject({ status: "em_construcao", salesBand: "ultimas_unidades" });
   });
 
   it("todo empreendimento com página completa ou reduzida tem coordenadas para o mapa", () => {

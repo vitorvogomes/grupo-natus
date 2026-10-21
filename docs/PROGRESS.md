@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-10-20 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Última revisão:** **v5 ✅** — leads (Resend, Supabase, CV CRM), SEO/migração, Solar v2 · v4 ✅ · v3 ✅ · v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-10-20 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Última revisão:** **v6 ✅** — faixas comerciais, formulário em todo empreendimento, reveal sem esperar o JS · v5 ✅ · v4 ✅ · v3 ✅ · v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -267,6 +267,22 @@ Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · l
   - verificar o domínio no Resend (hoje sai pela conta pessoal, para o e-mail de dev);
   - export do Search Console para completar a tabela de redirects;
   - hospedagem com o proxy sobrescrevendo `x-real-ip`.
+
+## Revisão v6 — faixas comerciais, formulário em todo empreendimento, mobile ✅ (2026-10-20)
+
+- **Follow Savassi em construção** (era lançamento). Com isso o Solar é o único lançamento e abre o portfólio. O top 3 é Solar → Follow → Golden Ville (o Follow subiu no seed, à frente do Golden). O resumo do Follow deixou de começar por "Lançamento".
+- **Faixas comerciais no card**: `soldOut` virou `salesBand` (`pre_lancamento` · `ultimas_unidades` · `vendido`), com uma cor por faixa (`--color-band-*`: nude-400 com texto navy, nude-700 e navy-700 com texto branco). Solar = Pré-lançamento, Follow = Últimas unidades, os 4 prontos = 100% vendido.
+- **"Quer saber mais?" em todo empreendimento**: o breve lançamento ganhou o formulário de interesse (mesmo fluxo: `site_leads`, CV CRM e e-mail). A rota deixou de recusar o slug de breve lançamento. O "Quero ser avisado" do painel leva ao formulário em vez de abrir o WhatsApp. Sem `crmId`, o lead entra no CRM sem empreendimento, como nos prontos.
+- 🐛 **Home em branco no 1º carregamento no celular**: o `Reveal` (`whileInView` do motion) saía do servidor em `opacity: 0` e só aparecia depois da hidratação. Medido com 4G lento e CPU 4×: o carrossel ficava ~3 s invisível já na tela. Na volta pela logo o JS já estava em cache, por isso "tudo carregava". Agora o HTML sai visível e `armReveal` esconde e anima só o que ainda está abaixo da tela quando o JS chega; a `ProgressBar` segue o mesmo padrão (a barra sai do servidor no valor). De quebra, o JS da Home caiu de 275 para 240 KB gzip (o componente `motion` saiu do bundle).
+
+### Code review v6 (2026-10-21)
+- 🐛 **Reveal preso no meio**: se o efeito rodasse de novo com o elemento armado (a `ProgressBar` mudando de valor), a limpeza parava a animação sem devolver o estado final, e a barra ou o bloco podiam ficar escondidos. Agora a limpeza devolve o estado final.
+- **Um lote por commit**: `armReveal` grava, mede e esconde todos os reveals de uma vez (microtask, antes da pintura), em vez de intercalar leitura e escrita por elemento na hidratação.
+- O reveal termina em `transform: none`, não `translateY(0)`: transform em repouso cria bloco de contenção para os `absolute` de dentro. O ease dos reveals tem teste contra o token `--ease-brand`.
+- **Solar**: o resumo deixou de começar por "Lançamento", que contradizia a faixa "Pré-lançamento". A fase de vendas no CONTENT-GAPS virou uma coluna "Faixa do card".
+- **Limpeza**: `DevelopmentBadges` não recebe mais `salesBand` (não usava); os stubs de "abaixo da tela" dos testes viraram um helper (`tests/belowTheFold.ts`) que restaura mesmo quando a asserção falha; comentários no presente; o comentário da composição da página e o CLAUDE.md dizem o que o código faz (a composição sai do dado, não do status); a spine deixou de citar `soldOut` e um formato de erro da API que não existe.
+
+**Gate:** 543 testes · cobertura 96,6% stmts · 92,7% branches · lint, typecheck e build ok · Chromium (Pixel 7 com 4G lento, iPhone 13, 1440 px): conteúdo visível antes da hidratação, reveal e barras de obra ao rolar preservados, sem rolagem horizontal, top 3 Solar → Follow → Golden Ville.
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 > A v5 usa o Supabase só para gravar leads (`site_leads`, `site_contacts`, RLS sem policy, aplicadas no SQL Editor). Não há Supabase local, migração de conteúdo nem painel: o Gate C segue fechado.

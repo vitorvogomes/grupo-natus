@@ -46,13 +46,13 @@ export default async function DevelopmentPage({ params }: PageParams) {
   if (!development) notFound();
 
   /**
-   * Composição da página: o status diz quais seções fazem sentido e o dado
-   * presente diz quais aparecem.
+   * Composição da página: o dado presente diz quais seções aparecem (galeria,
+   * diferenciais, obra); o status só decide dois casos.
    *
-   * - Lançamento: página completa (é o destaque do portfólio).
-   * - Em construção / pronto: reduzida — só o que tiver material.
+   * - Estágio de obra: só em lançamento e em construção.
    * - Breve lançamento: seção mínima. É a fase embrionária; em vez de uma
-   *   sequência de blocos dizendo "em breve", um painel com o que se sabe.
+   *   sequência de blocos dizendo "em breve", um painel com o que se sabe,
+   *   e o formulário de interesse.
    */
   const images = development.images;
   const amenities = development.amenities ?? [];
@@ -160,14 +160,13 @@ export default async function DevelopmentPage({ params }: PageParams) {
         </Reveal>
       ) : null}
 
-      {/* No breve lançamento o painel já traz o "Quero ser avisado". */}
-      {minimal ? null : (
-        <Reveal>
-          <section id={DEV_SECTIONS.contato.id} className={sectionClass}>
-            <DevelopmentCta development={development} />
-          </section>
-        </Reveal>
-      )}
+      {/* Todo empreendimento tem o formulário, inclusive o breve lançamento
+          (o "Quero ser avisado" do painel leva até aqui). */}
+      <Reveal>
+        <section id={DEV_SECTIONS.contato.id} className={sectionClass}>
+          <DevelopmentCta development={development} />
+        </section>
+      </Reveal>
 
       {/* Só nos empreendimentos efetivamente enquadrados: a marca é federal e
           exibi-la fora do programa sugere um credenciamento que não existe. */}

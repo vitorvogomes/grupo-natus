@@ -6,7 +6,7 @@
 /**
  * Status do portfólio. A ordem é a prioridade de exibição: lançamentos são os
  * destaques (página completa), "breve lançamento" é a fase embrionária (seção
- * mínima). "100% vendido" não é status — é a marca `soldOut` sobre "pronto".
+ * mínima). "100% vendido" não é status — é a faixa comercial (`salesBand`).
  */
 export const DEVELOPMENT_STATUSES = [
   "lancamento",
@@ -55,6 +55,20 @@ export const STATUS_META: Record<DevelopmentStatus, StatusMeta> = {
   breve_lancamento: {
     label: "Breve lançamento",
   },
+};
+
+/**
+ * Faixa comercial do card: a fase de vendas, à parte do status da obra.
+ * "100% vendido" só sobre "pronto"; "pré-lançamento" só sobre "lançamento";
+ * "últimas unidades" em lançamento ou em obra (o teste de conteúdo garante).
+ */
+export const SALES_BANDS = ["pre_lancamento", "ultimas_unidades", "vendido"] as const;
+export type SalesBand = (typeof SALES_BANDS)[number];
+
+export const SALES_BAND_LABELS: Record<SalesBand, string> = {
+  pre_lancamento: "Pré-lançamento",
+  ultimas_unidades: "Últimas unidades",
+  vendido: "100% vendido",
 };
 
 /**
@@ -141,10 +155,10 @@ export type Development = {
    */
   mcmv?: boolean;
   /**
-   * 100% vendido. Só faz sentido em "pronto" (o teste de conteúdo garante):
-   * vira uma faixa no card (`SoldOutBand`), não um badge a mais.
+   * Fase de vendas (pré-lançamento, últimas unidades, 100% vendido): vira uma
+   * faixa no card (`SalesBand`), não um badge a mais.
    */
-  soldOut?: boolean;
+  salesBand?: SalesBand;
   /**
    * `idempreendimento` no CV CRM: liga o lead do formulário ao empreendimento
    * certo. Ausente = o lead entra no CRM sem empreendimento.

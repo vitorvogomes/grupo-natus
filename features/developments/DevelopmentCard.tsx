@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/Card";
 import { buttonVariants } from "@/components/ui/Button";
 import { Image } from "@/components/ui/Image";
 import { cn } from "@/lib/utils";
-import { DevelopmentBadges, SoldOutBand } from "./DevelopmentBadges";
+import { DevelopmentBadges, SalesBand } from "./DevelopmentBadges";
 import { formatLocality } from "./locality";
 import { PLACEHOLDER_IMAGE, pickHeroImage } from "./pickHeroImage";
 import { coverSizes } from "./coverSizes";
@@ -45,7 +45,7 @@ export function DevelopmentCard({ development }: DevelopmentCardProps) {
         />
       </div>
 
-      {development.soldOut ? <SoldOutBand /> : null}
+      {development.salesBand ? <SalesBand band={development.salesBand} /> : null}
 
       <div className="flex flex-1 flex-col p-4">
         {/* Nome + UF no selo (ref. Novolar): a UF separa as duas praças da
