@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/features/seo/metadata";
 import type { ReactNode } from "react";
 import { CookiePreferencesButton } from "@/features/consent/CookiePreferencesButton";
 import { CONSENT_COOKIE } from "@/lib/consent";
 import { CONTACT, LEGAL } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Política de Privacidade",
   description:
     "Como o Grupo Natus trata os dados pessoais enviados pelo site, quais cookies usa e como exercer seus direitos pela LGPD.",
-  alternates: { canonical: "/politica-de-privacidade" },
-};
+  path: "/politica-de-privacidade",
+});
 
 /** Data da versão do texto. Atualize junto com qualquer mudança abaixo. */
-const UPDATED_AT = "17 de outubro de 2026";
+const UPDATED_AT = "21 de outubro de 2026";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -85,6 +86,12 @@ export default function PoliticaDePrivacidadePage() {
               (localização, área, tipo e observações).
             </li>
             <li>
+              <strong className="text-ink">Origem da visita:</strong> a página
+              de onde o formulário foi enviado e, quando você chega por um
+              anúncio, os parâmetros de campanha do link (como a origem e o
+              nome da campanha). Nada disso fica guardado no seu navegador.
+            </li>
+            <li>
               <strong className="text-ink">Dados técnicos:</strong> o endereço
               IP de quem envia um formulário, mantido só em memória por cerca
               de um minuto para limitar abusos e spam.
@@ -127,8 +134,18 @@ export default function PoliticaDePrivacidadePage() {
           <p>Não vendemos dados pessoais. Eles passam apenas por:</p>
           <ul className={listClass}>
             <li>
+              <strong className="text-ink">Banco de dados:</strong> o serviço
+              de hospedagem onde guardamos os pedidos enviados pelos
+              formulários, com acesso restrito à nossa equipe.
+            </li>
+            <li>
+              <strong className="text-ink">Sistema de atendimento (CRM):</strong>{" "}
+              os pedidos de informação sobre um empreendimento são registrados
+              no sistema que nossa equipe comercial usa para atender você.
+            </li>
+            <li>
               <strong className="text-ink">Provedor de e-mail:</strong> o
-              serviço que entrega à nossa equipe as mensagens dos formulários.
+              serviço que avisa a nossa equipe de cada mensagem dos formulários.
             </li>
             <li>
               <strong className="text-ink">Google Maps:</strong> quando você

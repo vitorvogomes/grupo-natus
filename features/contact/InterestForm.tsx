@@ -2,7 +2,6 @@ import { LeadForm, type LeadField } from "./LeadForm";
 
 type InterestFormProps = {
   slug: string;
-  name: string;
 };
 
 /**
@@ -10,11 +9,11 @@ type InterestFormProps = {
  *
  * O empreendimento não é mais um campo na tela: a página já sabe qual é, e um
  * input somente-leitura só ocupava espaço e dava ao formulário a aparência de
- * ser mais longo do que é. Ele segue no payload via `context`, então o e-mail
- * do lead continua dizendo de qual empreendimento veio (lib/email serializa
- * todas as chaves).
+ * ser mais longo do que é. Segue só o `slug`: o servidor resolve nome e ID no
+ * CRM pelo dado. A página e a UTM (o anúncio traz o visitante até aqui) vão
+ * junto, lidas da URL no envio.
  */
-export function InterestForm({ slug, name }: InterestFormProps) {
+export function InterestForm({ slug }: InterestFormProps) {
   const fields: LeadField[] = [
     { name: "nome", label: "Nome", required: true },
     { name: "telefone", label: "Telefone", type: "tel", required: true },
@@ -26,7 +25,8 @@ export function InterestForm({ slug, name }: InterestFormProps) {
       leadType="interesse"
       fields={fields}
       submitLabel="Quero saber mais!"
-      context={{ slug, empreendimento: name }}
+      context={{ slug }}
+      withPageContext
     />
   );
 }

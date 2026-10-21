@@ -22,6 +22,23 @@ describe("LeadForm", () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it("aplica os limites do servidor: o campo não passa do tamanho e o excesso é explicado", async () => {
+    const spy = vi.spyOn(submit, "submitLead");
+    const user = userEvent.setup();
+    render(<LeadForm leadType="contato" fields={fields} />);
+    const nome = screen.getByLabelText(/nome/i);
+    expect(nome).toHaveAttribute("maxLength", "100");
+    expect(screen.getByLabelText(/mensagem/i)).toHaveAttribute("maxLength", "5000");
+    // Colar além do limite (o atributo não barra `fireEvent`/autofill em todo navegador).
+    nome.removeAttribute("maxLength");
+    await user.type(nome, "x".repeat(101));
+    await user.type(screen.getByLabelText(/email/i), "a@b.com");
+    await user.type(screen.getByLabelText(/mensagem/i), "Oi");
+    await user.click(screen.getByRole("button", { name: /enviar/i }));
+    expect(await screen.findByText("Use até 100 caracteres.")).toBeInTheDocument();
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it("envia payload válido e mostra sucesso", async () => {
     const spy = vi
       .spyOn(submit, "submitLead")
@@ -84,11 +101,8 @@ describe("LeadForm", () => {
     expect(screen.getByLabelText("Assunto")).toBeInTheDocument();
   });
 
-  it("mostra erro quando o envio falha", async () => {
-    vi.spyOn(submit, "submitLead").mockResolvedValue({
-      ok: false,
-      error: "Rate limit",
-    });
+  it("mostra uma mensagem genérica quando o envio falha (sem o motivo)", async () => {
+    vi.spyOn(submit, "submitLead").mockResolvedValue({ ok: false });
     const user = userEvent.setup();
     render(<LeadForm leadType="contato" fields={fields} />);
     await user.type(screen.getByLabelText(/Nome/), "Maria");
@@ -96,7 +110,7 @@ describe("LeadForm", () => {
     await user.type(screen.getByLabelText(/Mensagem/), "Olá");
     await user.click(screen.getByRole("button", { name: /enviar/i }));
     await waitFor(() =>
-      expect(screen.getByRole("alert")).toHaveTextContent("Rate limit"),
+      expect(screen.getByRole("alert")).toHaveTextContent(submit.LEAD_ERROR_MESSAGE),
     );
   });
 });

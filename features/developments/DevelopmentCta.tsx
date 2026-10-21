@@ -50,7 +50,7 @@ export function DevelopmentCta({ development }: DevelopmentCtaProps) {
         </div>
 
         <div className="rounded-xl bg-surface p-6 text-ink shadow-lg sm:p-7">
-          <InterestForm slug={development.slug} name={development.name} />
+          <InterestForm slug={development.slug} />
         </div>
       </div>
     </section>

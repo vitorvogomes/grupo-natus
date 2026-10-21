@@ -10,7 +10,9 @@ import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select, type SelectOption } from "@/components/ui/Select";
 import { isEmail, isPhone } from "@/lib/validators";
-import { submitLead } from "./submitLead";
+import { FIELD_MAX } from "@/lib/leads/schema";
+import { readPageContext } from "./pageContext";
+import { LEAD_ERROR_MESSAGE, submitLead } from "./submitLead";
 
 export type LeadFieldType = "text" | "email" | "tel" | "textarea" | "select";
 
@@ -21,8 +23,6 @@ export type LeadField = {
   required?: boolean;
   options?: SelectOption[];
   placeholder?: string;
-  defaultValue?: string;
-  readOnly?: boolean;
 };
 
 type LeadFormProps = {
@@ -31,15 +31,24 @@ type LeadFormProps = {
   submitLabel?: string;
   /** Contexto oculto enviado junto (ex.: slug do empreendimento). */
   context?: Record<string, string>;
+  /** Envia também a página e a UTM da URL atual (lidas no envio). */
+  withPageContext?: boolean;
 };
 
 type LeadValues = Record<string, string>;
 
-/** Schema zod derivado dos campos: obrigatório + email/telefone quando preenchidos. */
+/** Limite do servidor (`FIELD_MAX`) para o campo, quando ele tem um. */
+function maxLengthOf(field: LeadField): number | undefined {
+  return (FIELD_MAX as Record<string, number>)[field.name];
+}
+
+/** Schema zod derivado dos campos: tamanho, obrigatório e email/telefone quando preenchidos. */
 function buildSchema(fields: readonly LeadField[]) {
   const shape: Record<string, z.ZodType<string>> = {};
   for (const field of fields) {
     const checks: Array<{ test: (v: string) => boolean; message: string }> = [];
+    const max = maxLengthOf(field);
+    if (max) checks.push({ test: (v) => v.trim().length <= max, message: `Use até ${max} caracteres.` });
     if (field.required) {
       checks.push({ test: (v) => v.trim().length > 0, message: "Campo obrigatório." });
     }
@@ -65,10 +74,11 @@ export function LeadForm({
   fields,
   submitLabel = "Enviar",
   context = {},
+  withPageContext = false,
 }: LeadFormProps) {
   const schema = useMemo(() => buildSchema(fields), [fields]);
   const defaultValues = useMemo<LeadValues>(
-    () => Object.fromEntries(fields.map((f) => [f.name, f.defaultValue ?? ""])),
+    () => Object.fromEntries(fields.map((f) => [f.name, ""])),
     [fields],
   );
 
@@ -87,18 +97,12 @@ export function LeadForm({
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
     "idle",
   );
-  const [formError, setFormError] = useState<string>("");
 
   async function onValid(values: LeadValues) {
     setStatus("sending");
-    setFormError("");
-    const result = await submitLead({ type: leadType, ...context, ...values });
-    if (result.ok) {
-      setStatus("success");
-    } else {
-      setStatus("error");
-      setFormError(result.error ?? "Falha ao enviar.");
-    }
+    const page = withPageContext ? readPageContext(window.location) : {};
+    const result = await submitLead({ type: leadType, ...page, ...context, ...values });
+    setStatus(result.ok ? "success" : "error");
   }
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -147,6 +151,7 @@ export function LeadForm({
               required={field.required}
               error={error}
               rows={4}
+              maxLength={maxLengthOf(field)}
               placeholder={field.placeholder}
               {...registration}
             />
@@ -174,7 +179,7 @@ export function LeadForm({
             required={field.required}
             error={error}
             type={field.type ?? "text"}
-            readOnly={field.readOnly}
+            maxLength={maxLengthOf(field)}
             placeholder={field.placeholder}
             {...registration}
           />
@@ -183,7 +188,7 @@ export function LeadForm({
 
       {status === "error" ? (
         <p role="alert" className="text-sm text-destructive">
-          {formError}
+          {LEAD_ERROR_MESSAGE}
         </p>
       ) : null}
 
