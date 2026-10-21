@@ -47,7 +47,7 @@
 
 ```ts
 type DevelopmentStatus = 'lancamento' | 'em_construcao' | 'pronto' | 'breve_lancamento'
-// + soldOut?: boolean ("100% vendido", só sobre 'pronto'); mcmv?: boolean
+// + salesBand?: "pre_lancamento" | "ultimas_unidades" | "vendido" (faixa do card; vendido só sobre 'pronto'); mcmv?: boolean
 
 type Development = {
   slug: string

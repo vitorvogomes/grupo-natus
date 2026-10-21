@@ -9,17 +9,17 @@
 
 ## 1. Por empreendimento (11) — revisão v3 (2026-10-11)
 
-Status novos: **Lançamento** (página completa, destaque) · **Em construção** e **Pronto para morar** (página reduzida) · **Breve lançamento** (seção mínima com a foto padrão). **100% vendido** é marca sobre "pronto" (faixa só no card), não status.
+Status novos: **Lançamento** · **Em construção** · **Pronto para morar** (a página mostra o que houver de material; estágio de obra só nos dois primeiros) · **Breve lançamento** (seção mínima com a foto padrão). A fase de vendas (pré-lançamento · últimas unidades · 100% vendido) não é status: é a faixa do card (`salesBand`).
 
-| # | Empreendimento | Bairro · Cidade/UF | Status | 100% vendido | MCMV | Material |
+| # | Empreendimento | Bairro · Cidade/UF | Status | Faixa do card | MCMV | Material |
 |---|---|---|---|---|---|---|
-| 1 | Follow Savassi | Savassi · BH/MG | Lançamento | — | — | completo (fotos da obra pendentes) |
-| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | — | ✔ | completo (34 imagens; 13 renders v2 de 5504 px, os demais de 1448–2111 px — ver §5) |
+| 1 | Follow Savassi | Savassi · BH/MG | Em construção | Últimas unidades | — | completo (fotos da obra pendentes) |
+| 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | Pré-lançamento | ✔ | completo (34 imagens; 13 renders v2 de 5504 px, os demais de 1448–2111 px — ver §5) |
 | 3 | Golden Ville Residence | Maria Paula · **Niterói**/RJ | Em construção | — | ✔ | descrição + imagens (fotos da obra pendentes) |
-| 4 | Viver Mais | Itaboraí/RJ | Pronto para morar | ✔ | ✔ | descrição + imagens |
-| 5 | Residencial Denver | Santa Lúcia · BH/MG | Pronto para morar | ✔ | — | descrição + imagens |
-| 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar | ✔ | ✔ | descrição + imagens |
-| 7 | Residenziale Colonnello Figueiredo | Pau Pombo · Nova Lima/MG | Pronto para morar | ✔ | — | descrição + imagens |
+| 4 | Viver Mais | Itaboraí/RJ | Pronto para morar | 100% vendido | ✔ | descrição + imagens |
+| 5 | Residencial Denver | Santa Lúcia · BH/MG | Pronto para morar | 100% vendido | — | descrição + imagens |
+| 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar | 100% vendido | ✔ | descrição + imagens |
+| 7 | Residenziale Colonnello Figueiredo | Pau Pombo · Nova Lima/MG | Pronto para morar | 100% vendido | — | descrição + imagens |
 | 8 | Mirante Gutierrez | BH/MG | Breve lançamento | — | — | mínimo (maquetes guardadas em `public/`) |
 | 9 | One Studios | Niterói/RJ | Breve lançamento | — | — | mínimo |
 | 10 | Sunset Ville Residence | BH/MG | Breve lançamento | — | ✔ | mínimo |
