@@ -19,8 +19,8 @@ import {
  */
 
 /**
- * Resumo da engenharia (era a descrição da Oasi; desde a v4 o site fala em
- * nome do Grupo Natus e não apresenta as empresas separadamente).
+ * Resumo da engenharia, em nome do Grupo Natus (o site não apresenta as
+ * empresas do grupo separadamente).
  */
 export const ENGINEERING_SUMMARY =
   "Do canteiro à entrega das chaves: planejamento, execução e controle de obra, com custo previsível e cronograma cumprido.";
