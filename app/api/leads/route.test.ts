@@ -109,10 +109,14 @@ describe("POST /api/leads (FR11)", () => {
     expect(handleGeneralLead).not.toHaveBeenCalled();
   });
 
-  it("interesse com slug inexistente ou de breve lançamento é recusado", async () => {
+  it("interesse com slug inexistente é recusado", async () => {
     expect((await post({ ...interesse, slug: "nao-existe" })).status).toBe(400);
-    expect((await post({ ...interesse, slug: "gutierrez" })).status).toBe(400);
     expect(handleInterestLead).not.toHaveBeenCalled();
+  });
+
+  it("breve lançamento também recebe interesse (mesmo fluxo: banco, CRM e e-mail)", async () => {
+    expect((await post({ ...interesse, slug: "gutierrez" })).status).toBe(200);
+    expect(handleInterestLead.mock.calls[0]![1]).toMatchObject({ slug: "gutierrez", status: "breve_lancamento" });
   });
 
   it("rate-limit por IP, preferindo o x-real-ip do host", async () => {

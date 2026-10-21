@@ -58,7 +58,7 @@ function rotulosDaNav() {
     .map((a) => [a.textContent, a.getAttribute("href")]);
 }
 
-describe("Lançamento — página completa (Follow Savassi)", () => {
+describe("Em construção com material completo (Follow Savassi)", () => {
   it("monta a página inteira, na ordem pedida", async () => {
     await abrir("follow-savassi");
     expect(
@@ -224,13 +224,20 @@ describe("Breve lançamento — seção mínima (Gutierrez, Sunset Ville)", () =
     expect(screen.getByText(/20 un. alto luxo/)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /quero ser avisado/i }),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("href", "#falar-com-consultor");
     expect(screen.queryByRole("heading", { name: "Galeria" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Localização" })).toBeNull();
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
     expect(
       screen.queryByRole("navigation", { name: /seções do empreendimento/i }),
     ).toBeNull();
+  });
+
+  it("tem o formulário de interesse, como todo empreendimento", async () => {
+    await abrir("gutierrez");
+    const secao = document.getElementById("falar-com-consultor")!;
+    expect(within(secao).getByRole("heading", { name: "Quer saber mais?" })).toBeInTheDocument();
+    expect(within(secao).getByRole("textbox", { name: /nome/i })).toBeInTheDocument();
   });
 
   it("nunca mostra placeholder TODO na tela", async () => {
