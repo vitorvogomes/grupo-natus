@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { armReveal } from "./armReveal";
 
 type RevealProps = {
   children: ReactNode;
@@ -16,35 +16,34 @@ type RevealProps = {
 };
 
 /**
- * Reveal sutil ao entrar na viewport (fade + rise), uma única vez.
- * Só transform/opacity (GPU); ease de marca; respeita prefers-reduced-motion
- * (renderiza estático, conteúdo visível — protege CWV e no-JS). Usar apenas
- * em conteúdo abaixo da dobra (nunca no elemento de LCP).
+ * Reveal sutil ao entrar na viewport (fade + rise), uma única vez, via
+ * `armReveal`: o HTML sai visível e só o que está abaixo da tela anima.
+ * Usar abaixo da dobra (nunca no elemento de LCP).
  */
 export function Reveal({
   children,
   className,
   delay = 0,
-  as = "div",
+  as: Tag = "div",
 }: RevealProps) {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement & HTMLLIElement>(null);
 
-  if (reduce) {
-    const Tag = as;
-    return <Tag className={className}>{children}</Tag>;
-  }
-
-  const MotionTag = as === "li" ? motion.li : motion.div;
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    return armReveal(el, el, {
+      from: { opacity: "0", transform: "translateY(16px)" },
+      // `none`, não translateY(0): transform em repouso criaria um bloco de
+      // contenção para os `absolute` de dentro (ex.: o sr-only dos cards).
+      to: { opacity: "1", transform: "none" },
+      delay,
+      margin: "0px 0px -10% 0px",
+    });
+  }, [delay]);
 
   return (
-    <MotionTag
-      className={className}
-      initial={{ opacity: 0, transform: "translateY(16px)" }}
-      whileInView={{ opacity: 1, transform: "translateY(0px)" }}
-      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
-    >
+    <Tag ref={ref} className={className}>
       {children}
-    </MotionTag>
+    </Tag>
   );
 }

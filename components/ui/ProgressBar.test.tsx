@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
+import { describe, expect, it, onTestFinished, vi } from "vitest";
+import { stubBelowTheFold } from "@/tests/belowTheFold";
 import { ProgressBar } from "./ProgressBar";
 
 describe("ProgressBar (acessível, não só cor)", () => {
@@ -31,13 +33,22 @@ describe("ProgressBar (acessível, não só cor)", () => {
     expect(screen.getByText("62%")).toBeInTheDocument();
   });
 
-  it("observa o trilho (tamanho real), não o preenchimento que nasce em scaleX(0)", () => {
-    // Regressão: observar o indicador fazia o IntersectionObserver medir uma
-    // caixa de largura zero, e as barras das etapas às vezes nunca enchiam.
+  it("o HTML do servidor já traz a barra no valor, sem esperar o JS", () => {
+    const html = renderToString(<ProgressBar value={60} label="Alvenaria" />);
+    expect(html).toContain("scaleX(0.6)");
+  });
+
+  it("abaixo da tela: o preenchimento parte de 0 e enche quando o TRILHO entra na tela", async () => {
+    // O trilho tem o tamanho real; o preenchimento em scaleX(0) é uma caixa de
+    // largura zero, que não cruza o limiar do IntersectionObserver.
+    const { animate } = stubBelowTheFold();
     const observe = vi.spyOn(globalThis.IntersectionObserver.prototype, "observe");
+    onTestFinished(() => observe.mockRestore());
+
     render(<ProgressBar value={60} label="Alvenaria" />);
-    const observed = observe.mock.calls.map(([el]) => el);
-    expect(observed).toContain(screen.getByRole("progressbar"));
-    observe.mockRestore();
+    const track = screen.getByRole("progressbar");
+    await waitFor(() => expect(animate).toHaveBeenCalled());
+    expect(observe.mock.calls.map(([el]) => el)).toContain(track);
+    expect((track.firstElementChild as HTMLElement).style.transform).toBe("scaleX(0)");
   });
 });

@@ -23,8 +23,8 @@ if (!Element.prototype.scrollTo) {
   Element.prototype.scrollTo = () => {};
 }
 if (!("IntersectionObserver" in globalThis)) {
-  // No-op observer que reporta o alvo como visível — assim `whileInView`
-  // (framer-motion) resolve nos testes em vez de deixar o conteúdo em opacity:0.
+  // Observer que reporta o alvo como visível na hora — assim o `inView` dos
+  // reveals (`armReveal`) e da `ProgressBar` dispara nos testes.
   globalThis.IntersectionObserver = class {
     constructor(private cb: IntersectionObserverCallback) {}
     observe(el: Element) {
