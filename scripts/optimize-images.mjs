@@ -407,20 +407,44 @@ async function buildMapPin() {
 }
 
 /**
- * Favicon do site a partir do símbolo oficial. O app não tinha nenhum — o
- * Next serve app/icon.png automaticamente como /icon e <link rel="icon">.
+ * Favicon do site a partir do símbolo oficial, sempre sobre o navy. O Next
+ * serve app/icon.png e app/favicon.ico como <link rel="icon">, e o Google
+ * escolhe qualquer um dos dois para o resultado de busca: os dois saem do
+ * mesmo desenho, ou a busca mostra ícones diferentes entre as páginas.
  */
 async function buildFavicon() {
   console.log("\n▸ brand: favicon");
   try {
+    const mark = (size) =>
+      sharp(join(ROOT, "img/LOGOS/Favicon/favicon-natus-beige.png"))
+        .resize({ width: size, height: size, fit: "contain", background: { r: 36, g: 60, b: 84, alpha: 1 } })
+        .flatten({ background: "#243c54" })
+        .png({ compressionLevel: 9 });
+
     const outPath = join(ROOT, "app/icon.png");
-    await sharp(join(ROOT, "img/LOGOS/Favicon/favicon-natus-beige.png"))
-      .resize({ width: 192, height: 192, fit: "contain", background: { r: 36, g: 60, b: 84, alpha: 1 } })
-      .flatten({ background: "#243c54" })
-      .png({ compressionLevel: 9 })
-      .toFile(outPath);
-    const after = (await stat(outPath)).size;
-    console.log(`  app/icon.png  192x192  ${KB(after)}`);
+    await mark(192).toFile(outPath);
+    console.log(`  app/icon.png  192x192  ${KB((await stat(outPath)).size)}`);
+
+    // ICO com PNGs embutidos (16/32/48; o Google pede múltiplo de 48).
+    const sizes = [16, 32, 48];
+    const pngs = await Promise.all(sizes.map((s) => mark(s).toBuffer()));
+    const header = Buffer.alloc(6 + 16 * sizes.length);
+    header.writeUInt16LE(1, 2);
+    header.writeUInt16LE(sizes.length, 4);
+    let offset = header.length;
+    sizes.forEach((s, i) => {
+      const entry = 6 + 16 * i;
+      header.writeUInt8(s, entry);
+      header.writeUInt8(s, entry + 1);
+      header.writeUInt16LE(1, entry + 4);
+      header.writeUInt16LE(32, entry + 6);
+      header.writeUInt32LE(pngs[i].length, entry + 8);
+      header.writeUInt32LE(offset, entry + 12);
+      offset += pngs[i].length;
+    });
+    const icoPath = join(ROOT, "app/favicon.ico");
+    await writeFile(icoPath, Buffer.concat([header, ...pngs]));
+    console.log(`  app/favicon.ico  16/32/48  ${KB((await stat(icoPath)).size)}`);
   } catch (err) {
     console.warn(`  ⚠ pulando o favicon: ${err.message}`);
     process.exitCode = 1;
