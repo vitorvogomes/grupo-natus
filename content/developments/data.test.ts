@@ -12,6 +12,12 @@ describe("Seed dos empreendimentos", () => {
     expect(developments.map((d) => d.slug)).not.toContain("vista-do-lago");
   });
 
+  it("Golden Ville fica em Maria Paula, São Gonçalo/RJ (cliente, 2026-11-09)", () => {
+    const golden = developments.find((d) => d.slug === "golden-ville-residence")!;
+    expect(golden.location).toMatchObject({ neighborhood: "Maria Paula", city: "São Gonçalo", state: "RJ" });
+    expect(golden.summary).toContain("Maria Paula, São Gonçalo/RJ");
+  });
+
   it("cada empreendimento tem nome, slug kebab-case, cidade/UF e status válido", () => {
     for (const dev of developments) {
       expect(dev.name.length).toBeGreaterThan(0);

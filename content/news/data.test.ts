@@ -58,6 +58,18 @@ describe("Natus News: conteúdo das edições", () => {
   );
 
   it.each(editions.map((e) => [e.slug, e] as const))(
+    "%s: o rótulo de cada novidade termina na cidade/UF do cadastro do empreendimento",
+    (_, edition) => {
+      for (const update of edition.updates.items) {
+        const { city, state } = getDevelopmentBySlug(update.developmentSlug)!.location;
+        expect(update.eyebrow, update.developmentSlug).toMatch(
+          new RegExp(`${`${city}/${state}`.toUpperCase()}$`),
+        );
+      }
+    },
+  );
+
+  it.each(editions.map((e) => [e.slug, e] as const))(
     "%s: links externos em https e empreendimentos que existem no portfólio",
     (_, edition) => {
       for (const item of edition.radar.items) expect(item.url).toMatch(/^https:\/\//);

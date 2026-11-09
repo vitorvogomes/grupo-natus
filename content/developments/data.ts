@@ -266,12 +266,13 @@ const SEEDS: readonly Seed[] = [
     crmId: 2,
     name: "Golden Ville Residence",
     status: "em_construcao",
-    city: "Niterói",
+    // Como no CV CRM e na Natus News (cliente, 2026-11-09).
+    city: "São Gonçalo",
     neighborhood: "Maria Paula",
     state: "RJ",
     propertyType: "apartamento",
     summary:
-      "Em construção em Maria Paula, Niterói/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
+      "Em construção em Maria Paula, São Gonçalo/RJ: 104 apartamentos de 2 quartos com suíte e varanda, em condomínio fechado com lazer completo.",
     description: [
       "Apartamentos de 2 quartos com suíte e varanda.",
       "Lazer completo: piscina, academia, espaço gourmet e salão de festas.",

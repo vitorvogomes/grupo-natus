@@ -36,7 +36,7 @@ Descoberta (Home/Catálogo) → Interesse (página do empreendimento: galeria, l
 |---|------|-----------|--------|------|
 | 1 | Follow Savassi | Savassi · Belo Horizonte/MG | Em construção | |
 | 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | 368 un. · MCMV |
-| 3 | Golden Ville Residence | Maria Paula · Niterói/RJ | Em construção | 104 un. · MCMV |
+| 3 | Golden Ville Residence | Maria Paula · São Gonçalo/RJ | Em construção | 104 un. · MCMV |
 | 4 | Viver Mais | Itaboraí/RJ | Pronto para morar · 100% vendido | 256 un. · MCMV |
 | 5 | Residencial Denver | Santa Lúcia · Belo Horizonte/MG | Pronto para morar · 100% vendido | 14 studios |
 | 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar · 100% vendido | 112 aptos · MCMV |
