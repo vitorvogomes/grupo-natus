@@ -425,9 +425,11 @@ async function buildFavicon() {
     await mark(192).toFile(outPath);
     console.log(`  app/icon.png  192x192  ${KB((await stat(outPath)).size)}`);
 
-    // ICO com PNGs embutidos (16/32/48; o Google pede múltiplo de 48).
+    // ICO com PNGs embutidos (16/32/48; o Google pede múltiplo de 48). O
+    // flatten tira o alfa, mas PNG dentro de ICO tem de ser RGBA: o decodificador
+    // do Turbopack recusa RGB e o `next build` falha.
     const sizes = [16, 32, 48];
-    const pngs = await Promise.all(sizes.map((s) => mark(s).toBuffer()));
+    const pngs = await Promise.all(sizes.map((s) => mark(s).ensureAlpha().toBuffer()));
     const header = Buffer.alloc(6 + 16 * sizes.length);
     header.writeUInt16LE(1, 2);
     header.writeUInt16LE(sizes.length, 4);
