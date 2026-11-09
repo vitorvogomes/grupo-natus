@@ -15,7 +15,7 @@ Status novos: **Lançamento** · **Em construção** · **Pronto para morar** (a
 |---|---|---|---|---|---|---|
 | 1 | Follow Savassi | Savassi · BH/MG | Em construção | Últimas unidades | — | completo (fotos da obra pendentes) |
 | 2 | Solar Manilha | Manilha · Itaboraí/RJ | Lançamento | Pré-lançamento | ✔ | completo (34 imagens; 13 renders v2 de 5504 px, os demais de 1448–2111 px — ver §5) |
-| 3 | Golden Ville Residence | Maria Paula · **Niterói**/RJ | Em construção | — | ✔ | descrição + imagens (fotos da obra pendentes) |
+| 3 | Golden Ville Residence | Maria Paula · São Gonçalo/RJ | Em construção | — | ✔ | descrição + imagens (fotos da obra pendentes) |
 | 4 | Viver Mais | Itaboraí/RJ | Pronto para morar | 100% vendido | ✔ | descrição + imagens |
 | 5 | Residencial Denver | Santa Lúcia · BH/MG | Pronto para morar | 100% vendido | — | descrição + imagens |
 | 6 | Torres da Lagoa | Lagoa Santa/MG | Pronto para morar | 100% vendido | ✔ | descrição + imagens |
@@ -37,7 +37,7 @@ Status novos: **Lançamento** · **Em construção** · **Pronto para morar** (a
 Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento interno · Acabamento externo**. Etapas em 0% não aparecem. A seção existe em Lançamento e Em construção.
 
 - [x] **Percentuais informados pelo cliente**: Follow Savassi com Fundação 100% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 70% (total 7%), aprovado. **Solar Manilha sem estágio de obra** (2026-10-17).
-- [ ] **Fotos da obra** do Follow Savassi e do Golden Ville. Sem elas a seção mostra só os percentuais (o painel de canteiro aparece quando houver fotos).
+- [ ] **Fotos da obra** do Follow Savassi e do Golden Ville. Sem elas a seção mostra só os percentuais (o painel de canteiro aparece quando houver fotos). A Natus News da edição 0 trouxe uma foto de cada (`img/news/edicao-0/golden-obra.jpg` e `follow-obra.jpg`, de 1040 e 560 px): servem, se o cliente quiser, mas são pequenas para o palco da galeria.
 - [x] ~~**Data ("última atualização")** e periodicidade~~ — descartado pelo cliente (2026-10-17). O campo `updatedAt` segue opcional no modelo: sem ele, a data não aparece.
 
 ## 3. Páginas institucionais (Epic 6)
@@ -63,7 +63,7 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [x] **Envio de e-mail** (v5, 2026-10-20): Resend; destino `LEADS_EMAIL_TO` no `.env` (dev: caixa pessoal do desenvolvedor; **produção: marketing@natusgrupo.com.br**).
 - [ ] 🔔 **Domínio no Resend**: verificar `natusgrupo.com.br` (registros SPF/DKIM no DNS) para enviar como `no-reply@natusgrupo.com.br`. Até lá, `LEADS_EMAIL_FROM` = `onboarding@resend.dev`, que só entrega para o dono da conta Resend. **Bloqueia a publicação.**
 - [x] **CV CRM — ID de cada empreendimento** (`crmId` no seed, 2026-10-20). A API lista só 3 empreendimentos, com os mesmos nomes do site: Golden Ville = 2, Follow = 3, Solar = 4. Os outros entram no CRM sem empreendimento até serem cadastrados lá; quando forem, é só pôr o `crmId` no seed.
-- [ ] 🔔 **Golden Ville — cidade**: o CRM cadastra o empreendimento em **São Gonçalo/RJ**; o site diz **Niterói**. Confirmar com o cliente qual é a correta.
+- [x] **Golden Ville — cidade**: **São Gonçalo/RJ** (cliente, 2026-11-09), como no CV CRM e na Natus News; o site dizia Niterói. Corrigidos a cidade e o resumo no seed (título, JSON-LD e filtro de cidade derivam deles). A frase "a 10 minutos dos centros de Niterói e São Gonçalo" fala de proximidade e ficou.
 - [x] **Supabase**: as duas migrações (`site_leads`, `site_contacts`) aplicadas no SQL Editor e testadas de ponta a ponta (2026-10-20); a chave pública não lê nem grava nelas.
 - [ ] 🔔 **Hospedagem**: o proxy precisa sobrescrever `x-real-ip` com o IP do visitante (a Vercel faz isso; num nginx, `proxy_set_header X-Real-IP $remote_addr`). Sem isso, o limite de envios por IP pode ser contornado.
 - [ ] 🔔 **Resend gratuito = 100 e-mails/dia** (3.000/mês). Todo lead fica no banco, então estourar não perde nada; os sem aviso ficam com `email_enviado = false`. Se o volume crescer, plano pago ou e-mail só para Contato/Terreno.
@@ -84,6 +84,12 @@ Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento inter
 - [ ] **Galpão/condomínio**: 2 e 3 fotos é pouco para uma galeria — enviar mais se houver.
 - [x] **Favicon**: o site não tinha nenhum. Agora usa o símbolo oficial (`app/icon.png`, gerado de `img/LOGOS/Favicon/favicon-natus-beige.png` sobre o navy da marca).
 - [ ] Vídeos/panorâmicas, se houver. A galeria já prevê uma aba de vídeo — falta o arquivo.
+
+## 5.1 Natus News (v7)
+- [x] **Edição 0** (`/news/edicao-0`): texto, imagens e links do e-mail do ActiveCampaign (`img/news/edicao-0/`), fiel ao original a pedido do cliente. URL e numeração ("Edição 0") confirmadas pelo cliente (2026-11-09).
+- [ ] 🔔 **Contraste das cores da news**: o dourado `#9a8358` (rótulos e links "Ler a notícia →"/"Ver o empreendimento →") fica em ~3,3:1 sobre o creme e ~3,6:1 sobre o branco, e o cinza `#8a8a8a` da linha "Fonte:" em ~3,1:1 sobre o creme — abaixo do AA (4,5:1) para texto de 12px. É o design do e-mail, mantido a pedido do cliente. Escurecer os dois tokens (`--color-news-gold`, `--color-news-source`) resolve sem mudar o desenho; confirmar com o cliente.
+- [ ] 🔔 **Solar Manilha — lançamento**: a news diz "lançamento previsto para o início de março de 2027", mas o site mostra o status "Lançamento" (faixa "Pré-lançamento" no card) e o "Ver o empreendimento →" leva a essa página. Confirmar com o cliente qual status vale hoje.
+- [ ] **Data de envio** de cada edição: `publishedAt` da edição 0 é a data de entrada no site (2026-11-09). Se o e-mail saiu em outra data, ajustar em `content/news/data.ts`.
 
 ## 6. Navegação — Header/Footer (B5)
 - [x] **Redes sociais** (2026-10-17): Instagram, Facebook e LinkedIn no rodapé e no `sameAs` do JSON-LD (`SOCIAL` em `lib/site.ts`).

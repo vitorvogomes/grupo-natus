@@ -31,6 +31,7 @@
 - **FR14** — SEO por página e por empreendimento: metadata, title, description, canonical, Open Graph, sitemap, robots, structured data quando fizer sentido, URLs amigáveis, alt text.
 - **FR15** — (Condicional) Painel `/admin` com Supabase Auth para gerenciar progresso/conteúdo/imagens/leads — **somente se necessidade concreta**.
 - **FR16** — **Privacidade (LGPD)**: página de Política de Privacidade; consentimento de cookies (aceitar todos / só necessários / preferências, revogável pelo rodapé); integrações de terceiros com cookie (Google Maps; futuras ferramentas de análise/anúncio) só carregam após o aceite; formulários com aviso e link para a política. (Revisão v4, 2026-10-17.)
+- **FR17** — **Natus News** (revisão v7, 2026-11-09): a newsletter mensal publicada no site, `/news` (índice) e `/news/[slug]` (edição), fiel ao design do e-mail; cada edição é dado (`content/news`), sem os elementos que só fazem sentido no e-mail (ver no navegador, descadastro, variáveis).
 
 ## 3. Requisitos não-funcionais (NFR)
 

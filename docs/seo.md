@@ -12,11 +12,11 @@ Cada item diz **onde** mexer (arquivo, painel ou serviço) e **como saber que de
 
 | Item | Onde | Estado |
 |---|---|---|
-| Sitemap | `app/sitemap.ts` (rotas de `STATIC_ROUTES` em `lib/site.ts` + um item por empreendimento) | ✅ |
+| Sitemap | `app/sitemap.ts` (rotas de `STATIC_ROUTES` em `lib/site.ts` + um item por empreendimento + um por edição da Natus News, com `lastModified`) | ✅ |
 | robots.txt | `app/robots.ts` | ✅ libera tudo; bloqueia `/theme-showcase` (404 em produção) e `/api/` |
 | Metadados base | `app/layout.tsx`: `metadataBase`, `title.default` com descritor, template, OG/Twitter padrão, `themeColor` | ✅ |
-| Metadados por página | `pageMetadata()` / `developmentMetadata()` em `features/seo/metadata.ts` | ✅ canônica + OG + Twitter em todas; teste de unicidade em `app/metadata.test.ts` |
-| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (logo, sede, contato, `sameAs`), `WebSite` (home), `ApartmentComplex`/`Residence` (geo, capa, CEP), `BreadcrumbList` | ✅ falta só `legalName`/`taxID` (razão social) |
+| Metadados por página | `pageMetadata()` / `developmentMetadata()` / `newsMetadata()` em `features/seo/metadata.ts` (edição da news: `og:type` article + `article:published_time`) | ✅ canônica + OG + Twitter em todas; teste de unicidade em `app/metadata.test.ts` |
+| JSON-LD | `features/seo/jsonLd.tsx`: `Organization` (logo, sede, contato, `sameAs`), `WebSite` (home), `ApartmentComplex`/`Residence` (geo, capa, CEP), `Article` (edições da Natus News), `BreadcrumbList` (trilha `[nome, caminho][]`) | ✅ falta só `legalName`/`taxID` (razão social) |
 | Imagem de compartilhamento | `public/brand/og-grupo-natus.jpg` (padrão) e a capa no empreendimento | ✅ |
 | 404 | `app/not-found.tsx` com links para empreendimentos e contato | ✅ |
 | Redirects do WordPress | `content/redirects.ts` → `next.config.ts` (308); `npm run check:redirects` | ✅ 19 URLs; completar com o Search Console |
@@ -39,7 +39,8 @@ O que existe está na tabela do §1. As decisões que não aparecem no código:
 
 ### 2.5 Conteúdo (opcional, ganho de ranking)
 1. **Texto por empreendimento**: um parágrafo autoral sobre a localização (`location.note`, que só o Follow tem) ajuda a ranquear por "apartamento em {bairro}".
-2. **Links internos**: o "explore" e o catálogo já ligam tudo. Das institucionais, vale linkar Quem Somos → empreendimentos em destaque.
+2. **Links internos**: o "explore" e o catálogo já ligam tudo. Das institucionais, vale linkar Quem Somos → empreendimentos em destaque. A Natus News liga cada novidade de obra à página do empreendimento.
+3. **Natus News (v7)**: conteúdo mensal e datado em `/news/[slug]`, fora do menu (decisão do cliente); entra pelo sitemap, pelos e-mails e pelos anúncios. O título da edição está na arte, por isso o h1 vai em texto `sr-only`.
 
 ### 2.6 Desempenho (Core Web Vitals)
 1. Rode o PageSpeed Insights na home, numa página de lançamento e em `/quem-somos`, no celular. Meta: LCP < 2,5 s, CLS < 0,1, INP < 200 ms.

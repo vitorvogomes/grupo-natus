@@ -124,15 +124,17 @@ natus-website/
     negocie-seu-terreno/       # FR10
     contato/                   # FR8
     politica-de-privacidade/   # FR16 (LGPD)
+    news/  news/[slug]/        # Natus News: índice + template de edição (v7)
     api/                       # Route Handlers: leads/contato/email (FR11)
     sitemap.ts  robots.ts      # FR14 site-wide
   features/
     developments/              # cards, filtros, galeria, progresso, mapa (FR1-5, FR7)
     contact/                   # LeadForm: contato, interesse, terreno (FR8-10)
     consent/                   # banner, preferências, MapConsentGate (FR16)
-    home/  institutional/  mcmv/  seo/
+    home/  institutional/  mcmv/  news/  seo/
   components/                  # Button, Badge, Card, Image, Modal, WhatsAppButton...
   content/developments/        # 11 empreendimentos (fonte de verdade) — AD-2
+  content/news/                # edições da Natus News (dado, como os empreendimentos)
   lib/                         # whatsapp, maps, email, consent, env, crm, leads, supabase (só leads) — AD-3/4/5
   types/                       # Development, ConstructionProgress
   styles/                      # tokens Tailwind v4 @theme — AD-7
@@ -163,6 +165,7 @@ erDiagram
 | Formulários + leads (FR8-11) | `features/contact`, `app/api/leads`, `lib/leads`, `lib/email`, `lib/crm`, `lib/supabase` | AD-3, AD-4, AD-5 |
 | Privacidade + cookies (FR16) | `lib/consent`, `features/consent`, `app/politica-de-privacidade` | AD-3 |
 | Institucionais (FR12, FR13) | `app/engenharia`, `app/quem-somos` | AD-7 |
+| Natus News (v7) | `app/news`, `content/news`, `features/news`, `types/news` | AD-2, AD-3, AD-7 |
 | SEO (FR14) | rotas + `sitemap.ts`/`robots.ts` | AD-6 |
 | Admin/persistência (FR15) | `lib/supabase`, `app/admin` (condicional) | AD-4, AD-5 |
 

@@ -4,7 +4,7 @@
 > Legenda: ⬜ a fazer · 🔵 em andamento · ✅ concluída · ⛔ bloqueada.
 > Backlog canônico: [`_bmad-output/planning-artifacts/epics.md`](../_bmad-output/planning-artifacts/epics.md) · Arquitetura: [ARCHITECTURE-SPINE](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md)
 
-**Última atualização:** 2026-10-20 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Última revisão:** **v6 ✅** — faixas comerciais, formulário em todo empreendimento, reveal sem esperar o JS · v5 ✅ · v4 ✅ · v3 ✅ · v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
+**Última atualização:** 2026-11-09 · **Concluídas:** 32/35 (Epics 1–7 ✅) · **Epic atual:** — (Epic 8 condicional) · **Última revisão:** **v7 ✅** — Natus News no site (`/news`) · v6 ✅ — faixas comerciais, formulário em todo empreendimento, reveal sem esperar o JS · v5 ✅ · v4 ✅ · v3 ✅ · v2 ✅ · **Gate A: ✅** · **Gate B: ✅**
 
 ---
 
@@ -283,6 +283,27 @@ Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · l
 - **Limpeza**: `DevelopmentBadges` não recebe mais `salesBand` (não usava); os stubs de "abaixo da tela" dos testes viraram um helper (`tests/belowTheFold.ts`) que restaura mesmo quando a asserção falha; comentários no presente; o comentário da composição da página e o CLAUDE.md dizem o que o código faz (a composição sai do dado, não do status); a spine deixou de citar `soldOut` e um formato de erro da API que não existe.
 
 **Gate:** 543 testes · cobertura 96,6% stmts · 92,7% branches · lint, typecheck e build ok · Chromium (Pixel 7 com 4G lento, iPhone 13, 1440 px): conteúdo visível antes da hidratação, reveal e barras de obra ao rolar preservados, sem rolagem horizontal, top 3 Solar → Follow → Golden Ville.
+
+## Revisão v7 — Natus News no site ✅ (2026-11-09)
+
+- **`/news/edicao-0`**: a newsletter mensal (HTML do ActiveCampaign em `img/news/edicao-0/`) vira página do site, **fiel ao e-mail** a pedido do cliente: texto literal, ordem dos blocos (banner → abertura → números → Radar Natus → Natus no mês → convite → fecho) e as cores exatas em tokens `--color-news-*`. A adaptação é só de layout: faixas de largura total, conteúdo na medida do e-mail (600px, que é também a largura nativa das fotos), header/footer do site e a tipografia do site no lugar do Arial. Saem "Ver no navegador", o descadastro e as variáveis `%…%`.
+- **Edição = dado** (`content/news`, tipo `NewsEdition`), um template em `/news/[slug]` e o índice `/news`. A próxima edição é um objeto em `content/news/data.ts` e as fotos na lista `NEWS` do pipeline (`npm run optimize:images news`).
+- **Imagens servidas pelo site**: baixadas do ActiveCampaign e otimizadas (faixa compacta: PNG q95, JPEG q86); o manifesto de dimensões passou a cobrir `public/news`. Hotlink seria um terceiro carregado sem consentimento.
+- **SEO**: h1 em texto (`sr-only`, porque o título está na arte), `newsMetadata` com `og:type` article e a data, JSON-LD `Article` + `BreadcrumbList` (que passou a receber a trilha, usada também nos empreendimentos), `/news` em `STATIC_ROUTES` e cada edição no sitemap com `lastModified`. Cada novidade de obra ganhou "Ver o empreendimento →" (link interno).
+- **Decisões do cliente**: sem link no menu nem no rodapé; a URL é `/news/edicao-0`, como a numeração da arte; o Golden Ville é "Maria Paula, São Gonçalo/RJ", como na news: o cliente confirmou e o cadastro do empreendimento foi corrigido (era Niterói); um teste amarra o rótulo de cada novidade à cidade do cadastro.
+- Observação, sem mudança (é o design do e-mail): o dourado `#9a8358` em 12px sobre o creme fica em ~3,3:1, abaixo do AA para texto pequeno.
+
+### Code review v7 (2026-11-09)
+- **Imagens nítidas**: o `sizes` do card do índice subestimava a coluna no tablet (2 colunas de até ~470 px pediam a variante de 384) e o das fotos da edição errava entre 600 e 639 px (coluna de 560, não 520).
+- **Uma regra de qualidade**: a faixa por tamanho do original virou `qualityBand()` no pipeline, usada pelos empreendimentos e pelos avulsos com `band: true` (a news); a qualidade fixa por imagem saiu, e a news entra no relatório da faixa compacta.
+- **Manifesto único**: `content/developments/image-dimensions.json` → `content/image-dimensions.json` (empreendimentos e news; a news não depende mais do módulo dos empreendimentos).
+- **Nome da edição num lugar só** (`editionName`/`newsTitle` em `content/news`): h1, título da aba, JSON-LD e card usavam três formatos.
+- `key` das listas da edição pela posição (conteúdo pode repetir); `/news` no sitemap com a data da edição mais recente.
+- **Pendências do cliente** (CONTENT-GAPS §5.1): contraste do dourado/cinza da news (abaixo do AA, design do e-mail) e o status de lançamento do Solar (a news diz março/2027). O `og:image` em WebP segue o padrão das capas dos empreendimentos.
+- **Lápides**: testes do slug `vista-do-lago` e da fonte serifada antiga saíram; comentários que narravam o histórico ("agora", "de antes", "não mais") foram reescritos no presente.
+- **`.claude`**: o Stop hook passou a olhar também `styles/` e os `.css`/`.json` (tokens e manifesto, que os testes leem).
+
+**Gate:** 577 testes · cobertura 96,76% stmts · 92,7% branches · lint, typecheck e build ok (`/news/edicao-0` em SSG) · Chrome 1440 px e 500 px: layout fiel, sem rolagem horizontal, nenhuma requisição ao ActiveCampaign.
 
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 > A v5 usa o Supabase só para gravar leads (`site_leads`, `site_contacts`, RLS sem policy, aplicadas no SQL Editor). Não há Supabase local, migração de conteúdo nem painel: o Gate C segue fechado.
