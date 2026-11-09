@@ -69,6 +69,22 @@
    * (lê como aviso e reprova contraste com texto branco). */
   --color-status-error: #b3261e;
 
+  /* ---- Natus News (/news) ---- */
+  /* A newsletter tem identidade própria (grafite + dourado), e o cliente
+   * pediu a página fiel ao e-mail: estas são as cores exatas do HTML
+   * original. Uso restrito a features/news. */
+  --color-news-ink: #15171b; /* títulos, números, faixa do convite (e a borda do banner) */
+  --color-news-text: #22252b; /* texto corrido */
+  --color-news-muted: #6b6b6b; /* rótulos dos números */
+  --color-news-source: #8a8a8a; /* linha "Fonte: …" do Radar */
+  --color-news-gold: #9a8358; /* rótulos e links sobre fundo claro */
+  --color-news-gold-soft: #d8c49b; /* rótulo e botão sobre o grafite */
+  --color-news-cream: #f4f3ef; /* faixa do Radar */
+  --color-news-rule: #ddd6c6; /* fios entre as notícias */
+  --color-news-invite-text: #c9c9c9; /* texto do convite */
+  --color-news-footer: #0e0f12; /* fecho da edição */
+  --color-news-footer-text: #9a9a9a;
+
   /* ---- Ponte semântica shadcn/ui — mapeada 100% na marca (sem dark mode).
    * Gera as utilities bg-primary/text-foreground/bg-card/etc. usadas pelos
    * componentes shadcn, reaproveitando os tokens Natus acima. ---- */

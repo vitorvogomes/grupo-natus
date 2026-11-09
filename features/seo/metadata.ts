@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import type { Development } from "@/types/development";
+import type { NewsEdition } from "@/types/news";
+import { newsTitle } from "@/content/news";
 import { PROPERTY_TYPE_LABELS, STATUS_META } from "@/types/development";
 import { pickHeroImage } from "@/features/developments/pickHeroImage";
 
@@ -32,6 +34,7 @@ export function pageMetadata({
   path,
   image = DEFAULT_SHARE_IMAGE,
   absoluteTitle = false,
+  article,
 }: {
   title: string;
   description: string;
@@ -39,13 +42,17 @@ export function pageMetadata({
   image?: ShareImage;
   /** Sem o sufixo " | Grupo Natus" do template (a home já leva a marca). */
   absoluteTitle?: boolean;
+  /** Conteúdo datado (Natus News): `og:type` article com a data de publicação. */
+  article?: { publishedTime: string };
 }): Metadata {
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
     alternates: { canonical: path },
     openGraph: {
-      type: "website",
+      ...(article
+        ? { type: "article" as const, publishedTime: article.publishedTime }
+        : { type: "website" as const }),
       locale: "pt_BR",
       siteName: SITE_NAME,
       url: path,
@@ -88,5 +95,17 @@ export function developmentMetadata(dev: Development): Metadata {
     image: cover
       ? { url: cover.src, width: cover.width, height: cover.height, alt: cover.alt }
       : DEFAULT_SHARE_IMAGE,
+  });
+}
+
+/** Edição da Natus News: resumo do e-mail como descrição e o banner como imagem. */
+export function newsMetadata(edition: NewsEdition): Metadata {
+  const { src, width, height, alt } = edition.banner;
+  return pageMetadata({
+    title: newsTitle(edition),
+    description: edition.description,
+    path: `/news/${edition.slug}`,
+    image: { url: src, width, height, alt },
+    article: { publishedTime: edition.publishedAt },
   });
 }

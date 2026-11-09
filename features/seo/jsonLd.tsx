@@ -1,5 +1,7 @@
 import { CONTACT, HEADQUARTERS, SITE_URL, SOCIAL } from "@/lib/site";
 import type { Development } from "@/types/development";
+import type { NewsEdition } from "@/types/news";
+import { newsTitle } from "@/content/news";
 import { pickHeroImage } from "@/features/developments/pickHeroImage";
 
 const absolute = (path: string) => `${SITE_URL}${path}`;
@@ -72,21 +74,39 @@ export function developmentSchema(dev: Development) {
   };
 }
 
-export function breadcrumbSchema(dev: Development) {
-  const trail = [
-    ["Início", absolute("/")],
-    ["Empreendimentos", absolute("/empreendimentos")],
-    [dev.name, absolute(`/empreendimentos/${dev.slug}`)],
-  ] as const;
+/** Trilha de navegação: pares [nome, caminho], do início até a página. */
+export function breadcrumbSchema(trail: readonly (readonly [name: string, path: string])[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: trail.map(([name, item], i) => ({
+    itemListElement: trail.map(([name, path], i) => ({
       "@type": "ListItem",
       position: i + 1,
       name,
-      item,
+      item: absolute(path),
     })),
+  };
+}
+
+/** Edição da Natus News como `Article`, publicada pelo próprio Grupo Natus. */
+export function newsArticleSchema(edition: NewsEdition) {
+  const url = absolute(`/news/${edition.slug}`);
+  const organization = { "@type": "Organization", name: "Grupo Natus", url: SITE_URL };
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: newsTitle(edition),
+    description: edition.description,
+    datePublished: edition.publishedAt,
+    inLanguage: "pt-BR",
+    url,
+    mainEntityOfPage: url,
+    image: [edition.banner, ...edition.updates.items.map((u) => u.image)].map((img) => absolute(img.src)),
+    author: organization,
+    publisher: {
+      ...organization,
+      logo: { "@type": "ImageObject", url: absolute("/brand/grupo-natus-principal.png") },
+    },
   };
 }
 

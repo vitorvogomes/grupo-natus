@@ -29,6 +29,7 @@
  * Uso:  node scripts/optimize-images.mjs [slug ...]
  *   sem argumento → processa todos os JOBS; com slugs → só aqueles.
  *   `manifest` → só regera o manifesto de dimensões (sempre regerado no fim).
+ *   `singles`, `institucional`, `news`, `brand` → só aquele grupo.
  *
  * Mapeamento arquivo→saída é explícito (JOBS). `role: "hero"` usa lado maior
  * maior; webp já otimizado (<300 KB) é copiado sem re-encode (evita 2ª perda).
@@ -337,6 +338,18 @@ const INSTITUTIONAL = [
   },
 ];
 
+// Natus News: as imagens de cada edição, baixadas do ActiveCampaign para
+// img/news/<slug>/ (o site não carrega nada do provedor de e-mail: seria um
+// terceiro sem consentimento). Rode com o slug "news". `band: true` aplica a
+// faixa pelo tamanho do original, como nos empreendimentos: os do e-mail vêm
+// pequenos e caem na compacta (PNG q95, JPEG q86).
+const NEWS = [
+  { name: "news edicao-0: banner", src: "img/news/edicao-0/header-news.png", out: "public/news/edicao-0/banner.webp", maxSide: 2560, band: true },
+  { name: "news edicao-0: obra do Golden Ville", src: "img/news/edicao-0/golden-obra.jpg", out: "public/news/edicao-0/golden-ville-obra.webp", maxSide: 2560, band: true },
+  { name: "news edicao-0: fachada do Follow Savassi", src: "img/news/edicao-0/follow-obra.jpg", out: "public/news/edicao-0/follow-savassi-obra.webp", maxSide: 2560, band: true },
+  { name: "news edicao-0: stand do Solar Manilha", src: "img/news/edicao-0/solar-stand.jpg", out: "public/news/edicao-0/solar-manilha-stand.webp", maxSide: 2560, band: true },
+];
+
 const KB = (bytes) => `${Math.round(bytes / 1024)} KB`;
 
 /**
@@ -491,7 +504,23 @@ async function buildSocialImages() {
   }
 }
 
-/** Processa uma lista de assets avulsos (src/out/maxSide explícitos). */
+/**
+ * Faixa de qualidade pelo tamanho do original (ver o cabeçalho): alta (≥ o
+ * alvo → reduz, q92) ou compacta (tamanho nativo; q95 se a fonte é sem perda,
+ * q86 se já é comprimida). `override` (o `quality` da imagem) vence.
+ */
+function qualityBand({ src, side, maxSide, override }) {
+  const high = side >= maxSide;
+  const lossless = LOSSLESS_SOURCES.has(extname(src).toLowerCase());
+  const quality = override ?? (high ? QUALITY : lossless ? COMPACT_QUALITY : COMPACT_LOSSY_QUALITY);
+  return { high, quality };
+}
+
+/**
+ * Processa uma lista de assets avulsos (src/out/maxSide explícitos). Sem
+ * `band`, sai em q92 (ou no `quality` do item); com `band: true`, segue a
+ * faixa pelo tamanho do original e entra no relatório da faixa compacta.
+ */
 async function optimizeFlat(label, list) {
   console.log(`\n▸ ${label} (${list.length})`);
   for (const item of list) {
@@ -499,15 +528,28 @@ async function optimizeFlat(label, list) {
     try {
       const outPath = join(ROOT, item.out);
       await mkdir(join(outPath, ".."), { recursive: true });
-      const before = (await stat(join(ROOT, item.src))).size;
-      await sharp(join(ROOT, item.src))
+      const srcPath = join(ROOT, item.src);
+      const before = (await stat(srcPath)).size;
+      let quality = item.quality ?? QUALITY;
+      if (item.band) {
+        const { width = 0, height = 0 } = await sharp(srcPath).metadata();
+        const band = qualityBand({
+          src: item.src,
+          side: item.fitWidth ? width : Math.max(width, height),
+          maxSide: item.maxSide,
+          override: item.quality,
+        });
+        quality = band.quality;
+        if (!band.high) compact.push(`${item.out.replace(/^public\//, "")}  ${width}x${height}  q${quality}`);
+      }
+      await sharp(srcPath)
         .rotate()
         .resize(
           item.fitWidth
             ? { width: item.maxSide, withoutEnlargement: true }
             : { width: item.maxSide, height: item.maxSide, fit: "inside", withoutEnlargement: true },
         )
-        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality: QUALITY, effort: 6, smartSubsample: true })
+        .webp(item.lossless ? { lossless: true, effort: 6 } : { quality, effort: 6, smartSubsample: true })
         .toFile(outPath);
       const after = (await stat(outPath)).size;
       console.log(`  ${item.out}  ${KB(before)} → ${KB(after)}`);
@@ -519,11 +561,11 @@ async function optimizeFlat(label, list) {
 }
 
 /**
- * Manifesto de dimensões das imagens dos empreendimentos
- * (`content/developments/image-dimensions.json`). O seed anexa largura e
+ * Manifesto de dimensões (`content/image-dimensions.json`) das imagens dos
+ * empreendimentos e das edições da Natus News. Os seeds anexam largura e
  * altura a cada imagem, e o `sizes` do next/image é calculado a partir da
  * proporção (ver features/developments/coverSizes.ts). Regerado ao fim de
- * toda execução; um teste de conteúdo acusa imagem do seed fora dele.
+ * toda execução; os testes de conteúdo acusam imagem fora dele.
  */
 async function writeDimensionsManifest() {
   const manifest = {};
@@ -538,8 +580,11 @@ async function writeDimensionsManifest() {
     }
   }
   await walk(OUT_ROOT);
+  await walk(join(ROOT, "public", "news")).catch((err) => {
+    if (err.code !== "ENOENT") throw err;
+  });
   const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)));
-  const out = join(ROOT, "content", "developments", "image-dimensions.json");
+  const out = join(ROOT, "content", "image-dimensions.json");
   await writeFile(out, `${JSON.stringify(sorted, null, 2)}\n`);
   console.log(`\n▸ manifesto: ${Object.keys(sorted).length} imagens → ${relative(ROOT, out)}`);
 }
@@ -549,13 +594,16 @@ const compact = [];
 
 async function run() {
   const requested = process.argv.slice(2);
-  const KEYWORDS = new Set(["singles", "institucional", "brand", "manifest"]);
+  const KEYWORDS = new Set(["singles", "institucional", "news", "brand", "manifest"]);
 
   if (!requested.length || requested.includes("singles")) {
     await optimizeFlat("singles", SINGLES);
   }
   if (!requested.length || requested.includes("institucional")) {
     await optimizeFlat("institucional", INSTITUTIONAL);
+  }
+  if (!requested.length || requested.includes("news")) {
+    await optimizeFlat("news", NEWS);
   }
   if (!requested.length || requested.includes("brand")) {
     await buildMapPin();
@@ -599,10 +647,12 @@ async function run() {
         // em retrato (Follow, 3999×5000) reduzido pelo lado maior ficaria com
         // 2399 px de largura — abaixo dos 2880 de um hero em tela 2×.
         const hero = img.role === "hero";
-        const high = (hero ? width : Math.max(width, height)) >= maxSide;
-        const lossless = LOSSLESS_SOURCES.has(extname(img.src).toLowerCase());
-        const quality =
-          img.quality ?? (high ? QUALITY : lossless ? COMPACT_QUALITY : COMPACT_LOSSY_QUALITY);
+        const { high, quality } = qualityBand({
+          src: img.src,
+          side: hero ? width : Math.max(width, height),
+          maxSide,
+          override: img.quality,
+        });
         if (!high) compact.push(`${slug}/${img.out}  ${width}x${height}  q${quality}`);
 
         let pipeline = sharp(srcPath).rotate();

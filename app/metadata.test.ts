@@ -9,6 +9,9 @@ import { metadata as contato } from "./contato/page";
 import { metadata as terreno } from "./negocie-seu-terreno/page";
 import { metadata as privacidade } from "./politica-de-privacidade/page";
 import { generateMetadata } from "./empreendimentos/[slug]/page";
+import { metadata as news } from "./news/page";
+import { generateMetadata as generateNewsMetadata } from "./news/[slug]/page";
+import { getAllEditions } from "@/content/news";
 
 function titleOf(m: Metadata): string {
   const t = m.title;
@@ -24,6 +27,12 @@ async function allPages() {
       await generateMetadata({ params: Promise.resolve({ slug: d.slug }) }),
     ] as const),
   );
+  const editions = await Promise.all(
+    getAllEditions().map(async (e) => [
+      `/news/${e.slug}`,
+      await generateNewsMetadata({ params: Promise.resolve({ slug: e.slug }) }),
+    ] as const),
+  );
   return [
     ["/", home],
     ["/empreendimentos", catalogo],
@@ -32,7 +41,9 @@ async function allPages() {
     ["/contato", contato],
     ["/negocie-seu-terreno", terreno],
     ["/politica-de-privacidade", privacidade],
+    ["/news", news],
     ...devs,
+    ...editions,
   ] as const;
 }
 

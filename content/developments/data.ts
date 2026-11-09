@@ -4,7 +4,7 @@ import type {
   DevelopmentFeature,
   DevelopmentImage,
 } from "@/types/development";
-import dimensions from "./image-dimensions.json";
+import dimensions from "@/content/image-dimensions.json";
 
 /**
  * Seed dos 11 empreendimentos do portfólio do Grupo Natus.

@@ -24,6 +24,7 @@ export const STATIC_ROUTES = [
   "/negocie-seu-terreno",
   "/contato",
   "/politica-de-privacidade",
+  "/news",
 ] as const;
 
 export type NavLink = {

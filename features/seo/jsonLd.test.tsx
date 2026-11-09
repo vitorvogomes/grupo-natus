@@ -4,11 +4,13 @@ import {
   JsonLd,
   breadcrumbSchema,
   developmentSchema,
+  newsArticleSchema,
   organizationSchema,
   websiteSchema,
 } from "./jsonLd";
 import { SOCIAL } from "@/lib/site";
 import type { Development } from "@/types/development";
+import { getEditionBySlug } from "@/content/news";
 
 const dev: Development = {
   slug: "follow-savassi",
@@ -87,13 +89,45 @@ describe("JSON-LD (FR14)", () => {
     expect(s).not.toHaveProperty("image");
   });
 
-  it("breadcrumbSchema: Início › Empreendimentos › nome", () => {
-    const s = breadcrumbSchema(dev);
+  it("breadcrumbSchema: trilha de [nome, caminho] com URLs absolutas", () => {
+    const s = breadcrumbSchema([
+      ["Início", "/"],
+      ["Empreendimentos", "/empreendimentos"],
+      [dev.name, `/empreendimentos/${dev.slug}`],
+    ]);
     expect(s.itemListElement.map((i) => i.name)).toEqual(["Início", "Empreendimentos", "Follow Savassi"]);
     expect(s.itemListElement[2]).toMatchObject({
       position: 3,
       item: "https://www.natusgrupo.com.br/empreendimentos/follow-savassi",
     });
+  });
+
+  it("newsArticleSchema: edição da Natus News como Article do Grupo Natus", () => {
+    const edition = getEditionBySlug("edicao-0")!;
+    const s = newsArticleSchema(edition);
+    expect(s).toMatchObject({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: "Natus News · Edição 0 — novembro de 2026",
+      description: edition.description,
+      datePublished: edition.publishedAt,
+      inLanguage: "pt-BR",
+      url: "https://www.natusgrupo.com.br/news/edicao-0",
+      mainEntityOfPage: "https://www.natusgrupo.com.br/news/edicao-0",
+      author: { "@type": "Organization", name: "Grupo Natus" },
+      publisher: {
+        "@type": "Organization",
+        name: "Grupo Natus",
+        logo: { "@type": "ImageObject", url: "https://www.natusgrupo.com.br/brand/grupo-natus-principal.png" },
+      },
+    });
+    // Banner e fotos das obras, todas absolutas e do próprio site.
+    expect(s.image).toEqual([
+      "https://www.natusgrupo.com.br/news/edicao-0/banner.webp",
+      "https://www.natusgrupo.com.br/news/edicao-0/golden-ville-obra.webp",
+      "https://www.natusgrupo.com.br/news/edicao-0/follow-savassi-obra.webp",
+      "https://www.natusgrupo.com.br/news/edicao-0/solar-manilha-stand.webp",
+    ]);
   });
 
   it("JsonLd escapa '<' (um texto nunca fecha o <script>)", () => {

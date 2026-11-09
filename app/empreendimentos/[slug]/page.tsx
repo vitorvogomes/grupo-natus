@@ -88,7 +88,13 @@ export default async function DevelopmentPage({ params }: PageParams) {
   return (
     <main>
       <JsonLd data={developmentSchema(development)} />
-      <JsonLd data={breadcrumbSchema(development)} />
+      <JsonLd
+        data={breadcrumbSchema([
+          ["Início", "/"],
+          ["Empreendimentos", "/empreendimentos"],
+          [development.name, `/empreendimentos/${development.slug}`],
+        ])}
+      />
       <DevelopmentHero development={development} />
       <DevelopmentAnchorNav sections={sections} />
 

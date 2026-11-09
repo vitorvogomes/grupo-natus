@@ -40,6 +40,27 @@ describe("Design tokens Natus (@theme)", () => {
     }
   });
 
+  it("guarda a paleta da Natus News com as cores exatas do e-mail original", () => {
+    // O cliente pediu a página fiel ao design da newsletter; a cor fica nos
+    // tokens (AD-7), não espalhada nos componentes.
+    const palette: Record<string, string> = {
+      "--color-news-ink": "#15171b",
+      "--color-news-text": "#22252b",
+      "--color-news-muted": "#6b6b6b",
+      "--color-news-source": "#8a8a8a",
+      "--color-news-gold": "#9a8358",
+      "--color-news-gold-soft": "#d8c49b",
+      "--color-news-cream": "#f4f3ef",
+      "--color-news-rule": "#ddd6c6",
+      "--color-news-invite-text": "#c9c9c9",
+      "--color-news-footer": "#0e0f12",
+      "--color-news-footer-text": "#9a9a9a",
+    };
+    for (const [token, hex] of Object.entries(palette)) {
+      expect(themeCss.toLowerCase()).toMatch(new RegExp(`${token}:\\s*${hex};`));
+    }
+  });
+
   it("define os demais namespaces de token reutilizáveis", () => {
     // tipografia, spacing, radius, shadow, breakpoint, motion.
     expect(themeCss).toMatch(/--font-sans:/);
