@@ -135,7 +135,7 @@ function GalleryStage({
             sizes={`(max-width: ${FULL_WIDTH_UP_TO}px) ${Math.round(100 * factor)}vw, ${Math.round(desktopWidth * factor)}px`}
             // 100 no palco e no lightbox, onde a foto é examinada de perto: o
             // Next converte para AVIF 63 (escala 50/80), que fica igual ao
-            // original na tela com metade dos bytes do WEBP 90 de antes.
+            // original na tela com metade dos bytes de um WEBP 90.
             quality={100}
             className={fit === "contain" ? "object-contain" : "object-cover"}
           />

@@ -90,8 +90,8 @@ describe("Header na Home (revela na rolagem)", () => {
 
   it("nenhuma camada fica por cima do header revelado pelo hover", async () => {
     // Regressão: uma faixa de captura (z-50) sobre o header (z-40) revelava a
-    // navegação mas engolia todos os cliques. O alvo do hover agora é o
-    // invólucro do próprio header — não existe camada irmã sobre ele.
+    // navegação mas engolia todos os cliques. O alvo do hover é o invólucro
+    // do próprio header — não existe camada irmã sobre ele.
     const user = userEvent.setup();
     render(<Header />);
     expect(screen.queryByTestId("header-hover-zone")).toBeNull();

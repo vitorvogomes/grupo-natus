@@ -20,7 +20,7 @@ describe("Modal", () => {
         conteúdo
       </Modal>,
     );
-    // Modalidade agora é responsabilidade do Radix (focus-scope + inert);
+    // A modalidade é do Radix (focus-scope + inert);
     // validamos o papel, o nome acessível (via DialogTitle) e o conteúdo.
     const dialog = screen.getByRole("dialog");
     expect(dialog).toHaveAccessibleName("Título");

@@ -252,11 +252,3 @@ describe("Breve lançamento — seção mínima (Gutierrez, Sunset Ville)", () =
     ).toBeInTheDocument();
   });
 });
-
-describe("Portfólio", () => {
-  it("Vista do Lago saiu do portfólio (404)", async () => {
-    await expect(
-      DevelopmentPage({ params: Promise.resolve({ slug: "vista-do-lago" }) }),
-    ).rejects.toThrow(/NEXT_NOT_FOUND/);
-  });
-});

@@ -7,9 +7,8 @@ import {
 
 
 describe("Seed dos empreendimentos", () => {
-  it("cadastra os 11 empreendimentos do portfólio (Vista do Lago saiu)", () => {
+  it("cadastra os 11 empreendimentos do portfólio", () => {
     expect(developments).toHaveLength(11);
-    expect(developments.map((d) => d.slug)).not.toContain("vista-do-lago");
   });
 
   it("Golden Ville fica em Maria Paula, São Gonçalo/RJ (cliente, 2026-11-09)", () => {

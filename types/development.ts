@@ -76,10 +76,9 @@ export const SALES_BAND_LABELS: Record<SalesBand, string> = {
  * derivar da ordem de aparição no dado faria a mesma galeria trocar de ordem
  * conforme alguém reorganizasse o array de imagens.
  *
- * "imagens" cobre render externo, área comum e interior: a separação
- * externa/apartamento que existia antes dividia o acervo em duas abas quase
- * idênticas (34 contra 18) sem ajudar a escolher. Aba de vídeo entra quando
- * houver arquivo.
+ * "imagens" cobre render externo, área comum e interior: separar
+ * externa/apartamento dividiria o acervo em duas abas quase idênticas sem
+ * ajudar a escolher. Aba de vídeo entra quando houver arquivo.
  */
 export const DEVELOPMENT_IMAGE_KINDS = ["imagens", "planta", "obra"] as const;
 

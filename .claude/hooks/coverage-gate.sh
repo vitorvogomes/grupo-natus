@@ -15,9 +15,11 @@ grep -q '"test:coverage"' package.json || exit 0
 MARKER=".claude/.tdd-last-pass"
 # Pula se nada de código/teste mudou desde o último gate verde (evita rodar em turnos de conversa).
 if [ -f "$MARKER" ]; then
-  # Mesmas pastas do coverage.include (vitest.config.ts), mais testes soltos.
-  CHANGED="$(find app components lib features content types tests 2>/dev/null -type f \
-    \( -name '*.ts' -o -name '*.tsx' \) -newer "$MARKER" | head -1)"
+  # Mesmas pastas do coverage.include (vitest.config.ts), mais as de testes
+  # soltos (tests/, styles/*.test.ts), o CSS dos tokens e os JSON de conteúdo
+  # (manifesto de imagens), que os testes leem.
+  CHANGED="$(find app components lib features content types tests styles 2>/dev/null -type f \
+    \( -name '*.ts' -o -name '*.tsx' -o -name '*.css' -o -name '*.json' \) -newer "$MARKER" | head -1)"
   [ -z "$CHANGED" ] && exit 0
 fi
 

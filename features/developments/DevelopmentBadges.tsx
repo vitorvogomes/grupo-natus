@@ -9,8 +9,8 @@ type DevelopmentBadgesProps = {
 
 /**
  * Selos do empreendimento: o status e, quando enquadrado, o MCMV. A fase de
- * vendas fica de fora de propósito — é a `SalesBand`, uma faixa com peso
- * próprio, e não mais um selo disputando a mesma linha.
+ * vendas fica de fora de propósito — é a `SalesBand`, uma faixa com presença
+ * própria, e não um selo disputando a mesma linha.
  */
 export function DevelopmentBadges({
   development,
