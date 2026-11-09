@@ -100,12 +100,12 @@ graph TD
 
 | Name | Version |
 | --- | --- |
-| Next.js (App Router) | 16.3.5 `[INSTALLED]` |
+| Next.js (App Router) | 16.4.5 `[INSTALLED]` (16.3.5 até 2026-11-09; subiu por advisories de segurança) |
 | React | 19.3.x `[INSTALLED]` |
 | TypeScript | 6.0.x (strict) `[INSTALLED]` — spine pinava 5.x; npm resolveu 6.x em 2026-09 |
 | Tailwind CSS | 4.3.3 `[INSTALLED]` (via `@tailwindcss/postcss`) |
-| Vitest + Testing Library | 5.0.1 + RTL 16 + jsdom 29 `[INSTALLED]` |
-| ESLint | 9.39 + `eslint-config-next` 16.3.5 (flat config nativo) `[INSTALLED]` |
+| Vitest + Testing Library | 5.1 + RTL 16 + jsdom 29 `[INSTALLED]` |
+| ESLint | 9.39 + `eslint-config-next` 16.4.5 (flat config nativo) `[INSTALLED]` |
 | @supabase/supabase-js | 2.118 `[INSTALLED]` (v5, só servidor; `@supabase/ssr` só com auth, Epic 8) |
 | Email (Resend) | API HTTP via `fetch`, sem SDK `[ADOPTED]` (v5) |
 | CV CRM | API v1 via `fetch` (headers `email` + `token`) `[ADOPTED]` (v5) |

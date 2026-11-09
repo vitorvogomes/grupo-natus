@@ -76,7 +76,7 @@ Camada de conteúdo estática (`content/`) até haver necessidade de administra�
 
 `Next.js (App Router + TS)` → conteúdo estático + Route Handlers → (quando necessário) Supabase (Postgres + RLS + Auth). Estrutura de pastas (sem `src/`): `app`, `components`, `features/{developments,home,institutional,mcmv,contact,consent,seo}`, `content`, `lib`, `styles`, `types`, `scripts`.
 
-> **Arquitetura detalhada (fonte de verdade):** [`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md) — invariantes AD-1…AD-8, stack verificado (Next 16.3.5 / React 19 / Tailwind 4.3 / Vitest 5.0.1) e Capability→Architecture map.
+> **Arquitetura detalhada (fonte de verdade):** [`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`](../_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md) — invariantes AD-1…AD-8, stack verificado (Next 16.4.5 / React 19 / Tailwind 4.3 / Vitest 5.1) e Capability→Architecture map.
 
 ## 6. Epics (visão geral)
 

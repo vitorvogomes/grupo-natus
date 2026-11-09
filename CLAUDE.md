@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Epics 1–7 concluídas (32/35 stories) + revisões de cliente v2–v6.** Gates A ✅ e B ✅; Epic 8 (Supabase/Admin, Gate C) é condicional e fora do plano. Histórico e números correntes (testes, cobertura, build) no fim de `docs/PROGRESS.md`; decisões no `.memlog.md` da spine.
 
-Stack: Next.js 16.3.5 (App Router) + React 19 + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 85%, `docs/adr/0001-coverage-85.md`). Tipografia Outfit (títulos) + Inter (`next/font`); ícones lucide (zero emoji); primitivos Radix (Dialog, Accordion, Tabs, Progress, Select); motion via `motion`; forms com react-hook-form + zod (`LeadForm` → `/api/leads`, honeypot + rate-limit; ver "Leads" abaixo).
+Stack: Next.js 16.4.5 (App Router) + React 19 + TS 6 estrito + Tailwind v4.3 + Vitest 5 (gate 85%, `docs/adr/0001-coverage-85.md`). Tipografia Outfit (títulos) + Inter (`next/font`); ícones lucide (zero emoji); primitivos Radix (Dialog, Accordion, Tabs, Progress, Select); motion via `motion`; forms com react-hook-form + zod (`LeadForm` → `/api/leads`, honeypot + rate-limit; ver "Leads" abaixo).
 
 Pastas: `app/`, `components/` (+`ui/`, `motion/`, `showcase/`), `features/` (`developments`, `home`, `institutional`, `mcmv`, `contact`, `seo`), `content/developments/`, `lib/`, `types/`, `styles/`, `scripts/`, `public/`, `tests/` (helpers de teste).
 
@@ -56,7 +56,7 @@ Materiais de origem (ainda a base de verdade):
 - `docs/product-brief.md` — vision, audience, scope, the 11 developments (confirmed by the client in the v3 review), constraints.
 - `docs/prd.md` — FRs/NFRs, conceptual data model (`Development`, `ConstructionProgress`), epic overview, gates, open risks.
 - **`_bmad-output/planning-artifacts/epics.md`** — **canonical backlog** (BMAD): Requirements Inventory (FR/NFR/UX-DR), FR Coverage Map, **8 epics · 35 stories** in Given/When/Then. `docs/epics.md` is now just a pointer to it. Gates: A (theme-showcase approval, end of Epic 1); B (validate one development page before generating the rest, Epic 3); C (persistence/admin only on concrete need, Epic 8).
-- **`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`** — **architecture spine** (BMAD): the binding invariants (AD-1…AD-8), design paradigm, conventions, verified stack (Next.js 16.3.5 / React 19 / Tailwind 4.3 / Vitest 5.0.1), source tree, and Capability→Architecture map. `[ASSUMPTION]` tags mark unconfirmed picks (supabase-js/@supabase/ssr, Resend, create-next-app starter). The `.memlog.md` beside it is the decision log.
+- **`_bmad-output/planning-artifacts/architecture/architecture-natus-2026-09-16/ARCHITECTURE-SPINE.md`** — **architecture spine** (BMAD): the binding invariants (AD-1…AD-8), design paradigm, conventions, verified stack (Next.js 16.4.5 / React 19 / Tailwind 4.3 / Vitest 5.1), source tree, and Capability→Architecture map. `[ASSUMPTION]` tags mark unconfirmed picks (supabase-js/@supabase/ssr, Resend, create-next-app starter). The `.memlog.md` beside it is the decision log.
 
 ## Workflow, skills & the sacred TDD gate (`.claude/`)
 
@@ -121,7 +121,7 @@ Originais versionados; o site serve só o que o pipeline gera em `public/`.
 
 ## Commands
 
-Definidos em `package.json` (criados no E1.1):
+Definidos em `package.json` (criados no E1.1). Instalar/atualizar dependências **com o npm do `packageManager` (11.9.0)** — sem ele, `npx -y npm@11.9.0 install …`: o npm 10 marca os binários do sharp como `dev` no lockfile (sumiriam num `--omit=dev`) e quebra no `npm audit fix` (`edgesOut`).
 - `npm run dev` — servidor de desenvolvimento (Next + Turbopack).
 - `npm run build` — build de produção (roda typecheck do Next).
 - `npm run lint` — ESLint (flat config: `eslint-config-next/core-web-vitals` + `/typescript`).
