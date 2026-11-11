@@ -175,12 +175,19 @@ describe("Imagem do 'O que oferece'", () => {
 });
 
 describe("Em construção — página reduzida (Golden Ville)", () => {
-  it("mostra só a fundação no estágio de obra", async () => {
+  it("mostra as 5 etapas no estágio de obra, na ordem oficial", async () => {
     await abrir("golden-ville-residence");
     const etapas = screen
       .getAllByRole("progressbar")
       .map((el) => el.getAttribute("aria-label"));
-    expect(etapas).toEqual(["Total Construído", "Fundação"]);
+    expect(etapas).toEqual([
+      "Total Construído",
+      "Fundação",
+      "Estrutura",
+      "Alvenaria",
+      "Acabamento interno",
+      "Acabamento externo",
+    ]);
   });
 
   it("sem diferenciais, 'Empreendimento' na sub-nav leva ao resumo", async () => {

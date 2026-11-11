@@ -301,11 +301,16 @@ const SEEDS: readonly Seed[] = [
       { label: "Unidades", value: "104" },
       { label: "Lazer", value: "Piscina e academia" },
     ],
-    // Percentuais informados pelo cliente (2026-10-11): fase inicial — só a
-    // fundação aparece.
+    // Percentuais informados pelo cliente (2026-11-11).
     progress: {
-      overallPercentage: 7,
-      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+      overallPercentage: 90,
+      stages: [
+        { name: "Fundação", percentage: 100, order: 1 },
+        { name: "Estrutura", percentage: 100, order: 2 },
+        { name: "Alvenaria", percentage: 100, order: 3 },
+        { name: "Acabamento interno", percentage: 80, order: 4 },
+        { name: "Acabamento externo", percentage: 90, order: 5 },
+      ],
     },
   },
   {

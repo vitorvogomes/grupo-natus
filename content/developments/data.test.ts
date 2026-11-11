@@ -93,9 +93,15 @@ describe("Seed dos empreendimentos", () => {
       "Acabamento interno": 60,
       "Acabamento externo": 50,
     });
-    expect(pct("golden-ville-residence")).toEqual({
-      overallPercentage: 7,
-      stages: [{ name: "Fundação", percentage: 70, order: 1 }],
+    expect(pct("golden-ville-residence").overallPercentage).toBe(90);
+    expect(
+      Object.fromEntries(pct("golden-ville-residence").stages.map((s) => [s.name, s.percentage])),
+    ).toEqual({
+      Fundação: 100,
+      Estrutura: 100,
+      Alvenaria: 100,
+      "Acabamento interno": 80,
+      "Acabamento externo": 90,
     });
   });
 
