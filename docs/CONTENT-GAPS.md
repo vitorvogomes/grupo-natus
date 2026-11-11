@@ -36,7 +36,7 @@ Status novos: **Lançamento** · **Em construção** · **Pronto para morar** (a
 
 Etapas oficiais (v3): **Fundação · Estrutura · Alvenaria · Acabamento interno · Acabamento externo**. Etapas em 0% não aparecem. A seção existe em Lançamento e Em construção.
 
-- [x] **Percentuais informados pelo cliente**: Follow Savassi com Fundação 100% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 70% (total 7%), aprovado. **Solar Manilha sem estágio de obra** (2026-10-17).
+- [x] **Percentuais informados pelo cliente**: Follow Savassi com Fundação 100% · Estrutura 100% · Alvenaria 90% · Acabamento interno 60% · Acabamento externo 50% (total 70%); Golden Ville com Fundação 100% · Estrutura 100% · Alvenaria 100% · Acabamento interno 80% · Acabamento externo 90% (total 90%; atualizado pelo cliente em 2026-11-11, antes Fundação 70% e total 7%). **Solar Manilha sem estágio de obra** (2026-10-17). A Natus News da edição 0 (09/11) segue com o texto do e-mail ("Começou a primeira laje"), sem alteração.
 - [ ] **Fotos da obra** do Follow Savassi e do Golden Ville. Sem elas a seção mostra só os percentuais (o painel de canteiro aparece quando houver fotos). A Natus News da edição 0 trouxe uma foto de cada (`img/news/edicao-0/golden-obra.jpg` e `follow-obra.jpg`, de 1040 e 560 px): servem, se o cliente quiser, mas são pequenas para o palco da galeria.
 - [x] ~~**Data ("última atualização")** e periodicidade~~ — descartado pelo cliente (2026-10-17). O campo `updatedAt` segue opcional no modelo: sem ele, a data não aparece.
 

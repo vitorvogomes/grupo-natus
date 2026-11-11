@@ -305,6 +305,9 @@ Verificação: **442 testes** · cobertura **96,1% stmts / 93,2% branches** · l
 
 **Gate:** 577 testes · cobertura 96,76% stmts · 92,7% branches · lint, typecheck e build ok (`/news/edicao-0` em SSG) · Chrome 1440 px e 500 px: layout fiel, sem rolagem horizontal, nenhuma requisição ao ActiveCampaign.
 
+### Atualização de obra — Golden Ville (2026-11-11)
+- Percentuais do cliente: Fundação 100 · Estrutura 100 · Alvenaria 100 · Acab. interno 80 · Acab. externo 90 (total 90; eram Fundação 70, total 7). A página passa a mostrar as 5 etapas. A Natus News (edição 0) fica como foi enviada.
+
 ## Epic 8 — Supabase & Admin (condicional)  ⬜ 0/3 — **[Gate C]**
 > A v5 usa o Supabase só para gravar leads (`site_leads`, `site_contacts`, RLS sem policy, aplicadas no SQL Editor). Não há Supabase local, migração de conteúdo nem painel: o Gate C segue fechado.
 - ⬜ 8.1 Inicializar Supabase local — NFR5
